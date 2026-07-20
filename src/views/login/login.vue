@@ -3,27 +3,58 @@
     <div class="login-card">
       <img src="@/assets/logo.png" alt="logo" class="login-logo"/>
 
-      <el-form v-if="!disablePwd" label-position="top" class="login-form">
-        <el-form-item :label="T('Username')">
-          <el-input v-model="form.username" type="username" class="login-input"></el-input>
-        </el-form-item>
+      <el-tabs v-if="!disablePwd" v-model="activeTab" class="login-tabs">
+        <el-tab-pane :label="T('AccountLogin')" name="account">
+          <el-form label-position="top" class="login-form">
+            <el-form-item :label="T('Username')">
+              <el-input v-model="form.username" type="username" class="login-input"></el-input>
+            </el-form-item>
 
-        <el-form-item :label="T('Password')">
-          <el-input v-model="form.password" type="password" @keyup.enter.native="login" show-password
-                    class="login-input"></el-input>
-        </el-form-item>
-        <el-form-item :label="T('Captcha')" v-if="captchaCode">
-          <el-input v-model="form.captcha" @keyup.enter.native="login"  class="login-input captcha-input">
-            <template #append>
-              <img :src="captchaCode.b64" @click="loadCaptcha" class="captcha" alt="captcha"/>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="login" type="primary" class="login-button">{{ T('Login') }}</el-button>
-          <el-button v-if="allowRegister" @click="register" class="login-button">{{ T('Register') }}</el-button>
-        </el-form-item>
-      </el-form>
+            <el-form-item :label="T('Password')">
+              <el-input v-model="form.password" type="password" @keyup.enter.native="login" show-password
+                        class="login-input"></el-input>
+            </el-form-item>
+            <el-form-item :label="T('Captcha')" v-if="captchaCode">
+              <el-input v-model="form.captcha" @keyup.enter.native="login"  class="login-input captcha-input">
+                <template #append>
+                  <img :src="captchaCode.b64" @click="loadCaptcha" class="captcha" alt="captcha"/>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="login" type="primary" class="login-button">{{ T('Login') }}</el-button>
+              <el-button v-if="allowRegister" @click="register" class="login-button">{{ T('Register') }}</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+
+        <el-tab-pane :label="T('SmsLogin')" name="sms">
+          <el-form label-position="top" class="login-form">
+            <el-form-item :label="T('Phone')">
+              <el-input v-model="smsForm.phone" maxlength="11" class="login-input"></el-input>
+            </el-form-item>
+            <el-form-item :label="T('Captcha')" v-if="captchaCode">
+              <el-input v-model="smsForm.captcha" class="login-input captcha-input">
+                <template #append>
+                  <img :src="captchaCode.b64" @click="loadCaptcha" class="captcha" alt="captcha"/>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item :label="T('SmsCode')">
+              <el-input v-model="smsForm.code" @keyup.enter.native="loginBySms" class="login-input code-input">
+                <template #append>
+                  <el-button @click="sendSmsCode" :disabled="smsCountdown > 0" class="sms-send-btn">
+                    {{ smsCountdown > 0 ? T('ResendIn', { s: smsCountdown }) : T('SendSmsCode') }}
+                  </el-button>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button @click="loginBySms" type="primary" class="login-button">{{ T('Login') }}</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
 
       <div class="divider" v-if="options.length > 0 && !disablePwd">
         <span>{{ T('or login in with') }}</span>
@@ -42,12 +73,12 @@
 </template>
 
 <script setup>
-  import { reactive, onMounted, ref } from 'vue'
+  import { reactive, onMounted, onUnmounted, ref } from 'vue'
   import { useUserStore } from '@/store/user'
   import { ElMessage } from 'element-plus'
   import { T } from '@/utils/i18n'
   import { useRoute, useRouter } from 'vue-router'
-  import { loginOptions, captcha } from '@/api/login'
+  import { loginOptions, captcha, smsCode } from '@/api/login'
   import { getCode, removeCode } from '@/utils/auth'
 
   const oauthInfo = ref({})
@@ -81,6 +112,17 @@
     captcha_id: ''
   })
 
+  const activeTab = ref('account')
+  const smsForm = reactive({
+    phone: '',
+    code: '',
+    captcha: '',
+    captcha_id: ''
+  })
+  const smsCountdown = ref(0)
+  let smsTimer = null
+  const phoneReg = /^1[3-9]\d{9}$/
+
   const captchaCode = ref('')
   const redirect = route.query?.redirect
   const login = async () => {
@@ -96,11 +138,65 @@
     }
   }
 
+  const sendSmsCode = async () => {
+    if (smsCountdown.value > 0) return
+    if (!phoneReg.test(smsForm.phone)) {
+      ElMessage.error(T('InvalidPhone'))
+      return
+    }
+    const res = await smsCode({
+      phone: smsForm.phone,
+      captcha: smsForm.captcha,
+      captcha_id: smsForm.captcha_id,
+    }).catch(e => e)
+    if (res.code === 110) {
+      // need captcha
+      loadCaptcha()
+      return
+    }
+    if (res.code) return
+    ElMessage.success(T('SmsSendSuccess'))
+    smsForm.captcha = ''
+    smsCountdown.value = 60
+    smsTimer = setInterval(() => {
+      smsCountdown.value--
+      if (smsCountdown.value <= 0) {
+        clearInterval(smsTimer)
+        smsTimer = null
+      }
+    }, 1000)
+  }
+
+  onUnmounted(() => {
+    if (smsTimer) clearInterval(smsTimer)
+  })
+
+  const loginBySms = async () => {
+    if (!phoneReg.test(smsForm.phone)) {
+      ElMessage.error(T('InvalidPhone'))
+      return
+    }
+    if (!smsForm.code) {
+      ElMessage.error(T('ParamRequired', { param: T('SmsCode') }))
+      return
+    }
+    const res = await userStore.loginBySms({
+      phone: smsForm.phone,
+      code: smsForm.code,
+      platform: platform,
+    }).catch(e => e)
+    if (!res.code) {
+      ElMessage.success(T('LoginSuccess'))
+      router.push({ path: redirect || '/', replace: true })
+    }
+  }
+
   const loadCaptcha = async () => {
     const captchaRes = await captcha().catch(_ => false)
     console.log(captchaRes)
     captchaCode.value = captchaRes.data.captcha
     form.captcha_id = captchaRes.data.captcha.id
+    smsForm.captcha_id = captchaRes.data.captcha.id
   }
 
   const handleOIDCLogin = (provider) => {
@@ -111,12 +207,14 @@
   import githubImage from '@/assets/github.png'
   import oidcImage from '@/assets/oidc.png'
   import webauthImage from '@/assets/webauth.png'
+  import wechatImage from '@/assets/wechat.svg'
   import defaultImage from '@/assets/oidc.png'
 
   const providerImageMap = {
     google: googleImage,
     github: githubImage,
     oidc: oidcImage,
+    wechat: wechatImage,
     // WebAuth: webauthImage,
     default: defaultImage,
   }
@@ -196,6 +294,34 @@ h1 {
 
 .login-form {
   margin-bottom: 20px;
+}
+
+.login-tabs {
+  :deep(.el-tabs__item) {
+    color: #ccc;
+  }
+
+  :deep(.el-tabs__item.is-active) {
+    color: var(--el-color-primary);
+  }
+
+  :deep(.el-tabs__nav-wrap::after) {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.code-input {
+  :deep(.el-input-group__append) {
+    border-radius: 5px;
+    padding: 0;
+    overflow: hidden;
+
+    .sms-send-btn {
+      border: none;
+      border-radius: 0;
+      width: 120px;
+    }
+  }
 }
 
 .login-input {

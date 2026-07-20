@@ -8,6 +8,14 @@ export function login (data) {
   })
 }
 
+export function loginSms (data) {
+  return request({
+    url: '/login-sms',
+    method: 'post',
+    data,
+  })
+}
+
 export function current () {
   return request({
     url: '/user/current',

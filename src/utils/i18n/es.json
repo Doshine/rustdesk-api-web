@@ -531,5 +531,32 @@
   },
   "Remark": {
     "One": "Remark"
+  },
+  "AccountLogin": {
+    "One": "Cuenta"
+  },
+  "SmsLogin": {
+    "One": "Inicio por SMS"
+  },
+  "Phone": {
+    "One": "Teléfono"
+  },
+  "SmsCode": {
+    "One": "Código SMS"
+  },
+  "SendSmsCode": {
+    "One": "Obtener código"
+  },
+  "ResendIn": {
+    "One": "Reenviar en {s}s"
+  },
+  "InvalidPhone": {
+    "One": "Número de teléfono inválido"
+  },
+  "SmsSendSuccess": {
+    "One": "Código SMS enviado"
+  },
+  "wechat": {
+    "One": "WeChat"
   }
 }

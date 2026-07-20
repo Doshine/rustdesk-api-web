@@ -534,6 +534,33 @@
   },
   "Remark": {
     "One": "Примечание"
+  },
+  "AccountLogin": {
+    "One": "По паролю"
+  },
+  "SmsLogin": {
+    "One": "Вход по SMS"
+  },
+  "Phone": {
+    "One": "Телефон"
+  },
+  "SmsCode": {
+    "One": "SMS-код"
+  },
+  "SendSmsCode": {
+    "One": "Получить код"
+  },
+  "ResendIn": {
+    "One": "Повтор через {s}с"
+  },
+  "InvalidPhone": {
+    "One": "Неверный номер телефона"
+  },
+  "SmsSendSuccess": {
+    "One": "SMS-код отправлен"
+  },
+  "wechat": {
+    "One": "WeChat"
   }
 }
 

@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { current, login } from '@/api/user'
+import { current, login, loginSms } from '@/api/user'
 import { setToken, removeToken, setCode, removeCode } from '@/utils/auth'
 import { useRouteStore } from '@/store/router'
 import { useAppStore } from '@/store/app'
@@ -43,6 +43,17 @@ export const useUserStore = defineStore({
     async login (form) {
       const res = await login(form).catch(e => e)
       console.log('login', res)
+      if (!res.code) {
+        useAppStore().loadConfig()
+        const userData = res.data
+        this.saveUserData(userData)
+        return userData
+      } else {
+        return Promise.reject(res)
+      }
+    },
+    async loginBySms (form) {
+      const res = await loginSms(form).catch(e => e)
       if (!res.code) {
         useAppStore().loadConfig()
         const userData = res.data

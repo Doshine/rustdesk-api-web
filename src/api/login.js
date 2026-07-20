@@ -29,3 +29,11 @@ export function captcha () {
     method: 'get',
   })
 }
+
+export function smsCode (data) {
+  return request({
+    url: '/sms-code',
+    method: 'post',
+    data,
+  })
+}

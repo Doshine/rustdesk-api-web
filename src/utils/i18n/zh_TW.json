@@ -547,5 +547,32 @@
   },
   "Remark": {
     "One": "備註"
+  },
+  "AccountLogin": {
+    "One": "賬號登錄"
+  },
+  "SmsLogin": {
+    "One": "簡訊登錄"
+  },
+  "Phone": {
+    "One": "手機號"
+  },
+  "SmsCode": {
+    "One": "簡訊驗證碼"
+  },
+  "SendSmsCode": {
+    "One": "獲取驗證碼"
+  },
+  "ResendIn": {
+    "One": "{s}s 後重發"
+  },
+  "InvalidPhone": {
+    "One": "手機號格式不正確"
+  },
+  "SmsSendSuccess": {
+    "One": "驗證碼已發送"
+  },
+  "wechat": {
+    "One": "微信登錄"
   }
 }

@@ -517,5 +517,32 @@
   },
   "Remark": {
     "One": "비고"
+  },
+  "AccountLogin": {
+    "One": "계정 로그인"
+  },
+  "SmsLogin": {
+    "One": "SMS 로그인"
+  },
+  "Phone": {
+    "One": "전화번호"
+  },
+  "SmsCode": {
+    "One": "SMS 인증 코드"
+  },
+  "SendSmsCode": {
+    "One": "인증 코드 받기"
+  },
+  "ResendIn": {
+    "One": "{s}초 후 재전송"
+  },
+  "InvalidPhone": {
+    "One": "잘못된 전화번호입니다"
+  },
+  "SmsSendSuccess": {
+    "One": "인증 코드가 전송되었습니다"
+  },
+  "wechat": {
+    "One": "WeChat"
   }
 }
