@@ -34,14 +34,16 @@
             {{ row.device_id ? row.device_id : peer?.id }}
           </template>
         </el-table-column>
-        <el-table-column prop="uuid" label="uuid" align="center"/>
-        <el-table-column prop="ip" label="ip" align="center" width="150"/>
+        <el-table-column prop="uuid" label="uuid" align="center" class-name="yj-mono"/>
+        <el-table-column prop="ip" label="ip" align="center" width="150" class-name="yj-mono"/>
         <el-table-column prop="type" label="type" align="center" width="100"/>
         <el-table-column prop="platform" label="Platform/UA" align="center" width="120" show-overflow-tooltip/>
-        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
-        <el-table-column :label="T('Actions')" align="center" width="400">
+        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center" class-name="yj-mono"/>
+        <el-table-column :label="T('Actions')" align="center" width="90" class-name="table-actions">
           <template #default="{row}">
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -65,6 +67,7 @@
   import { T } from '@/utils/i18n'
   import { list } from '@/api/peer'
   import { downBlob, jsonToCsv } from '@/utils/file'
+  import { Delete } from '@element-plus/icons'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   getAllUsers()

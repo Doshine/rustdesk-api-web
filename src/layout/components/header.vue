@@ -7,6 +7,9 @@
     <img :src="setting.logo" alt="" class="logo">
     <div class="title">{{setting.title}}</div>
   </div>
+  <el-breadcrumb class="header-breadcrumb" separator="/">
+    <el-breadcrumb-item v-for="r in crumbs" :key="r.name">{{ T(r.meta?.title) }}</el-breadcrumb-item>
+  </el-breadcrumb>
   <Setting></Setting>
 </template>
 
@@ -16,6 +19,8 @@
   import Setting from '@/layout/components/setting/index.vue'
   import { useAppStore } from '@/store/app'
   import GTags from '@/layout/components/tags/index.vue'
+  import { useRoute } from 'vue-router'
+  import { T } from '@/utils/i18n'
 
   export default defineComponent({
     name: 'LayerHeader',
@@ -26,11 +31,15 @@
     setup (props) {
       const appStore = useAppStore()
       const setting = computed(() => appStore.setting)
+      const route = useRoute()
+      const crumbs = computed(() => route.matched.filter(r => r.meta?.title))
       const expandOrFoldSlider = () => {
         appStore.sideCollapse()
       }
       return {
         setting,
+        crumbs,
+        T,
         expandOrFoldSlider,
       }
     },
@@ -40,12 +49,22 @@
 
 <style scoped lang="scss">
   .ex-icon {
-    height: 100%;
+    height: 32px;
+    width: 32px;
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    justify-content: center;
+    margin-right: var(--yj-spacing-md);
     font-size: 16px;
+    color: var(--yj-text-secondary);
+    border-radius: var(--yj-radius-md);
     cursor: pointer;
+    transition: all var(--yj-duration-fast) var(--yj-easing-standard);
+
+    &:hover {
+      color: var(--yj-primary);
+      background-color: var(--yj-surface-hover);
+    }
   }
 
   .header-logo {
@@ -55,18 +74,32 @@
 
     .title {
       display: block;
-      margin-left: 10px;
+      margin-left: var(--yj-spacing-md);
+      font-size: var(--yj-font-size-lg);
+      font-weight: var(--yj-font-weight-semibold);
+      color: var(--yj-text-primary);
+      letter-spacing: 0.02em;
     }
 
     .logo {
       display: block;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--yj-radius-sm);
     }
   }
 
+  .header-breadcrumb {
+    margin-left: var(--yj-spacing-xxl);
 
-</style>
-<style lang="scss">
+    :deep(.el-breadcrumb__inner) {
+      color: var(--yj-text-secondary);
+      font-weight: var(--yj-font-weight-regular);
+    }
 
+    :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner) {
+      color: var(--yj-text-primary);
+      font-weight: var(--yj-font-weight-medium);
+    }
+  }
 </style>

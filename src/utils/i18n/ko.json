@@ -544,5 +544,29 @@
   },
   "wechat": {
     "One": "WeChat"
+  },
+  "DashboardTotalPeers": {
+    "One": "전체 기기",
+    "Other": "전체 기기"
+  },
+  "DashboardOnlinePeers": {
+    "One": "온라인 기기",
+    "Other": "온라인 기기"
+  },
+  "DashboardTotalUsers": {
+    "One": "전체 사용자",
+    "Other": "전체 사용자"
+  },
+  "DashboardConnTotal": {
+    "One": "연결 기록",
+    "Other": "연결 기록"
+  },
+  "DashboardConnTrend": {
+    "One": "최근 7일 연결 추이",
+    "Other": "최근 7일 연결 추이"
+  },
+  "DashboardOsDist": {
+    "One": "OS 분포",
+    "Other": "OS 분포"
   }
 }

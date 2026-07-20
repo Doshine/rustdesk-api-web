@@ -61,12 +61,14 @@
 
           </template>
         </el-table-column>
-        <el-table-column prop="path" :label="T('Path')" align="center" width="150" show-overflow-tooltip/>
-        <el-table-column prop="uuid" label="uuid" align="center" width="120" show-overflow-tooltip/>
-        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center" min-width="120"/>
-        <el-table-column :label="T('Actions')" align="center" width="150" fixed="right">
+        <el-table-column prop="path" :label="T('Path')" align="center" width="150" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column prop="uuid" label="uuid" align="center" width="120" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center" min-width="120" class-name="yj-mono"/>
+        <el-table-column :label="T('Actions')" align="center" width="90" class-name="table-actions" fixed="right">
           <template #default="{row}">
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -100,7 +102,7 @@
   import { useFileRepositories } from '@/views/audit/reponsitories'
   import { T } from '@/utils/i18n'
   import { sizeFormat } from '@/utils/file'
-  import { Right } from '@element-plus/icons'
+  import { Right, Delete } from '@element-plus/icons'
 
   const showDirFileNum = 3
   const {

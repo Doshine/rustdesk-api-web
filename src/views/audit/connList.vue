@@ -26,15 +26,17 @@
         <el-table-column pop="type" :label="T('Type')" align="center" width="120">
           <template #default="{row}">
             <el-tag v-if="row.type === 1" type="warning">{{ T('File') }}</el-tag>
-            <el-tag v-else>{{ T('Common') }}</el-tag>
+            <el-tag v-else type="primary" effect="light">{{ T('Common') }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="uuid" label="uuid" align="center" width="120" show-overflow-tooltip/>
-        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
-        <el-table-column :label="T('CloseTime')" prop="close_time" align="center"/>
-        <el-table-column :label="T('Actions')" align="center" width="150">
+        <el-table-column prop="uuid" label="uuid" align="center" width="120" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center" class-name="yj-mono"/>
+        <el-table-column :label="T('CloseTime')" prop="close_time" align="center" class-name="yj-mono"/>
+        <el-table-column :label="T('Actions')" align="center" width="90" class-name="table-actions">
           <template #default="{row}">
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -55,6 +57,7 @@
   import { onActivated, onMounted, ref, watch } from 'vue'
   import { useRepositories } from '@/views/audit/reponsitories'
   import { T } from '@/utils/i18n'
+  import { Delete } from '@element-plus/icons'
 
   const {
     listRes,

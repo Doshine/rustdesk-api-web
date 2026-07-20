@@ -36,10 +36,14 @@
         </el-table-column>
         <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
         <!--        <el-table-column prop="updated_at" label="更新时间" align="center"/>-->
-        <el-table-column :label="T('Actions')" align="center" class-name="table-actions" width="300" fixed="right">
+        <el-table-column :label="T('Actions')" align="center" class-name="table-actions" width="120" fixed="right">
           <template #default="{row}">
-            <el-button @click="toEdit(row)">{{ T('Edit') }}</el-button>
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Edit')" placement="top">
+              <el-button circle :icon="Edit" @click="toEdit(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -109,6 +113,7 @@
   import { T } from '@/utils/i18n'
   import { useRepositories } from '@/views/address_book/rule'
   import { onActivated, onMounted, watch } from 'vue'
+  import { Delete, Edit } from '@element-plus/icons'
 
   const props = defineProps({
     collection: {

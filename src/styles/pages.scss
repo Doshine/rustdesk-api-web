@@ -1,0 +1,217 @@
+/**
+ * W5 页面级重设计 —— 全局页面样式（卡片 / 表格 / 筛选区 / 分页 / 弹窗 / 空态）
+ * 全部引用 tokens.css 的 --yj-* 变量，深浅主题自动同构。
+ * 加载顺序：必须在 tokens.css 与 element-overrides.css 之后。
+ * 与 EP 暗色竞争时与 element-overrides.css 同策略：:root 与 html.dark 双写。
+ */
+
+/* ============ EP 组件级变量 → tokens 映射（双写保证暗色生效） ============ */
+:root,
+html.dark {
+  --el-card-border-color: var(--yj-border);
+  --el-card-border-radius: var(--yj-radius-lg);
+  --el-card-padding: var(--yj-spacing-xl);
+
+  --el-table-border-color: var(--yj-border);
+  --el-table-border: 1px solid var(--yj-border);
+  --el-table-header-bg-color: var(--yj-surface-hover);
+  --el-table-header-text-color: var(--yj-text-secondary);
+  --el-table-text-color: var(--yj-text-primary);
+  --el-table-tr-bg-color: var(--yj-surface);
+  --el-table-row-hover-bg-color: var(--yj-surface-hover);
+  --el-table-current-row-bg-color: var(--yj-primary-subtle);
+  --el-fill-color-light: var(--yj-surface-hover);
+
+  --el-dialog-border-radius: var(--yj-radius-xl);
+
+  --el-tag-border-radius: var(--yj-radius-sm);
+
+  --el-pagination-border-radius: var(--yj-radius-sm);
+
+  --el-loading-spinner-size: 36px;
+}
+
+:root {
+  --el-mask-color: rgba(255, 255, 255, 0.72);
+}
+html.dark {
+  --el-mask-color: rgba(10, 16, 36, 0.72);
+}
+
+/* ============ 内容区容器：最大宽度 + 居中 ============ */
+.app-main > * {
+  max-width: var(--yj-content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============ 卡片：radius 12 + tokens 阴影 sm，hover 微上浮 ============ */
+.app-main .el-card {
+  border-radius: var(--yj-radius-lg);
+  border: 1px solid var(--yj-border);
+  box-shadow: var(--yj-shadow-sm);
+  background-color: var(--yj-surface);
+  transition: box-shadow var(--yj-duration-normal) var(--yj-easing-standard),
+    transform var(--yj-duration-normal) var(--yj-easing-standard);
+
+  &.is-hover-shadow:hover {
+    box-shadow: var(--yj-shadow-md);
+  }
+}
+
+/* ============ 筛选区：紧凑工具条 ============ */
+.list-query {
+  margin-bottom: var(--yj-spacing-lg);
+
+  > .el-card__body {
+    padding: var(--yj-spacing-xl) var(--yj-spacing-xl) var(--yj-spacing-xs);
+  }
+
+  .el-form--inline .el-form-item {
+    margin-right: var(--yj-spacing-lg);
+    margin-bottom: var(--yj-spacing-lg);
+  }
+
+  .el-form-item__label {
+    color: var(--yj-text-secondary);
+    font-weight: var(--yj-font-weight-medium);
+  }
+}
+
+/* ============ 表格区：行高 / 斑马纹 / 表头 ============ */
+.list-body {
+  margin: 0 0 var(--yj-spacing-lg);
+
+  .el-table {
+    --el-table-cell-padding: 0 var(--yj-spacing-md);
+    font-size: var(--yj-font-size-base);
+    color: var(--yj-text-primary);
+
+    .el-table__cell {
+      padding: var(--yj-spacing-md) 0; /* 行高约 46px */
+    }
+
+    &.el-table--small .el-table__cell {
+      padding: var(--yj-spacing-sm) 0;
+    }
+
+    th.el-table__cell {
+      font-size: var(--yj-font-size-sm);
+      font-weight: var(--yj-font-weight-semibold);
+      letter-spacing: 0.02em;
+    }
+
+    /* 斑马纹（奇偶行），hover 优先级更高 */
+    .el-table__body tr:nth-child(even) > td {
+      background-color: var(--yj-table-zebra);
+    }
+
+    .el-table__body tr:nth-child(even):hover > td,
+    .el-table__body tr.hover-row:nth-child(even) > td {
+      background-color: var(--yj-surface-hover);
+    }
+  }
+}
+
+/* ============ 分页区：右对齐工具条 ============ */
+.list-page {
+  > .el-card__body {
+    padding: var(--yj-spacing-md) var(--yj-spacing-xl);
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* ============ 操作列：按钮间距 / icon 化 ============ */
+.table-actions {
+  .el-button {
+    margin: var(--yj-spacing-xxs) var(--yj-spacing-xs);
+  }
+
+  .el-button.is-circle {
+    margin: 0 var(--yj-spacing-xxs);
+  }
+}
+
+/* ============ 状态点：在线 / 离线（tokens 语义色 + 光晕） ============ */
+.yj-dot {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--yj-radius-full);
+
+  &--online {
+    background-color: var(--yj-online);
+    box-shadow: 0 0 0 3px var(--yj-success-subtle);
+  }
+
+  &--offline {
+    background-color: var(--yj-offline);
+    box-shadow: 0 0 0 3px var(--yj-offline-subtle);
+  }
+}
+
+/* ============ 等宽列：ID / 日志 / 路径 ============ */
+.yj-mono,
+.yj-mono .cell {
+  font-family: var(--yj-font-family-mono);
+  font-size: var(--yj-font-size-sm);
+  letter-spacing: 0;
+}
+
+/* ============ 表单：表单项间距 16 档 ============ */
+.el-form-item {
+  margin-bottom: var(--yj-spacing-lg);
+}
+
+/* ============ 弹窗：radius 16 + 标题区 ============ */
+.el-dialog {
+  box-shadow: var(--yj-shadow-lg);
+
+  .el-dialog__header {
+    padding-bottom: var(--yj-spacing-lg);
+    border-bottom: 1px solid var(--yj-divider);
+  }
+
+  .el-dialog__title {
+    font-size: var(--yj-font-size-lg);
+    font-weight: var(--yj-font-weight-semibold);
+    color: var(--yj-text-primary);
+  }
+}
+
+/* ============ 空态 / 加载态 ============ */
+.el-table__empty-block {
+  padding: var(--yj-spacing-xxxl) 0;
+}
+
+.el-table__empty-text {
+  color: var(--yj-text-tertiary);
+  font-size: var(--yj-font-size-base);
+  line-height: var(--yj-line-height-relaxed);
+}
+
+/* ============ 微交互：按钮统一过渡 ============ */
+.el-button {
+  font-weight: var(--yj-font-weight-medium);
+  transition: all var(--yj-duration-fast) var(--yj-easing-standard);
+}
+
+.el-tag {
+  font-weight: var(--yj-font-weight-medium);
+}
+
+/* ============ 设置页简单卡片栅格（rustdesk/*） ============ */
+.simple-card {
+  min-width: 320px;
+  margin: 0;
+
+  > .el-card__header {
+    padding: var(--yj-spacing-md) var(--yj-spacing-xl);
+    font-size: var(--yj-font-size-sm);
+    font-weight: var(--yj-font-weight-semibold);
+    color: var(--yj-text-secondary);
+    letter-spacing: 0.02em;
+  }
+}

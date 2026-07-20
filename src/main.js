@@ -12,6 +12,8 @@ import '@/styles/style.scss'
 // W5 主题层：必须在 Element Plus 样式（含 dark/css-vars）之后加载才能覆盖生效
 import '@/styles/tokens.css'
 import '@/styles/element-overrides.css'
+// W5 页面级样式：必须在主题层之后
+import '@/styles/pages.scss'
 import * as ElementIcons from '@element-plus/icons'
 
 const app = createApp(App)

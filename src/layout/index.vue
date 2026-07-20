@@ -37,7 +37,7 @@
   const appStore = useAppStore()
   const tagStore = useTagsStore()
   const sideBarWidth = computed(() => appStore.setting.locale.sideBarWidth)
-  const leftWidth = computed(() => appStore.setting.sideIsCollapse ? '64px' : 'var(--sideBarWidth)')
+  const leftWidth = computed(() => appStore.setting.sideIsCollapse ? 'var(--yj-sidebar-collapsed-width)' : 'var(--sideBarWidth)')
 
   const cachedTags = ref([])
 
@@ -46,25 +46,40 @@
 
 <style lang="scss" scoped>
 .app-header {
-  background-color: #3f454b;
-  color: var(--basicWhite);
+  background-color: var(--yj-surface);
+  color: var(--yj-text-primary);
   display: flex;
-  height: 50px;
+  align-items: center;
+  height: var(--yj-header-height);
+  padding: 0 var(--yj-spacing-xl) 0 var(--yj-spacing-lg);
+  box-shadow: var(--yj-shadow-sm);
+  position: relative;
+  z-index: var(--yj-z-sticky);
 }
 
 .header-tags {
-  height: auto;
-  border-bottom: 1px solid #eee;
+  height: var(--yj-tags-height);
+  background-color: var(--yj-surface);
+  border-bottom: 1px solid var(--yj-divider);
   display: flex;
-  padding: 0;
+  align-items: center;
+  gap: var(--yj-spacing-sm);
+  padding: 0 var(--yj-spacing-xl);
 }
 
 .app-left {
-  transition: width 0.5s;
+  transition: width var(--yj-duration-normal) var(--yj-easing-standard);
+  box-shadow: var(--yj-shadow-sm);
+  z-index: calc(var(--yj-z-sticky) + 1);
 }
 
 .app-container {
   min-height: 100vh;
+}
+
+.app-main {
+  background-color: var(--yj-bg);
+  padding: var(--yj-spacing-xxl);
 }
 </style>
 

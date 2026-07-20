@@ -38,9 +38,11 @@
             <el-tag :type="expired(row)?'info':'success'">{{ row.expired_at ? new Date(row.expired_at * 1000).toLocaleString() : '-' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column :label="T('Actions')" align="center" width="400">
+        <el-table-column :label="T('Actions')" align="center" width="90" class-name="table-actions">
           <template #default="{row}">
-            <el-button type="danger" @click="del(row)">{{ T('Logout') }}</el-button>
+            <el-tooltip :content="T('Logout')" placement="top">
+              <el-button type="danger" circle :icon="SwitchButton" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -62,6 +64,7 @@
   import { loadAllUsers } from '@/global'
   import { useRepositories } from '@/views/user/token.js'
   import { T } from '@/utils/i18n'
+  import { SwitchButton } from '@element-plus/icons'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   getAllUsers()

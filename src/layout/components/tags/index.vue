@@ -74,8 +74,10 @@
 <style lang="scss" scoped>
 
 .tag {
-  border-radius: 0;
+  border-radius: var(--yj-radius-full);
   cursor: pointer;
+  padding: 0 var(--yj-spacing-md);
+  transition: all var(--yj-duration-fast) var(--yj-easing-standard);
 
   &.active {
   }

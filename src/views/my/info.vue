@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <el-card :title="T('Userinfo')" shadow="hover">
+  <div class="my-info">
+    <el-card shadow="hover" class="info-card">
+      <template #header>
+        <div class="card-title">{{ T('Userinfo') }}</div>
+      </template>
       <el-form class="info-form" ref="form" label-width="120px" label-suffix="：">
         <el-form-item :label="T('Username')">
           <div>{{ userStore.username }}</div>
@@ -30,7 +33,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card shadow="hover" style="margin-top: 20px">
+    <el-card shadow="hover" class="hello-card">
       <div v-html="html"></div>
     </el-card>
     <changePwdDialog v-model:visible="changePwdVisible"></changePwdDialog>
@@ -91,9 +94,26 @@
 </script>
 
 <style scoped lang="scss">
+.my-info {
+  .info-card {
+    .card-title {
+      font-size: var(--yj-font-size-lg);
+      font-weight: var(--yj-font-weight-semibold);
+      color: var(--yj-text-primary);
+    }
+  }
+
+  .hello-card {
+    margin-top: var(--yj-spacing-lg);
+  }
+}
+
 .info-form {
-  width: 600px;
+  max-width: 640px;
   margin: 0 auto;
 
+  :deep(.el-form-item) {
+    margin-bottom: var(--yj-spacing-lg);
+  }
 }
 </style>

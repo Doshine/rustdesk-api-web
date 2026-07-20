@@ -3,7 +3,7 @@
     <div class="menu-item">
       <el-switch
           v-model="isDark"
-          style="--el-switch-on-color:#18222c"
+          style="--el-switch-on-color: var(--yj-deep-navy)"
       >
         <template #active-action>
           <el-icon>
@@ -34,7 +34,7 @@
     </el-dropdown>
     <el-dropdown class="menu-item">
       <div class="title">
-        <!--        <el-image class="avatar" :src="user.avatar"></el-image>-->
+        <span class="avatar">{{ avatarLetter }}</span>
         <span class="nickname">{{ user.username }}</span>
         <el-icon>
           <el-icon-arrow-down/>
@@ -57,7 +57,7 @@
   import { useUserStore } from '@/store/user'
   import { useAppStore } from '@/store/app'
   import changePwdDialog from '@/components/changePwdDialog.vue'
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import { T } from '@/utils/i18n'
   import { useDark } from '@vueuse/core'
   import { Sunny, Moon } from '@element-plus/icons'
@@ -65,6 +65,7 @@
   const userStore = useUserStore()
   const user = userStore
   const appStore = useAppStore()
+  const avatarLetter = computed(() => (user.username || 'U').charAt(0).toUpperCase())
 
   const logout = () => {
     userStore.logout()
@@ -90,7 +91,7 @@
   justify-content: space-around;
 
   .menu-item {
-    margin-left: 15px;
+    margin-left: var(--yj-spacing-lg);
 
     * {
       outline: none;
@@ -98,15 +99,47 @@
   }
 
   .title {
-    color: #fff;
+    color: var(--yj-text-primary);
     display: flex;
     align-items: center;
     justify-content: space-around;
+    padding: var(--yj-spacing-xs) var(--yj-spacing-sm);
+    border-radius: var(--yj-radius-md);
+    cursor: pointer;
+    transition: background-color var(--yj-duration-fast) var(--yj-easing-standard);
 
+    &:hover {
+      background-color: var(--yj-surface-hover);
+    }
+
+    .avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--yj-radius-full);
+      background: var(--yj-gradient);
+      color: var(--basicWhite);
+      font-size: var(--yj-font-size-sm);
+      font-weight: var(--yj-font-weight-semibold);
+    }
 
     .nickname {
-      padding: 0 10px;
+      padding: 0 var(--yj-spacing-sm);
+      font-size: var(--yj-font-size-md);
+      font-weight: var(--yj-font-weight-medium);
     }
+
+    .el-icon {
+      color: var(--yj-text-tertiary);
+    }
+  }
+
+  .menu-item > .title > i.el-icon {
+    color: var(--yj-text-secondary);
+    display: flex;
+    align-items: center;
   }
 }
 </style>

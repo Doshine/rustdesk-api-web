@@ -558,5 +558,29 @@
   },
   "wechat": {
     "One": "WeChat"
+  },
+  "DashboardTotalPeers": {
+    "One": "Dispositivos",
+    "Other": "Dispositivos"
+  },
+  "DashboardOnlinePeers": {
+    "One": "Dispositivos en línea",
+    "Other": "Dispositivos en línea"
+  },
+  "DashboardTotalUsers": {
+    "One": "Usuarios",
+    "Other": "Usuarios"
+  },
+  "DashboardConnTotal": {
+    "One": "Conexiones",
+    "Other": "Conexiones"
+  },
+  "DashboardConnTrend": {
+    "One": "Conexiones · Últimos 7 días",
+    "Other": "Conexiones · Últimos 7 días"
+  },
+  "DashboardOsDist": {
+    "One": "Distribución de SO",
+    "Other": "Distribución de SO"
   }
 }

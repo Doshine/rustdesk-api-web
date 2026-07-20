@@ -574,5 +574,29 @@
   },
   "wechat": {
     "One": "微信登錄"
+  },
+  "DashboardTotalPeers": {
+    "One": "設備總數",
+    "Other": "設備總數"
+  },
+  "DashboardOnlinePeers": {
+    "One": "在線設備",
+    "Other": "在線設備"
+  },
+  "DashboardTotalUsers": {
+    "One": "用戶總數",
+    "Other": "用戶總數"
+  },
+  "DashboardConnTotal": {
+    "One": "連線記錄",
+    "Other": "連線記錄"
+  },
+  "DashboardConnTrend": {
+    "One": "近 7 日連線趨勢",
+    "Other": "近 7 日連線趨勢"
+  },
+  "DashboardOsDist": {
+    "One": "設備系統分佈",
+    "Other": "設備系統分佈"
   }
 }

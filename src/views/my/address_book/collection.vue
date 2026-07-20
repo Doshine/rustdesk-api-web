@@ -15,12 +15,18 @@
         <el-table-column prop="name" :label="T('Name')" align="center"/>
         <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
         <!--        <el-table-column prop="updated_at" label="更新时间" align="center"/>-->
-        <el-table-column :label="T('Actions')" align="center" class-name="table-actions" width="600" fixed="right">
+        <el-table-column :label="T('Actions')" align="center" class-name="table-actions" width="170" fixed="right">
           <template #default="{row}">
             <template v-if="row.id>0">
-              <el-button type="primary" @click="showRules(row)">{{ T('ShareRules') }}</el-button>
-              <el-button @click="toEdit(row)">{{ T('Edit') }}</el-button>
-              <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+              <el-tooltip :content="T('ShareRules')" placement="top">
+                <el-button type="primary" circle :icon="Share" @click="showRules(row)"/>
+              </el-tooltip>
+              <el-tooltip :content="T('Edit')" placement="top">
+                <el-button circle :icon="Edit" @click="toEdit(row)"/>
+              </el-tooltip>
+              <el-tooltip :content="T('Delete')" placement="top">
+                <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+              </el-tooltip>
             </template>
           </template>
         </el-table-column>
@@ -59,6 +65,7 @@
   import { useRepositories } from '@/views/address_book/collection'
   import { onActivated, onMounted, watch } from 'vue'
   import Rule from '@/views/address_book/rule.vue'
+  import { Delete, Edit, Share } from '@element-plus/icons'
 
   const {
     listRes,

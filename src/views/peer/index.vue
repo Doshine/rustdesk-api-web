@@ -71,7 +71,7 @@
         <template v-for="c in visibleColumns.filter(cc => cc.visible)" :key="c">
           <el-table-column v-if="c.name==='id'" prop="id" label="ID" align="center" width="150">
             <template #default="{row}">
-              <span>{{ row.id }} <el-icon @click="handleClipboard(row.id, $event)"><CopyDocument/></el-icon></span>
+              <span class="yj-mono peer-id">{{ row.id }} <el-icon class="copy-icon" @click="handleClipboard(row.id, $event)"><CopyDocument/></el-icon></span>
             </template>
           </el-table-column>
           <el-table-column v-if="c.name==='cpu'" prop="cpu" label="CPU" align="center" width="100" show-overflow-tooltip/>
@@ -81,7 +81,8 @@
           <el-table-column v-if="c.name==='last_online_time'" prop="last_online_time" :label="T('LastOnlineTime')" align="center" min-width="120">
             <template #default="{row}">
               <div class="last_oline_time">
-                <span> {{ row.last_online_time ? timeAgo(row.last_online_time * 1000) : '-' }}</span> <span class="dot" :class="{red: timeDis(row.last_online_time) >= 60, green: timeDis(row.last_online_time)< 60}"></span>
+                <span class="yj-dot" :class="timeDis(row.last_online_time) >= 60 ? 'yj-dot--offline' : 'yj-dot--online'"></span>
+                <span> {{ row.last_online_time ? timeAgo(row.last_online_time * 1000) : '-' }}</span>
               </div>
             </template>
           </el-table-column>
@@ -100,13 +101,23 @@
           <el-table-column v-if="c.name==='updated_at'" prop="updated_at" :label="T('UpdatedAt')" align="center" width="150"/>
         </template>
 
-        <el-table-column :label="T('Actions')" align="center" width="500" class-name="table-actions" fixed="right">
+        <el-table-column :label="T('Actions')" align="center" width="230" class-name="table-actions" fixed="right">
           <template #default="{row}">
-            <el-button type="success" @click="connectByClient(row.id)">{{ T('Link') }}</el-button>
-            <el-button v-if="appStore.setting.appConfig.web_client" type="success" @click="toWebClientLink(row)">Web Client</el-button>
-            <el-button type="primary" @click="toAddressBook(row)">{{ T('AddToAddressBook') }}</el-button>
-            <el-button @click="toEdit(row)">{{ T('Edit') }}</el-button>
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Link')" placement="top">
+              <el-button type="success" circle :icon="Connection" @click="connectByClient(row.id)"/>
+            </el-tooltip>
+            <el-tooltip v-if="appStore.setting.appConfig.web_client" content="Web Client" placement="top">
+              <el-button type="success" circle :icon="Monitor" @click="toWebClientLink(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('AddToAddressBook')" placement="top">
+              <el-button type="primary" circle :icon="Collection" @click="toAddressBook(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('Edit')" placement="top">
+              <el-button circle :icon="Edit" @click="toEdit(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -241,7 +252,7 @@
   import { loadAllUsers } from '@/global'
   import { useAppStore } from '@/store/app'
   import { connectByClient } from '@/utils/peer'
-  import { ArrowDown, ArrowUp, CopyDocument, Setting } from '@element-plus/icons'
+  import { ArrowDown, ArrowUp, Collection, Connection, CopyDocument, Delete, Edit, Monitor, Setting } from '@element-plus/icons'
   import { handleClipboard } from '@/utils/clipboard'
   import { batchCreateFromPeers } from '@/api/address_book'
   import { useRepositories as useCollectionRepositories } from '@/views/address_book/collection'
@@ -577,21 +588,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--yj-spacing-sm);
 }
 
-.dot {
-  width: 6px;
-  height: 6px;
-  display: block;
-  border-radius: 50%;
-  margin-left: 10px;
+.peer-id {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yj-spacing-xs);
 
-  &.red {
-    background-color: red;
-  }
+  .copy-icon {
+    color: var(--yj-text-tertiary);
+    cursor: pointer;
+    transition: color var(--yj-duration-fast) var(--yj-easing-standard);
 
-  &.green {
-    background-color: green;
+    &:hover {
+      color: var(--yj-primary);
+    }
   }
 }
 </style>

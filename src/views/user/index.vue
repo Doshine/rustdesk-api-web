@@ -36,13 +36,23 @@
         <el-table-column prop="remark" :label="T('Remark')" align="center"/>
         <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
         <el-table-column prop="updated_at" :label="T('UpdatedAt')" align="center"/>
-        <el-table-column :label="T('Actions')" align="center" width="650">
+        <el-table-column :label="T('Actions')" align="center" width="230" class-name="table-actions" fixed="right">
           <template #default="{row}">
-            <el-button @click="toTag(row)">{{ T('UserTags') }}</el-button>
-            <el-button @click="toAddressBook(row)">{{ T('UserAddressBook') }}</el-button>
-            <el-button @click="toEdit(row)">{{ T('Edit') }}</el-button>
-            <el-button type="warning" @click="changePass(row)">{{ T('ResetPassword') }}</el-button>
-            <el-button type="danger" @click="remove(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('UserTags')" placement="top">
+              <el-button circle :icon="CollectionTag" @click="toTag(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('UserAddressBook')" placement="top">
+              <el-button circle :icon="Notebook" @click="toAddressBook(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('Edit')" placement="top">
+              <el-button type="primary" circle :icon="Edit" @click="toEdit(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('ResetPassword')" placement="top">
+              <el-button type="warning" circle :icon="Key" @click="changePass(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="remove(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -66,6 +76,7 @@
   import { update } from '@/api/user'
   import { ElMessageBox, ElMessage } from 'element-plus'
   import { onMounted, watch } from 'vue'
+  import { CollectionTag, Delete, Edit, Key, Notebook } from '@element-plus/icons'
   //列表
   const {
     listRes,

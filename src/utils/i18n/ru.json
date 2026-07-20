@@ -561,6 +561,29 @@
   },
   "wechat": {
     "One": "WeChat"
+  },
+  "DashboardTotalPeers": {
+    "One": "Всего устройств",
+    "Other": "Всего устройств"
+  },
+  "DashboardOnlinePeers": {
+    "One": "Устройств онлайн",
+    "Other": "Устройств онлайн"
+  },
+  "DashboardTotalUsers": {
+    "One": "Всего пользователей",
+    "Other": "Всего пользователей"
+  },
+  "DashboardConnTotal": {
+    "One": "Подключения",
+    "Other": "Подключения"
+  },
+  "DashboardConnTrend": {
+    "One": "Подключения за 7 дней",
+    "Other": "Подключения за 7 дней"
+  },
+  "DashboardOsDist": {
+    "One": "Распределение ОС",
+    "Other": "Распределение ОС"
   }
 }
-

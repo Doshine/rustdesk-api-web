@@ -1,24 +1,27 @@
 <template>
-  <div>
-    <h4 v-html="T('ServerCmdTips', {wiki: '<a target=\'_blank\' href=\'https://github.com/lejianwen/rustdesk-api/wiki/Rustdesk-Command\'>WIKI</a>'})"></h4>
-    <h5>
-      <span>ID {{ T('Status') }}: </span>
-      <el-tag v-if="canSendIdServerCmd" type="success">{{ T('Available') }}</el-tag>
-      <el-tag v-else type="danger">{{ T('NotAvailable') }}</el-tag>
-      <el-button size="small" type="text" @click="refreshCanSendIdServerCmd">{{ T('Refresh') }}</el-button>
-    </h5>
-    <h5>
-      <span>RELAY {{ T('Status') }}: </span>
-      <el-tag v-if="canSendRelayServerCmd" type="success">{{ T('Available') }}</el-tag>
-      <el-tag v-else type="danger">{{ T('NotAvailable') }}</el-tag>
-      <el-button size="small" type="text" @click="refreshCanSendRelayServerCmd">{{ T('Refresh') }}</el-button>
-    </h5>
+  <div class="server-cmd">
+    <el-card class="status-card" shadow="hover">
+      <div class="tips" v-html="T('ServerCmdTips', {wiki: '<a target=\'_blank\' href=\'https://github.com/lejianwen/rustdesk-api/wiki/Rustdesk-Command\'>WIKI</a>'})"></div>
+      <div class="status-row">
+        <span class="label">ID {{ T('Status') }}: </span>
+        <el-tag v-if="canSendIdServerCmd" type="success">{{ T('Available') }}</el-tag>
+        <el-tag v-else type="danger">{{ T('NotAvailable') }}</el-tag>
+        <el-button size="small" type="text" @click="refreshCanSendIdServerCmd">{{ T('Refresh') }}</el-button>
+      </div>
+      <div class="status-row">
+        <span class="label">RELAY {{ T('Status') }}: </span>
+        <el-tag v-if="canSendRelayServerCmd" type="success">{{ T('Available') }}</el-tag>
+        <el-tag v-else type="danger">{{ T('NotAvailable') }}</el-tag>
+        <el-button size="small" type="text" @click="refreshCanSendRelayServerCmd">{{ T('Refresh') }}</el-button>
+      </div>
+    </el-card>
     <el-tabs
         v-model="activeName"
         type="card"
+        class="cmd-tabs"
     >
       <el-tab-pane :label="T('Simple')" name="Simple">
-        <el-space wrap>
+        <el-space wrap :size="16">
           <RelayServers ref="rs" :can-send="canSendIdServerCmd"/>
           <alwaysUseRelay :can-send="canSendIdServerCmd" @success="handleAlwaysUseRelaySuccess"/>
           <mustLogin :can-send="canControlMustLogin&&canSendIdServerCmd"/>
@@ -281,9 +284,44 @@
 </script>
 
 <style scoped lang="scss">
+.server-cmd {
+  .status-card {
+    margin-bottom: var(--yj-spacing-lg);
+
+    .tips {
+      font-size: var(--yj-font-size-md);
+      color: var(--yj-text-secondary);
+      margin-bottom: var(--yj-spacing-md);
+      line-height: var(--yj-line-height-base);
+
+      :deep(a) {
+        color: var(--yj-primary);
+      }
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: var(--yj-spacing-sm);
+      padding: var(--yj-spacing-xs) 0;
+      font-size: var(--yj-font-size-md);
+
+      .label {
+        color: var(--yj-text-secondary);
+        font-weight: var(--yj-font-weight-medium);
+        min-width: 120px;
+      }
+    }
+  }
+
+  .cmd-tabs {
+    margin-top: var(--yj-spacing-xs);
+  }
+}
+
 .simple-card {
-  min-width: 300px;
-  margin: 10px;
-  min-height: 300px;
+  min-width: 320px;
+  margin: 0;
+  min-height: 220px;
 }
 </style>

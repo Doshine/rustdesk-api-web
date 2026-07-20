@@ -100,6 +100,28 @@
   --yj-z-overlay: 1200;
   --yj-z-modal: 1300;
   --yj-z-toast: 1400;
+
+  /* ============ 布局 layout（W5 页面级） ============ */
+  --yj-header-height: 56px;
+  --yj-sidebar-collapsed-width: 64px;
+  --yj-content-max-width: 1560px;
+  --yj-tags-height: 44px;
+
+  /* ============ 侧边栏 sidebar（深空蓝，深浅主题同构） ============ */
+  --yj-sidebar-bg: #0B1437;
+  --yj-sidebar-text: rgba(255, 255, 255, 0.68);
+  --yj-sidebar-text-active: #FFFFFF;
+  --yj-sidebar-hover-bg: rgba(255, 255, 255, 0.07);
+  --yj-sidebar-active-bg: #2F80FF;
+
+  /* ============ 状态点 status ============ */
+  --yj-online: #22C55E;
+  --yj-offline: #9AA0A6;
+  --yj-success-subtle: rgba(34, 197, 94, 0.14);
+  --yj-offline-subtle: rgba(154, 160, 166, 0.16);
+
+  /* ============ 表格 table ============ */
+  --yj-table-zebra: #FAFBFC;
 }
 
 /* ============ 暗色覆盖（Element Plus 暗色约定） ============ */
@@ -119,4 +141,10 @@ html.dark {
   --yj-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --yj-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
   --yj-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  /* sidebar.dark：比 deep navy 更深，贴近暗色底 */
+  --yj-sidebar-bg: #0A1024;
+
+  /* table.dark */
+  --yj-table-zebra: #161D2C;
 }

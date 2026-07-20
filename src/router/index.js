@@ -32,31 +32,30 @@ const constantRoutes = [
   },
 ]
 export const asyncRoutes = [
-  // {
-  //   path: '/',
-  //   name: 'Index',
-  //   redirect: '/Home',
-  //   meta: { title: '首页', icon: 'house' },
-  //   component: () => import('@/layout/index.vue'),
-  //   children: [
-  //     {
-  //       path: '/Home',
-  //       name: 'Home',
-  //       meta: { title: '首页', icon: 'house' },
-  //       component: () => import('@/views/index/index.vue'),
-  //     },
-  //
-  //   ],
-  // },
+  {
+    path: '/',
+    name: 'Index',
+    redirect: '/home',
+    meta: { title: 'Dashboard', icon: 'House' },
+    component: () => import('@/layout/index.vue'),
+    children: [
+      {
+        path: 'home',
+        name: 'Home',
+        meta: { title: 'Dashboard', icon: 'House' },
+        component: () => import('@/views/index/index.vue'),
+      },
+    ],
+  },
   {
     path: '/my',
     name: 'My',
-    redirect: '/',
+    redirect: '/my/info',
     meta: { title: 'My', icon: 'UserFilled' },
     component: () => import('@/layout/index.vue'),
     children: [
       {
-        path: '/',
+        path: 'info',
         name: 'MyInfo',
         meta: { title: 'Userinfo', icon: 'User' /*keepAlive: true*/ },
         component: () => import('@/views/my/info.vue'),

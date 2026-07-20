@@ -19,9 +19,11 @@
             <el-tag :type="expired(row)?'info':'success'">{{ row.expire ? row.expire : T('Forever') }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column :label="T('Actions')" align="center" width="400">
+        <el-table-column :label="T('Actions')" align="center" width="90" class-name="table-actions">
           <template #default="{row}">
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -42,6 +44,7 @@
   import { onActivated, onMounted, watch } from 'vue'
   import { T } from '@/utils/i18n'
   import { useRepositories } from '@/views/share_record'
+  import { Delete } from '@element-plus/icons'
 
   const {
     listRes,

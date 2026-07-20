@@ -38,10 +38,10 @@
       <el-table :data="listRes.list" v-loading="listRes.loading" border>
         <el-table-column prop="id" label="ID" align="center" width="200">
           <template #default="{row}">
-            <div>
+            <div class="yj-mono peer-id">
               <PlatformIcons :name="platformList.find(p=>p.label===row.platform)?.icon" style="width: 20px;height: 20px;display: inline-block" color="var(--basicBlack)"/>
               {{ row.id }}
-              <el-icon @click="handleClipboard(row.id, $event)">
+              <el-icon class="copy-icon" @click="handleClipboard(row.id, $event)">
                 <CopyDocument/>
               </el-icon>
             </div>
@@ -66,13 +66,21 @@
         <el-table-column prop="alias" :label="T('Alias')" align="center" width="150"/>
         <el-table-column prop="peer.version" :label="T('Version')" align="center" width="100"/>
         <el-table-column prop="hash" :label="T('Hash')" align="center" width="150" show-overflow-tooltip/>
-        <el-table-column :label="T('Actions')" align="center" class-name="table-actions" width="500" fixed="right">
+        <el-table-column :label="T('Actions')" align="center" class-name="table-actions" width="200" fixed="right">
           <template #default="{row}">
-            <el-button type="success" @click="connectByClient(row.id)">{{ T('Link') }}</el-button>
-            <el-button v-if="appStore.setting.appConfig.web_client" type="success" @click="toWebClientLink(row)">Web Client</el-button>
+            <el-tooltip :content="T('Link')" placement="top">
+              <el-button type="success" circle :icon="Connection" @click="connectByClient(row.id)"/>
+            </el-tooltip>
+            <el-tooltip v-if="appStore.setting.appConfig.web_client" content="Web Client" placement="top">
+              <el-button type="success" circle :icon="Monitor" @click="toWebClientLink(row)"/>
+            </el-tooltip>
             <!--            <el-button type="primary" @click="toShowShare(row)">{{ T('ShareByWebClient') }}</el-button>-->
-            <el-button @click="toEdit(row)">{{ T('Edit') }}</el-button>
-            <el-button type="danger" @click="del(row)">{{ T('Delete') }}</el-button>
+            <el-tooltip :content="T('Edit')" placement="top">
+              <el-button circle :icon="Edit" @click="toEdit(row)"/>
+            </el-tooltip>
+            <el-tooltip :content="T('Delete')" placement="top">
+              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -186,7 +194,7 @@
   import { connectByClient } from '@/utils/peer'
   import { useAppStore } from '@/store/app'
   import { handleClipboard } from '@/utils/clipboard'
-  import { CopyDocument } from '@element-plus/icons'
+  import { CopyDocument, Connection, Delete, Edit, Monitor } from '@element-plus/icons'
   import PlatformIcons from '@/components/icons/platform.vue'
   import { loadAllUsers } from '@/global'
 
@@ -233,6 +241,22 @@
 <style scoped lang="scss">
 .list-query .el-select {
   --el-select-width: 160px;
+}
+
+.peer-id {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yj-spacing-xs);
+
+  .copy-icon {
+    color: var(--yj-text-tertiary);
+    cursor: pointer;
+    transition: color var(--yj-duration-fast) var(--yj-easing-standard);
+
+    &:hover {
+      color: var(--yj-primary);
+    }
+  }
 }
 
 .colors {
