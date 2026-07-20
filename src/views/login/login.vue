@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-card">
-      <img src="@/assets/logo.png" alt="logo" class="login-logo"/>
+      <img src="@/assets/brand-logo.png" alt="logo" class="login-logo"/>
 
       <el-tabs v-if="!disablePwd" v-model="activeTab" class="login-tabs">
         <el-tab-pane :label="T('AccountLogin')" name="account">

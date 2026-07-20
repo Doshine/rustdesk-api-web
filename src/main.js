@@ -9,6 +9,9 @@ import { pinia } from '@/store'
 import '@/permission'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/style.scss'
+// W5 主题层：必须在 Element Plus 样式（含 dark/css-vars）之后加载才能覆盖生效
+import '@/styles/tokens.css'
+import '@/styles/element-overrides.css'
 import * as ElementIcons from '@element-plus/icons'
 
 const app = createApp(App)

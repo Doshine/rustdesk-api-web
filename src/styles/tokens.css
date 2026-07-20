@@ -1,0 +1,122 @@
+/**
+ * 蓝鲸银河 Web 主题 tokens（W5 设计系统主题层）
+ * 单一事实源：docs/design/tokens.json —— 改色改字只改源头，再同步本文件
+ * 命名约定：统一 --yj- 前缀（yj = yinhe / 银河）
+ * 暗色：遵循 Element Plus 约定，挂 html.dark 选择器
+ */
+
+:root {
+  /* ============ 品牌色 color.brand ============ */
+  --yj-primary: #2F80FF;
+  --yj-primary-hover: #5C9AFF;
+  --yj-primary-active: #1F66E5;
+  --yj-primary-subtle: rgba(47, 128, 255, 0.12);
+  --yj-accent: #00C2FF;
+  --yj-deep-navy: #0B1437;
+  --yj-gradient: linear-gradient(135deg, #2F80FF 0%, #00C2FF 100%);
+
+  /* ============ 语义色 color.semantic ============ */
+  --yj-success: #22C55E;
+  --yj-warning: #F59E0B;
+  --yj-danger: #EF4444;
+  --yj-info: #2F80FF;
+
+  /* ============ 质量色 color.quality ============ */
+  --yj-quality-good: #22C55E;
+  --yj-quality-fair: #F59E0B;
+  --yj-quality-poor: #EF4444;
+
+  /* ============ 中性色 color.neutral.light（默认/light 套） ============ */
+  --yj-bg: #F7F8FA;
+  --yj-surface: #FFFFFF;
+  --yj-surface-hover: #F0F2F5;
+  --yj-border: #E5E7EB;
+  --yj-divider: #EFF0F1;
+  --yj-text-primary: #1F2329;
+  --yj-text-secondary: #646A73;
+  --yj-text-tertiary: #9AA0A6;
+  --yj-text-inverse: #FFFFFF;
+
+  /* ============ 字体 font ============ */
+  --yj-font-family-base: -apple-system, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --yj-font-family-mono: 'SF Mono', Consolas, 'JetBrains Mono', monospace;
+  --yj-font-family-id-display: 'SF Pro Display', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+  /* font.size（数值 → px） */
+  --yj-font-size-xs: 11px;
+  --yj-font-size-sm: 12px;
+  --yj-font-size-base: 13px;
+  --yj-font-size-md: 14px;
+  --yj-font-size-lg: 16px;
+  --yj-font-size-xl: 18px;
+  --yj-font-size-xxl: 20px;
+  --yj-font-size-display: 28px;
+  --yj-font-size-id-card: 34px;
+
+  /* font.weight */
+  --yj-font-weight-regular: 400;
+  --yj-font-weight-medium: 500;
+  --yj-font-weight-semibold: 600;
+  --yj-font-weight-bold: 700;
+
+  /* font.lineHeight */
+  --yj-line-height-tight: 1.25;
+  --yj-line-height-base: 1.5;
+  --yj-line-height-relaxed: 1.75;
+
+  /* ============ 间距 spacing（数值 → px） ============ */
+  --yj-spacing-xxs: 2px;
+  --yj-spacing-xs: 4px;
+  --yj-spacing-sm: 8px;
+  --yj-spacing-md: 12px;
+  --yj-spacing-lg: 16px;
+  --yj-spacing-xl: 20px;
+  --yj-spacing-xxl: 24px;
+  --yj-spacing-xxxl: 32px;
+  --yj-spacing-page: 40px;
+
+  /* ============ 圆角 radius（数值 → px） ============ */
+  --yj-radius-sm: 6px;
+  --yj-radius-md: 8px;
+  --yj-radius-lg: 12px;
+  --yj-radius-xl: 16px;
+  --yj-radius-full: 9999px;
+
+  /* ============ 阴影 shadow.light（默认/light 套） ============ */
+  --yj-shadow-sm: 0 1px 2px rgba(31, 35, 41, 0.06);
+  --yj-shadow-md: 0 4px 12px rgba(31, 35, 41, 0.10);
+  --yj-shadow-lg: 0 8px 24px rgba(31, 35, 41, 0.14);
+
+  /* ============ 动效 motion ============ */
+  --yj-duration-fast: 120ms;
+  --yj-duration-normal: 200ms;
+  --yj-duration-slow: 320ms;
+  --yj-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --yj-easing-emphasis: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ============ 层级 zIndex ============ */
+  --yj-z-dropdown: 1000;
+  --yj-z-sticky: 1100;
+  --yj-z-overlay: 1200;
+  --yj-z-modal: 1300;
+  --yj-z-toast: 1400;
+}
+
+/* ============ 暗色覆盖（Element Plus 暗色约定） ============ */
+html.dark {
+  /* color.neutral.dark */
+  --yj-bg: #0F1420;
+  --yj-surface: #1A2130;
+  --yj-surface-hover: #242D40;
+  --yj-border: #2A3346;
+  --yj-divider: #232B3B;
+  --yj-text-primary: #E8EAED;
+  --yj-text-secondary: #9AA4B2;
+  --yj-text-tertiary: #6B7280;
+  --yj-text-inverse: #1F2329;
+
+  /* shadow.dark */
+  --yj-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --yj-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --yj-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+}

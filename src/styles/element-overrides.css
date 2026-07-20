@@ -1,0 +1,129 @@
+/**
+ * Element Plus 变量覆盖 —— 由 docs/design/tokens.json 派生（配合 tokens.css 使用）
+ * 加载顺序必须在 element-plus/dist/index.css 与 theme-chalk/dark/css-vars.css 之后
+ *
+ * 派生规则：
+ * - primary hover  = tokens brand.primaryHover  (#5C9AFF) → light-3
+ * - primary active = tokens brand.primaryActive (#1F66E5) → dark-2
+ * - primary subtle 档（light-5/7/8/9）用 tokens brand 蓝 rgba 梯度
+ * - success/warning/danger/info 用 tokens 语义色，light-N/dark-2 按 EP 官方
+ *   混色公式推导：light-N = 与白色混 N*10%，dark-2 = 与黑色混 20%
+ */
+
+:root {
+  /* ---- 主色：tokens color.brand.primary #2F80FF ---- */
+  --el-color-primary: #2F80FF;
+  --el-color-primary-light-3: #5C9AFF;              /* = brand.primaryHover */
+  --el-color-primary-light-5: rgba(47, 128, 255, 0.24);
+  --el-color-primary-light-7: rgba(47, 128, 255, 0.16);
+  --el-color-primary-light-8: rgba(47, 128, 255, 0.12); /* = brand.primarySubtle */
+  --el-color-primary-light-9: rgba(47, 128, 255, 0.06);
+  --el-color-primary-dark-2: #1F66E5;               /* = brand.primaryActive */
+
+  /* ---- 语义色：tokens color.semantic ---- */
+  --el-color-success: #22C55E;
+  --el-color-success-light-3: #64D68E;
+  --el-color-success-light-5: #91E2AF;
+  --el-color-success-light-7: #BDEECF;
+  --el-color-success-light-8: #D3F3DF;
+  --el-color-success-light-9: #E9F9EF;
+  --el-color-success-dark-2: #1B9E4B;
+
+  --el-color-warning: #F59E0B;
+  --el-color-warning-light-3: #F8BB54;
+  --el-color-warning-light-5: #FACF85;
+  --el-color-warning-light-7: #FCE2B6;
+  --el-color-warning-light-8: #FDECCE;
+  --el-color-warning-light-9: #FEF5E7;
+  --el-color-warning-dark-2: #C47E09;
+
+  --el-color-danger: #EF4444;
+  --el-color-danger-light-3: #F47C7C;
+  --el-color-danger-light-5: #F7A2A2;
+  --el-color-danger-light-7: #FAC7C7;
+  --el-color-danger-light-8: #FCDADA;
+  --el-color-danger-light-9: #FDECEC;
+  --el-color-danger-dark-2: #BF3636;
+
+  /* EP 中 error 独立于 danger，同步为 tokens danger */
+  --el-color-error: #EF4444;
+  --el-color-error-light-3: #F47C7C;
+  --el-color-error-light-5: #F7A2A2;
+  --el-color-error-light-7: #FAC7C7;
+  --el-color-error-light-8: #FCDADA;
+  --el-color-error-light-9: #FDECEC;
+  --el-color-error-dark-2: #BF3636;
+
+  --el-color-info: #2F80FF;
+  --el-color-info-light-3: #5C9AFF;
+  --el-color-info-light-5: rgba(47, 128, 255, 0.24);
+  --el-color-info-light-7: rgba(47, 128, 255, 0.16);
+  --el-color-info-light-8: rgba(47, 128, 255, 0.12);
+  --el-color-info-light-9: rgba(47, 128, 255, 0.06);
+  --el-color-info-dark-2: #1F66E5;
+
+  /* ---- 圆角 / 字体 ---- */
+  --el-border-radius-base: 8px;  /* tokens radius.md */
+  --el-font-family: var(--yj-font-family-base);
+}
+
+/**
+ * 暗色：EP dark/css-vars.css 在 html.dark 下重定义了整套 --el-color-*，
+ * 选择器优先级高于 :root，必须在此同步覆盖，否则暗色回落到 EP 默认蓝。
+ * 派生规则（EP 暗色约定）：light-N = 与 tokens dark surface #1A2130 混 N*10%，
+ * dark-2 = 与白色混 20%（主色 dark-2 恰等于 brand.primaryHover，直接取用）。
+ */
+html.dark {
+  --el-color-primary: #2F80FF;
+  --el-color-primary-light-3: #2964C1;
+  --el-color-primary-light-5: #255198;
+  --el-color-primary-light-7: #203E6E;
+  --el-color-primary-light-8: #1E3459;
+  --el-color-primary-light-9: #1C2B45;
+  --el-color-primary-dark-2: #5C9AFF;
+
+  --el-color-success: #22C55E;
+  --el-color-success-light-3: #209450;
+  --el-color-success-light-5: #1E7347;
+  --el-color-success-light-7: #1C523E;
+  --el-color-success-light-8: #1C4239;
+  --el-color-success-light-9: #1B3135;
+  --el-color-success-dark-2: #4ED17E;
+
+  --el-color-warning: #F59E0B;
+  --el-color-warning-light-3: #B37916;
+  --el-color-warning-light-5: #88601E;
+  --el-color-warning-light-7: #5C4725;
+  --el-color-warning-light-8: #463A29;
+  --el-color-warning-light-9: #302E2C;
+  --el-color-warning-dark-2: #F7B13C;
+
+  --el-color-danger: #EF4444;
+  --el-color-danger-light-3: #AF3A3E;
+  --el-color-danger-light-5: #85333A;
+  --el-color-danger-light-7: #5A2C36;
+  --el-color-danger-light-8: #452834;
+  --el-color-danger-light-9: #2F2532;
+  --el-color-danger-dark-2: #F26969;
+
+  --el-color-error: #EF4444;
+  --el-color-error-light-3: #AF3A3E;
+  --el-color-error-light-5: #85333A;
+  --el-color-error-light-7: #5A2C36;
+  --el-color-error-light-8: #452834;
+  --el-color-error-light-9: #2F2532;
+  --el-color-error-dark-2: #F26969;
+
+  --el-color-info: #2F80FF;
+  --el-color-info-light-3: #2964C1;
+  --el-color-info-light-5: #255198;
+  --el-color-info-light-7: #203E6E;
+  --el-color-info-light-8: #1E3459;
+  --el-color-info-light-9: #1C2B45;
+  --el-color-info-dark-2: #5C9AFF;
+}
+
+/* 全局正文字体对齐 tokens font.family.base */
+body {
+  font-family: var(--yj-font-family-base);
+}
