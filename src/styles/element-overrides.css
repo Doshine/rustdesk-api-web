@@ -1,5 +1,6 @@
 /**
- * Element Plus 变量覆盖 —— 由 docs/design/tokens.json 派生（配合 tokens.css 使用）
+ * Element Plus 变量覆盖 —— 由 docs/design/tokens.json 派生（配合 tokens.css 使用；
+ * 源文件在管理仓 https://github.com/Doshine/yinhe/blob/master/docs/design/tokens.json）
  * 加载顺序必须在 element-plus/dist/index.css 与 theme-chalk/dark/css-vars.css 之后
  *
  * 派生规则：

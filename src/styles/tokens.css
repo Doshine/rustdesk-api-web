@@ -1,6 +1,7 @@
 /**
  * 蓝鲸银河 Web 主题 tokens（W5 设计系统主题层）
  * 单一事实源：docs/design/tokens.json —— 改色改字只改源头，再同步本文件
+ * （源文件在管理仓 https://github.com/Doshine/yinhe/blob/master/docs/design/tokens.json）
  * 命名约定：统一 --yj- 前缀（yj = yinhe / 银河）
  * 暗色：遵循 Element Plus 约定，挂 html.dark 选择器
  */
