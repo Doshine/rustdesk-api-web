@@ -95,16 +95,17 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #2d3a4b;
+  background-color: var(--yj-bg);
   padding: 20px;
   box-sizing: border-box;
 }
 
 .login-card {
   width: 360px;
-  background-color: #283342;
+  background-color: var(--yj-surface);
+  border: 1px solid var(--yj-border);
   padding: 40px;
-  border-radius: 8px;
+  border-radius: var(--yj-radius-lg);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -138,20 +139,5 @@ h1 {
   display: block;
 }
 
-.el-form-item {
-  ::v-deep(.el-form-item__label) {
-    color: #fff;
-  }
-
-  .el-input {
-    ::v-deep(.el-input__wrapper) {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: transparent;
-    }
-
-    ::v-deep(input) {
-      color: #fff;
-    }
-  }
-}
+/* 表单标签/输入框颜色交由 element-overrides.css 的 EP token 映射，不再强制白色 */
 </style>

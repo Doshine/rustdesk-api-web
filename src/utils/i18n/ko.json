@@ -468,7 +468,7 @@
     "One": "Captcha"
   },
   "ServerCmd": {
-    "One": "서버 명령"
+    "One": "설정"
   },
   "Simple": {
     "One": "간단"
@@ -521,6 +521,105 @@
   "AccountLogin": {
     "One": "계정 로그인"
   },
+  "PendingApproval": {
+    "One": "승인 대기"
+  },
+  "Approve": {
+    "One": "승인"
+  },
+  "Reject": {
+    "One": "거부"
+  },
+  "PendingAlert": {
+    "One": "승인 대기 중인 새 기기 {n}대"
+  },
+  "ViewPending": {
+    "One": "보기"
+  },
+  "BatchUpdateTags": {
+    "One": "일괄 태그 지정"
+  },
+  "SelectTags": {
+    "One": "태그 선택"
+  },
+  "ApproveSuccess": {
+    "One": "승인 완료"
+  },
+  "NavVisibility": {
+    "One": "낸비게이션 표시"
+  },
+  "NavVisibilityNote": {
+    "One": "메뉴 표시 여부만 제어하며 기능 권한에는 영향을 주지 않습니다. 비워 두면 기본적으로 모두 표시됩니다."
+  },
+  "NavVisibilityAll": {
+    "One": "모두 표시(기본)"
+  },
+  "NavVisibilityCount": {
+    "One": "{n}개 표시"
+  },
+  "PendingEmptyTitle": {
+    "One": "승인 대기 중인 새 기기가 없습니다"
+  },
+  "PendingEmptyTip": {
+    "One": "새로 연결된 기기가 여기에 표시됩니다. 승인 후 연결 및 관리할 수 있습니다."
+  },
+  "ApproveConfirm": {
+    "One": "선택한 기기를 승인하시겠습니까?"
+  },
+  "MoreFilters": {
+    "One": "필터 더 보기"
+  },
+  "Reset": {
+    "One": "초기화"
+  },
+  "Online": {
+    "One": "온라인"
+  },
+  "Offline": {
+    "One": "오프라인"
+  },
+  "OnlineStatus": {
+    "One": "온라인 상태"
+  },
+  "AddPeer": {
+    "One": "기기 추가"
+  },
+  "AddUser": {
+    "One": "사용자 추가"
+  },
+  "NoData": {
+    "One": "데이터 없음"
+  },
+  "NoDataTip": {
+    "One": "현재 조건에 해당하는 기록이 없습니다. 필터를 조정하거나 새로 추가하세요."
+  },
+  "Enable": {
+    "One": "활성화"
+  },
+  "Disable": {
+    "One": "비활성화"
+  },
+  "More": {
+    "One": "더 보기"
+  },
+  "WechatLogin": {
+    "One": "WeChat 스캔"
+  },
+  "WechatScanTip": {
+    "One": "WeChat에서 QR 코드를 스캔하여 로그인하세요."
+  },
+  "WechatNotConfigured": {
+    "One": "WeChat 로그인을 사용할 수 없습니다. 다른 방법을 이용하세요."
+  },
+  "UseSmsLogin": {
+    "One": "SMS 코드로 로그인"
+  },
+  "UsePwdLogin": {
+    "One": "비밀번호로 로그인"
+  },
+  "AuthServiceUnavailable": {
+    "One": "인증 서비스를 사용할 수 없습니다. 잠시 후 다시 시도하거나 관리자에게 문의하세요."
+  },
   "SmsLogin": {
     "One": "SMS 로그인"
   },
@@ -568,5 +667,249 @@
   "DashboardOsDist": {
     "One": "OS 분포",
     "Other": "OS 분포"
+  },
+  "DashboardActiveSessions": {
+    "One": "활성 세션",
+    "Other": "활성 세션"
+  },
+  "DashboardAlerts": {
+    "One": "경고",
+    "Other": "경고"
+  },
+  "DashboardAlertsEmpty": {
+    "One": "데이터 소스 없음",
+    "Other": "데이터 소스 없음"
+  },
+  "DashboardPeersTotalCaption": {
+    "One": "총 기기 {n}대",
+    "Other": "총 기기 {n}대"
+  },
+  "DashboardConnsTotalCaption": {
+    "One": "누적 연결 {n}건",
+    "Other": "누적 연결 {n}건"
+  },
+  "DashboardActiveHint": {
+    "One": "최근 200개 연결 기록 기준",
+    "Other": "최근 200개 연결 기록 기준"
+  },
+  "DashboardNodeHealth": {
+    "One": "노드 상태",
+    "Other": "노드 상태"
+  },
+  "DashboardNodeApi": {
+    "One": "API 서버",
+    "Other": "API 서버"
+  },
+  "DashboardNodeId": {
+    "One": "ID 서버",
+    "Other": "ID 서버"
+  },
+  "DashboardNodeRelay": {
+    "One": "릴레이 서버",
+    "Other": "릴레이 서버"
+  },
+  "DashboardNodeStandby": {
+    "One": "예비 노드",
+    "Other": "예비 노드"
+  },
+  "DashboardLatency": {
+    "One": "지연 시간",
+    "Other": "지연 시간"
+  },
+  "DashboardLoad": {
+    "One": "부하",
+    "Other": "부하"
+  },
+  "DashboardUnconfigured": {
+    "One": "구성되지 않음",
+    "Other": "구성되지 않음"
+  },
+  "DashboardRetry": {
+    "One": "다시 시도",
+    "Other": "다시 시도"
+  },
+  "DashboardLoadFailed": {
+    "One": "로드 실패",
+    "Other": "로드 실패"
+  },
+  "DashboardLastUpdated": {
+    "One": "마지막 업데이트 {time}",
+    "Other": "마지막 업데이트 {time}"
+  },
+  "RelayNodes": {
+    "One": "릴레이 노드",
+    "Other": "릴레이 노드"
+  },
+  "RelayNodesDesc": {
+    "One": "등록된 릴레이 노드는 클라이언트에 배포됩니다.",
+    "Other": "등록된 릴레이 노드는 클라이언트에 배포됩니다."
+  },
+  "RelayNodesTip": {
+    "One": "여기에 노드를 등록한 후 '서버에 적용'을 클릭하면 ID 서버에 동기화되어 적용됩니다.",
+    "Other": "여기에 노드를 등록한 후 '서버에 적용'을 클릭하면 ID 서버에 동기화되어 적용됩니다."
+  },
+  "Host": {
+    "One": "호스트",
+    "Other": "호스트"
+  },
+  "Port": {
+    "One": "포트",
+    "Other": "포트"
+  },
+  "Region": {
+    "One": "지역",
+    "Other": "지역"
+  },
+  "ISP": {
+    "One": "통신사",
+    "Other": "통신사"
+  },
+  "Priority": {
+    "One": "우선순위",
+    "Other": "우선순위"
+  },
+  "LastCheckedAt": {
+    "One": "최근 확인",
+    "Other": "최근 확인"
+  },
+  "Enabled": {
+    "One": "활성화",
+    "Other": "활성화"
+  },
+  "PublicKey": {
+    "One": "공개 키",
+    "Other": "공개 키"
+  },
+  "AddNode": {
+    "One": "노드 추가",
+    "Other": "노드 추가"
+  },
+  "EditNode": {
+    "One": "노드 편집",
+    "Other": "노드 편집"
+  },
+  "Test": {
+    "One": "테스트",
+    "Other": "테스트"
+  },
+  "TestAll": {
+    "One": "전체 테스트",
+    "Other": "전체 테스트"
+  },
+  "TestConnection": {
+    "One": "연결 테스트",
+    "Other": "연결 테스트"
+  },
+  "TestPassed": {
+    "One": "성공",
+    "Other": "성공"
+  },
+  "TestFailed": {
+    "One": "실패",
+    "Other": "실패"
+  },
+  "Unknown": {
+    "One": "알 수 없음",
+    "Other": "알 수 없음"
+  },
+  "EffectiveConfig": {
+    "One": "현재 적용 구성",
+    "Other": "현재 적용 구성"
+  },
+  "EffectiveConfigTip": {
+    "One": "키 등 민감한 정보는 마지막 4자리만 표시되며, 복사 작업은 감사 로그에 기록됩니다.",
+    "Other": "키 등 민감한 정보는 마지막 4자리만 표시되며, 복사 작업은 감사 로그에 기록됩니다."
+  },
+  "ApplyToServer": {
+    "One": "서버에 적용",
+    "Other": "서버에 적용"
+  },
+  "ConfigMismatch": {
+    "One": "서버 구성이 노드 테이블과 일치하지 않습니다",
+    "Other": "서버 구성이 노드 테이블과 일치하지 않습니다"
+  },
+  "SyncNow": {
+    "One": "지금 동기화",
+    "Other": "지금 동기화"
+  },
+  "ConfigInSync": {
+    "One": "서버 구성이 노드 테이블과 일치합니다",
+    "Other": "서버 구성이 노드 테이블과 일치합니다"
+  },
+  "AddFirstNode": {
+    "One": "첫 노드 추가",
+    "Other": "첫 노드 추가"
+  },
+  "CopyAuditTip": {
+    "One": "전체 구성이 복사되었습니다. 이 복사 작업은 감사 로그에 기록됩니다",
+    "Other": "전체 구성이 복사되었습니다. 이 복사 작업은 감사 로그에 기록됩니다"
+  },
+  "RelayNodesResyncManual": {
+    "One": "강제 릴레이가 저장되었지만 활성화된 노드가 없습니다. '릴레이 노드' 패널에서 수동으로 서버에 적용하여 목록 초기화를 방지하세요.",
+    "Other": "강제 릴레이가 저장되었지만 활성화된 노드가 없습니다. '릴레이 노드' 패널에서 수동으로 서버에 적용하여 목록 초기화를 방지하세요."
+  },
+  "RelayNodesApplyHelp": {
+    "One": "활성화된 노드를 우선순위 내림차순으로 ID 서버에 기록하여 현재 릴레이 목록을 덮어씁니다(고위험).",
+    "Other": "활성화된 노드를 우선순위 내림차순으로 ID 서버에 기록하여 현재 릴레이 목록을 덮어씁니다(고위험)."
+  },
+  "Copy": {
+    "One": "복사",
+    "Other": "복사"
+  },
+  "ImportFromServer": {
+    "One": "서버에서 가져오기",
+    "Other": "서버에서 가져오기"
+  },
+  "ImportSelected": {
+    "One": "선택 항목 가져오기",
+    "Other": "선택 항목 가져오기"
+  },
+  "AlreadyExists": {
+    "One": "이미 존재",
+    "Other": "이미 존재"
+  },
+  "InSync": {
+    "One": "동기화됨",
+    "Other": "동기화됨"
+  },
+  "PendingSync": {
+    "One": "동기화 대기",
+    "Other": "동기화 대기"
+  },
+  "ServerSideNodes": {
+    "One": "서버 측 노드 {n}개",
+    "Other": "서버 측 노드 {n}개"
+  },
+  "View": {
+    "One": "보기",
+    "Other": "보기"
+  },
+  "Collapse": {
+    "One": "접기",
+    "Other": "접기"
+  },
+  "ImportDialogTitle": {
+    "One": "서버에서 노드 가져오기",
+    "Other": "서버에서 노드 가져오기"
+  },
+  "ImportSummarySuccess": {
+    "One": "{n}개 가져오기 성공",
+    "Other": "{n}개 가져오기 성공"
+  },
+  "ImportSummarySkip": {
+    "One": "{m}개 제외(이미 존재)",
+    "Other": "{m}개 제외(이미 존재)"
+  },
+  "ImportSummaryFail": {
+    "One": "{k}개 실패",
+    "Other": "{k}개 실패"
+  },
+  "ImportUnparsed": {
+    "One": "{n}개 항목을 해석할 수 없어 무시했습니다",
+    "Other": "{n}개 항목을 해석할 수 없어 무시했습니다"
+  },
+  "ReRead": {
+    "One": "다시 읽기",
+    "Other": "다시 읽기"
   }
 }

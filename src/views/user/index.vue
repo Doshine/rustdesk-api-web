@@ -1,30 +1,38 @@
 <template>
   <div>
+    <YjPageHeader :title="T('UserManage')">
+      <template #actions>
+        <el-button type="primary" :icon="Plus" @click="toAdd">{{ T('AddUser') }}</el-button>
+        <el-button @click="toExport">{{ T('Export') }}</el-button>
+      </template>
+    </YjPageHeader>
+
     <el-card class="list-query" shadow="hover">
-      <el-form inline label-width="80px">
+      <YjFilterBar @search="handlerQuery" @reset="onResetFilter">
         <el-form-item :label="T('Username')">
-          <el-input v-model="listQuery.username"></el-input>
+          <el-input v-model="listQuery.username" clearable @keyup.enter="handlerQuery"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handlerQuery">{{ T('Filter') }}</el-button>
-          <el-button type="danger" @click="toAdd">{{ T('Add') }}</el-button>
-          <el-button type="success" @click="toExport">{{ T('Export') }}</el-button>
+        <el-form-item :label="T('Status')">
+          <el-select v-model="listQuery.status" clearable>
+            <el-option :label="T('Enable')" :value="ENABLE_STATUS"></el-option>
+            <el-option :label="T('Disable')" :value="DISABLE_STATUS"></el-option>
+          </el-select>
         </el-form-item>
-      </el-form>
+      </YjFilterBar>
     </el-card>
     <el-card class="list-body" shadow="hover">
       <el-table :data="listRes.list" v-loading="listRes.loading" border>
-        <el-table-column prop="id" label="ID" align="center"></el-table-column>
-        <el-table-column prop="username" :label="T('Username')" align="center"/>
-        <el-table-column prop="email" :label="T('Email')" align="center"/>
-        <el-table-column prop="nickname" :label="T('Nickname')" align="center"/>
-        <el-table-column :label="T('Group')" align="center">
+        <el-table-column prop="id" label="ID" align="center" width="80"></el-table-column>
+        <el-table-column prop="username" :label="T('Username')" align="center" min-width="180" show-overflow-tooltip/>
+        <el-table-column prop="email" :label="T('Email')" align="center" min-width="180" show-overflow-tooltip/>
+        <el-table-column prop="nickname" :label="T('Nickname')" align="center" width="120" show-overflow-tooltip/>
+        <el-table-column :label="T('Group')" align="center" width="120">
           <template #default="{row}">
             <span v-if="row.group_id"> <el-tag>{{ listRes.groups?.find(g => g.id === row.group_id)?.name }} </el-tag> </span>
             <span v-else> - </span>
           </template>
         </el-table-column>
-        <el-table-column :label="T('Status')" align="center">
+        <el-table-column :label="T('Status')" align="center" width="92">
           <template #default="{row}">
             <el-switch v-model="row.status"
                        :active-value="ENABLE_STATUS"
@@ -33,28 +41,36 @@
             ></el-switch>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" :label="T('Remark')" align="center"/>
-        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
-        <el-table-column prop="updated_at" :label="T('UpdatedAt')" align="center"/>
-        <el-table-column :label="T('Actions')" align="center" width="230" class-name="table-actions" fixed="right">
+        <el-table-column prop="remark" :label="T('Remark')" align="center" width="160" show-overflow-tooltip/>
+        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center" width="160" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column prop="updated_at" :label="T('UpdatedAt')" align="center" width="160" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column :label="T('Actions')" align="center" width="120" class-name="table-actions" fixed="right">
           <template #default="{row}">
-            <el-tooltip :content="T('UserTags')" placement="top">
-              <el-button circle :icon="CollectionTag" @click="toTag(row)"/>
-            </el-tooltip>
-            <el-tooltip :content="T('UserAddressBook')" placement="top">
-              <el-button circle :icon="Notebook" @click="toAddressBook(row)"/>
-            </el-tooltip>
             <el-tooltip :content="T('Edit')" placement="top">
               <el-button type="primary" circle :icon="Edit" @click="toEdit(row)"/>
             </el-tooltip>
-            <el-tooltip :content="T('ResetPassword')" placement="top">
-              <el-button type="warning" circle :icon="Key" @click="changePass(row)"/>
-            </el-tooltip>
-            <el-tooltip :content="T('Delete')" placement="top">
-              <el-button type="danger" circle :icon="Delete" @click="remove(row)"/>
-            </el-tooltip>
+            <el-dropdown trigger="click" @command="(cmd) => handleRowCommand(cmd, row)">
+              <el-button circle :icon="MoreFilled"/>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="tag">{{ T('UserTags') }}</el-dropdown-item>
+                  <el-dropdown-item command="ab">{{ T('UserAddressBook') }}</el-dropdown-item>
+                  <el-dropdown-item command="resetPwd">{{ T('ResetPassword') }}</el-dropdown-item>
+                  <el-dropdown-item command="delete" divided>
+                    <span class="yj-danger-text">{{ T('Delete') }}</span>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </template>
         </el-table-column>
+        <template #empty>
+          <YjEmpty>
+            <template #action>
+              <el-button type="primary" @click="toAdd">{{ T('AddUser') }}</el-button>
+            </template>
+          </YjEmpty>
+        </template>
       </el-table>
     </el-card>
     <el-card class="list-page" shadow="hover">
@@ -76,7 +92,10 @@
   import { update } from '@/api/user'
   import { ElMessageBox, ElMessage } from 'element-plus'
   import { onMounted, watch } from 'vue'
-  import { CollectionTag, Delete, Edit, Key, Notebook } from '@element-plus/icons'
+  import { Edit, MoreFilled, Plus } from '@element-plus/icons'
+  import YjPageHeader from '@/components/yj/YjPageHeader.vue'
+  import YjFilterBar from '@/components/yj/YjFilterBar.vue'
+  import YjEmpty from '@/components/yj/YjEmpty.vue'
   //列表
   const {
     listRes,
@@ -94,6 +113,12 @@
   watch(() => listQuery.page, getList)
   watch(() => listQuery.page_size, handlerQuery)
 
+  const onResetFilter = () => {
+    listQuery.username = ''
+    listQuery.status = ''
+    handlerQuery()
+  }
+
   const { toEdit, toAdd, toAddressBook, toTag } = useToEditOrAdd()
 
   const { changePass } = useChangePwd()
@@ -105,6 +130,14 @@
     if (res) {
       getList(listQuery)
     }
+  }
+
+  // 行内「更多」菜单：标签 / 地址簿 / 重置密码 / 删除
+  const handleRowCommand = (cmd, row) => {
+    if (cmd === 'tag') toTag(row)
+    else if (cmd === 'ab') toAddressBook(row)
+    else if (cmd === 'resetPwd') changePass(row)
+    else if (cmd === 'delete') remove(row)
   }
 
   const changeStatus = async (row) => {
@@ -124,5 +157,8 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.yj-danger-text {
+  color: var(--yj-danger);
+}
 </style>

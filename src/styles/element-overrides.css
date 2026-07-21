@@ -66,6 +66,15 @@
   /* ---- 圆角 / 字体 ---- */
   --el-border-radius-base: 8px;  /* tokens radius.md */
   --el-font-family: var(--yj-font-family-base);
+
+  /* ---- 规范 v2.1 §9.3 七项映射（浅色 :root 显式声明） ---- */
+  --el-bg-color-page: #F5F7FA;        /* Canvas */
+  --el-bg-color: #FCFDFE;             /* Surface */
+  --el-bg-color-overlay: #F9FBFD;     /* Surface Raised */
+  --el-text-color-primary: #172033;   /* Text Primary */
+  --el-text-color-regular: #4F5E73;   /* Text Secondary */
+  --el-border-color: #DDE3EC;         /* Border */
+  --el-transition-duration-fast: .15s;/* Motion Hover */
 }
 
 /**
@@ -122,6 +131,15 @@ html.dark {
   --el-color-info-light-8: #1E3459;
   --el-color-info-light-9: #1C2B45;
   --el-color-info-dark-2: #5C9AFF;
+
+  /* ---- 规范 v2.1 §9.3 七项映射（深色 html.dark 显式双写，禁反向复用） ---- */
+  --el-bg-color-page: #0F1420;        /* Canvas */
+  --el-bg-color: #141B2A;             /* Surface */
+  --el-bg-color-overlay: #192234;     /* Surface Raised */
+  --el-text-color-primary: #F2F6FC;   /* Text Primary */
+  --el-text-color-regular: #AAB7CA;   /* Text Secondary */
+  --el-border-color: #273247;         /* Border */
+  --el-transition-duration-fast: .15s;/* Motion Hover */
 }
 
 /* 全局正文字体对齐 tokens font.family.base */

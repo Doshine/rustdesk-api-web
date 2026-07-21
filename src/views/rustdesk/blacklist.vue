@@ -1,34 +1,49 @@
 <template>
-  <el-card class="simple-card" shadow="hover" v-loading="form.loading">
-    <template #header>
-      <div class="card-header">
-        <span>BLACK_LIST</span>
+  <div class="yj-settings-panel" v-loading="form.loading">
+    <header class="yj-settings-panel__header">
+      <h2 class="yj-settings-panel__title">IP 黑名单 <span class="yj-settings-panel__code">BLACK_LIST</span></h2>
+      <p class="yj-settings-panel__desc">被拉黑的 IP 将被中继服务器拒绝服务，相关连接会被立即中断。</p>
+    </header>
+
+    <div class="yj-settings-group">
+      <div class="yj-settings-row yj-settings-row--column">
+        <div class="yj-settings-row__main">
+          <div class="yj-settings-row__name">当前黑名单（{{ form.list.length }}）</div>
+        </div>
+        <div v-if="form.list.length" class="yj-ip-list">
+          <el-tag v-for="ip in form.list" :key="ip" class="yj-ip-list__tag" disable-transitions>{{ ip }}</el-tag>
+        </div>
+        <div v-else class="yj-ip-list__empty">暂无条目</div>
       </div>
-    </template>
-    <el-form :disabled="!canSend">
-      <el-form-item>
-        <el-input type="textarea" :model-value="form.list.join('|')" :rows="5"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getList">{{ T('Refresh') }}</el-button>
-        <el-button @click="showForm('add')" type="primary">{{ T('Add') }}</el-button>
-        <el-button @click="showForm('delete')" type="danger">{{ T('Delete') }}</el-button>
-      </el-form-item>
-    </el-form>
-    <el-dialog v-model="form.form_visible" :title="form.form_type">
-      <el-form label-width="100px">
+
+      <div class="yj-settings-row">
+        <div class="yj-settings-row__main">
+          <div class="yj-settings-row__name">黑名单操作</div>
+          <div class="yj-settings-row__help">添加与删除均为高风险操作，提交前需确认影响范围与回滚方式。</div>
+        </div>
+        <div class="yj-settings-row__control">
+          <el-button @click="getList">{{ T('Refresh') }}</el-button>
+          <el-button type="primary" :disabled="!canSend" @click="showForm('add')">{{ T('Add') }}</el-button>
+          <el-button type="danger" plain :disabled="!canSend" @click="showForm('delete')">{{ T('Delete') }}</el-button>
+        </div>
+      </div>
+    </div>
+
+    <el-dialog v-model="form.form_visible" :title="form.form_type === 'add' ? '添加黑名单' : '删除黑名单'" width="480px">
+      <el-form label-width="72px">
         <el-form-item label="IP">
-          <el-input v-model="form.form_input"></el-input>
-          <div>多个IP以 | 分割</div>
-          <div v-if="form.form_type==='delete'">, 全部填 <strong>all</strong></div>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="form.form_visible=false">{{ T('Cancel') }}</el-button>
-          <el-button @click="form.form_type === 'add' ? add() : remove()" type="primary">{{ T('Submit') }}</el-button>
+          <el-input v-model="form.form_input" placeholder="1.2.3.4|5.6.7.8"></el-input>
+          <div class="yj-dialog-hint">
+            多个 IP 以 | 分割<span v-if="form.form_type==='delete'">，全部删除填 <strong>all</strong></span>
+          </div>
         </el-form-item>
       </el-form>
+      <template #footer>
+        <el-button @click="form.form_visible=false">{{ T('Cancel') }}</el-button>
+        <el-button type="primary" :loading="form.submitting" @click="submit">{{ T('Submit') }}</el-button>
+      </template>
     </el-dialog>
-  </el-card>
+  </div>
 </template>
 <script setup>
 
@@ -36,7 +51,7 @@
   import { reactive, watch } from 'vue'
   import { sendCmd } from '@/api/rustdesk'
   import { ElMessage } from 'element-plus'
-  import { RELAY_TARGET } from '@/views/rustdesk/options'
+  import { confirmRisk, RELAY_TARGET } from '@/views/rustdesk/options'
 
   const props = defineProps({
     canSend: Boolean,
@@ -49,6 +64,7 @@
     list: [],
     target: RELAY_TARGET,
     loading: false,
+    submitting: false,
     form_visible: false,
     form_input: '',
     form_type: '',
@@ -66,17 +82,26 @@
     form.form_input = ''
     form.form_type = type
   }
-  const add = async () => {
-    const res = await sendCmd({ cmd: form.add_cmd, option: form.form_input, target: RELAY_TARGET }).catch(_ => false)
-    if (res) {
-      ElMessage.success(T('OperationSuccess'))
-      getList()
+  const submit = async () => {
+    if (!form.form_input.trim()) {
+      ElMessage.error(T('ParamRequired', { param: 'IP' }))
+      return
     }
-  }
-  const remove = async () => {
-    const res = await sendCmd({ cmd: form.remove_cmd, option: form.form_input, target: RELAY_TARGET }).catch(_ => false)
+    // 高风险操作：保存前确认影响范围与回滚方式
+    const ok = await confirmRisk(form.form_type === 'add' ? 'blacklist_add' : 'blacklist_remove')
+    if (!ok) {
+      return
+    }
+    form.submitting = true
+    const res = await sendCmd({
+      cmd: form.form_type === 'add' ? form.add_cmd : form.remove_cmd,
+      option: form.form_input,
+      target: RELAY_TARGET,
+    }).catch(_ => false)
+    form.submitting = false
     if (res) {
       ElMessage.success(T('OperationSuccess'))
+      form.form_visible = false
       getList()
     }
   }

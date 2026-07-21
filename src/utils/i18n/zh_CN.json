@@ -492,7 +492,7 @@
     "One": "验证码"
   },
   "ServerCmd": {
-    "One": "服务端命令"
+    "One": "设置中心"
   },
   "Simple": {
     "One": "简单"
@@ -551,6 +551,105 @@
   "AccountLogin": {
     "One": "账号登录"
   },
+  "PendingApproval": {
+    "One": "待审批"
+  },
+  "Approve": {
+    "One": "批准"
+  },
+  "Reject": {
+    "One": "拒绝"
+  },
+  "PendingAlert": {
+    "One": "{n} 台新设备等待审批"
+  },
+  "ViewPending": {
+    "One": "查看"
+  },
+  "BatchUpdateTags": {
+    "One": "批量打标签"
+  },
+  "SelectTags": {
+    "One": "选择标签"
+  },
+  "ApproveSuccess": {
+    "One": "已通过审批"
+  },
+  "NavVisibility": {
+    "One": "导航可见性"
+  },
+  "NavVisibilityNote": {
+    "One": "仅控制菜单可见性，不影响功能权限；留空表示默认全部可见"
+  },
+  "NavVisibilityAll": {
+    "One": "默认全部可见"
+  },
+  "NavVisibilityCount": {
+    "One": "可见 {n} 项"
+  },
+  "PendingEmptyTitle": {
+    "One": "没有等待审批的新设备"
+  },
+  "PendingEmptyTip": {
+    "One": "新接入的设备会出现在这里，审批通过后即可连接与管理"
+  },
+  "ApproveConfirm": {
+    "One": "确认批准选中的设备接入？"
+  },
+  "MoreFilters": {
+    "One": "更多筛选"
+  },
+  "Reset": {
+    "One": "重置"
+  },
+  "Online": {
+    "One": "在线"
+  },
+  "Offline": {
+    "One": "离线"
+  },
+  "OnlineStatus": {
+    "One": "在线状态"
+  },
+  "AddPeer": {
+    "One": "新增设备"
+  },
+  "AddUser": {
+    "One": "新增用户"
+  },
+  "NoData": {
+    "One": "暂无数据"
+  },
+  "NoDataTip": {
+    "One": "当前条件下没有记录，试试调整筛选或新增一条"
+  },
+  "Enable": {
+    "One": "启用"
+  },
+  "Disable": {
+    "One": "禁用"
+  },
+  "More": {
+    "One": "更多"
+  },
+  "WechatLogin": {
+    "One": "微信扫码"
+  },
+  "WechatScanTip": {
+    "One": "打开微信扫一扫，完成扫码授权后即可登录"
+  },
+  "WechatNotConfigured": {
+    "One": "暂未开通微信扫码登录，请使用其他方式"
+  },
+  "UseSmsLogin": {
+    "One": "使用短信验证码登录"
+  },
+  "UsePwdLogin": {
+    "One": "使用账号密码登录"
+  },
+  "AuthServiceUnavailable": {
+    "One": "认证服务异常，请稍后重试或联系管理员"
+  },
   "SmsLogin": {
     "One": "短信登录"
   },
@@ -598,5 +697,245 @@
   "DashboardOsDist": {
     "One": "设备系统分布",
     "Other": "设备系统分布"
+  },
+  "DashboardActiveSessions": {
+    "One": "活跃会话",
+    "Other": "活跃会话"
+  },
+  "DashboardAlerts": {
+    "One": "告警",
+    "Other": "告警"
+  },
+  "DashboardAlertsEmpty": {
+    "One": "暂无数据源",
+    "Other": "暂无数据源"
+  },
+  "DashboardPeersTotalCaption": {
+    "One": "设备总数 {n}",
+    "Other": "设备总数 {n}"
+  },
+  "DashboardConnsTotalCaption": {
+    "One": "累计连接 {n}",
+    "Other": "累计连接 {n}"
+  },
+  "DashboardActiveHint": {
+    "One": "基于最近 200 条连接记录统计",
+    "Other": "基于最近 200 条连接记录统计"
+  },
+  "DashboardNodeHealth": {
+    "One": "节点健康",
+    "Other": "节点健康"
+  },
+  "DashboardNodeApi": {
+    "One": "API 服务",
+    "Other": "API 服务"
+  },
+  "DashboardNodeId": {
+    "One": "ID 服务器",
+    "Other": "ID 服务器"
+  },
+  "DashboardNodeRelay": {
+    "One": "中继服务器",
+    "Other": "中继服务器"
+  },
+  "DashboardNodeStandby": {
+    "One": "备用节点",
+    "Other": "备用节点"
+  },
+  "DashboardLatency": {
+    "One": "延迟",
+    "Other": "延迟"
+  },
+  "DashboardLoad": {
+    "One": "负载",
+    "Other": "负载"
+  },
+  "DashboardUnconfigured": {
+    "One": "未配置",
+    "Other": "未配置"
+  },
+  "DashboardRetry": {
+    "One": "重试",
+    "Other": "重试"
+  },
+  "DashboardLoadFailed": {
+    "One": "加载失败",
+    "Other": "加载失败"
+  },
+  "DashboardLastUpdated": {
+    "One": "最近成功更新 {time}",
+    "Other": "最近成功更新 {time}"
+  },
+  "RelayNodes": {
+    "One": "中继节点",
+    "Other": "中继节点"
+  },
+  "RelayNodesDesc": {
+    "One": "登记的中继节点将分发到客户端使用。",
+    "Other": "登记的中继节点将分发到客户端使用。"
+  },
+  "RelayNodesTip": {
+    "One": "在此登记节点后，点击「应用到服务器」同步到 ID 服务器生效。",
+    "Other": "在此登记节点后，点击「应用到服务器」同步到 ID 服务器生效。"
+  },
+  "Host": {
+    "One": "主机",
+    "Other": "主机"
+  },
+  "Port": {
+    "One": "端口",
+    "Other": "端口"
+  },
+  "Region": {
+    "One": "区域",
+    "Other": "区域"
+  },
+  "ISP": {
+    "One": "运营商",
+    "Other": "运营商"
+  },
+  "Priority": {
+    "One": "优先级",
+    "Other": "优先级"
+  },
+  "LastCheckedAt": {
+    "One": "最近探测",
+    "Other": "最近探测"
+  },
+  "Enabled": {
+    "One": "启用",
+    "Other": "启用"
+  },
+  "PublicKey": {
+    "One": "公钥",
+    "Other": "公钥"
+  },
+  "AddNode": {
+    "One": "新增节点",
+    "Other": "新增节点"
+  },
+  "EditNode": {
+    "One": "编辑节点",
+    "Other": "编辑节点"
+  },
+  "Test": {
+    "One": "测试",
+    "Other": "测试"
+  },
+  "TestAll": {
+    "One": "全部测试",
+    "Other": "全部测试"
+  },
+  "TestConnection": {
+    "One": "测试连接",
+    "Other": "测试连接"
+  },
+  "TestPassed": {
+    "One": "成功",
+    "Other": "成功"
+  },
+  "TestFailed": {
+    "One": "失败",
+    "Other": "失败"
+  },
+  "Unknown": {
+    "One": "未知",
+    "Other": "未知"
+  },
+  "EffectiveConfig": {
+    "One": "当前生效配置",
+    "Other": "当前生效配置"
+  },
+  "EffectiveConfigTip": {
+    "One": "密钥等敏感信息仅显示末四位；复制操作将写入审计日志。",
+    "Other": "密钥等敏感信息仅显示末四位；复制操作将写入审计日志。"
+  },
+  "ApplyToServer": {
+    "One": "应用到服务器",
+    "Other": "应用到服务器"
+  },
+  "ConfigMismatch": {
+    "One": "服务器配置与节点表不一致",
+    "Other": "服务器配置与节点表不一致"
+  },
+  "SyncNow": {
+    "One": "立即同步",
+    "Other": "立即同步"
+  },
+  "ConfigInSync": {
+    "One": "服务器配置与节点表一致",
+    "Other": "服务器配置与节点表一致"
+  },
+  "AddFirstNode": {
+    "One": "新增第一个节点",
+    "Other": "新增第一个节点"
+  },
+  "CopyAuditTip": {
+    "One": "已复制完整配置，本次复制操作将写入审计日志",
+    "Other": "已复制完整配置，本次复制操作将写入审计日志"
+  },
+  "RelayNodesResyncManual": {
+    "One": "强制中继已保存，但节点表中没有启用节点；请到「中继节点」面板手动「应用到服务器」，防止中继列表被重置。",
+    "Other": "强制中继已保存，但节点表中没有启用节点；请到「中继节点」面板手动「应用到服务器」，防止中继列表被重置。"
+  },
+  "RelayNodesApplyHelp": {
+    "One": "将启用节点按优先级降序写入 ID 服务器，覆盖现有中继列表（高风险）。",
+    "Other": "将启用节点按优先级降序写入 ID 服务器，覆盖现有中继列表（高风险）。"
+  },
+  "Copy": {
+    "One": "复制",
+    "Other": "复制"
+  },
+  "ImportFromServer": {
+    "One": "从服务器导入",
+    "Other": "从服务器导入"
+  },
+  "ImportSelected": {
+    "One": "导入所选",
+    "Other": "导入所选"
+  },
+  "AlreadyExists": {
+    "One": "已存在",
+    "Other": "已存在"
+  },
+  "InSync": {
+    "One": "已同步",
+    "Other": "已同步"
+  },
+  "PendingSync": {
+    "One": "待同步",
+    "Other": "待同步"
+  },
+  "ServerSideNodes": {
+    "One": "服务器侧 {n} 个节点",
+    "Other": "服务器侧 {n} 个节点"
+  },
+  "Collapse": {
+    "One": "收起",
+    "Other": "收起"
+  },
+  "ImportDialogTitle": {
+    "One": "从服务器导入节点",
+    "Other": "从服务器导入节点"
+  },
+  "ImportSummarySuccess": {
+    "One": "成功导入 {n} 个",
+    "Other": "成功导入 {n} 个"
+  },
+  "ImportSummarySkip": {
+    "One": "跳过 {m} 个（已存在）",
+    "Other": "跳过 {m} 个（已存在）"
+  },
+  "ImportSummaryFail": {
+    "One": "失败 {k} 个",
+    "Other": "失败 {k} 个"
+  },
+  "ImportUnparsed": {
+    "One": "{n} 条无法解析已忽略",
+    "Other": "{n} 条无法解析已忽略"
+  },
+  "ReRead": {
+    "One": "重新读取",
+    "Other": "重新读取"
   }
 }

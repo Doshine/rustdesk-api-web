@@ -485,7 +485,7 @@
     "One": "Captcha"
   },
   "ServerCmd": {
-    "One": "Commande serveur"
+    "One": "Paramètres"
   },
   "Simple": {
     "One": "Simple"
@@ -538,6 +538,105 @@
   "AccountLogin": {
     "One": "Compte"
   },
+  "PendingApproval": {
+    "One": "En attente"
+  },
+  "Approve": {
+    "One": "Approuver"
+  },
+  "Reject": {
+    "One": "Rejeter"
+  },
+  "PendingAlert": {
+    "One": "{n} nouvel(s) appareil(s) en attente d'approbation"
+  },
+  "ViewPending": {
+    "One": "Voir"
+  },
+  "BatchUpdateTags": {
+    "One": "Étiqueter en masse"
+  },
+  "SelectTags": {
+    "One": "Sélectionner des étiquettes"
+  },
+  "ApproveSuccess": {
+    "One": "Approuvé"
+  },
+  "NavVisibility": {
+    "One": "Visibilité de navigation"
+  },
+  "NavVisibilityNote": {
+    "One": "Contrôle uniquement la visibilité du menu, pas les permissions. Laisser vide pour tout afficher par défaut."
+  },
+  "NavVisibilityAll": {
+    "One": "Tout visible (défaut)"
+  },
+  "NavVisibilityCount": {
+    "One": "{n} visible(s)"
+  },
+  "PendingEmptyTitle": {
+    "One": "Aucun nouvel appareil en attente"
+  },
+  "PendingEmptyTip": {
+    "One": "Les nouveaux appareils apparaîtront ici. Une fois approuvés, ils pourront être connectés et gérés."
+  },
+  "ApproveConfirm": {
+    "One": "Approuver les appareils sélectionnés ?"
+  },
+  "MoreFilters": {
+    "One": "Plus de filtres"
+  },
+  "Reset": {
+    "One": "Réinitialiser"
+  },
+  "Online": {
+    "One": "En ligne"
+  },
+  "Offline": {
+    "One": "Hors ligne"
+  },
+  "OnlineStatus": {
+    "One": "Statut en ligne"
+  },
+  "AddPeer": {
+    "One": "Ajouter un appareil"
+  },
+  "AddUser": {
+    "One": "Ajouter un utilisateur"
+  },
+  "NoData": {
+    "One": "Aucune donnée"
+  },
+  "NoDataTip": {
+    "One": "Aucun enregistrement. Essayez d'ajuster les filtres ou d'en ajouter un."
+  },
+  "Enable": {
+    "One": "Activer"
+  },
+  "Disable": {
+    "One": "Désactiver"
+  },
+  "More": {
+    "One": "Plus"
+  },
+  "WechatLogin": {
+    "One": "WeChat (QR)"
+  },
+  "WechatScanTip": {
+    "One": "Ouvrez WeChat et scannez le QR code pour vous connecter."
+  },
+  "WechatNotConfigured": {
+    "One": "La connexion WeChat n'est pas disponible. Veuillez utiliser une autre méthode."
+  },
+  "UseSmsLogin": {
+    "One": "Se connecter avec un code SMS"
+  },
+  "UsePwdLogin": {
+    "One": "Se connecter avec un mot de passe"
+  },
+  "AuthServiceUnavailable": {
+    "One": "Le service d'authentification est indisponible. Veuillez réessayer plus tard ou contacter votre administrateur."
+  },
   "SmsLogin": {
     "One": "Connexion SMS"
   },
@@ -585,5 +684,245 @@
   "DashboardOsDist": {
     "One": "Répartition des OS",
     "Other": "Répartition des OS"
+  },
+  "DashboardActiveSessions": {
+    "One": "Sessions actives",
+    "Other": "Sessions actives"
+  },
+  "DashboardAlerts": {
+    "One": "Alertes",
+    "Other": "Alertes"
+  },
+  "DashboardAlertsEmpty": {
+    "One": "Aucune source de données",
+    "Other": "Aucune source de données"
+  },
+  "DashboardPeersTotalCaption": {
+    "One": "{n} appareils au total",
+    "Other": "{n} appareils au total"
+  },
+  "DashboardConnsTotalCaption": {
+    "One": "{n} connexions au total",
+    "Other": "{n} connexions au total"
+  },
+  "DashboardActiveHint": {
+    "One": "D'après les 200 derniers enregistrements",
+    "Other": "D'après les 200 derniers enregistrements"
+  },
+  "DashboardNodeHealth": {
+    "One": "Santé des nœuds",
+    "Other": "Santé des nœuds"
+  },
+  "DashboardNodeApi": {
+    "One": "Serveur API",
+    "Other": "Serveur API"
+  },
+  "DashboardNodeId": {
+    "One": "Serveur ID",
+    "Other": "Serveur ID"
+  },
+  "DashboardNodeRelay": {
+    "One": "Serveur relais",
+    "Other": "Serveur relais"
+  },
+  "DashboardNodeStandby": {
+    "One": "Nœud de secours",
+    "Other": "Nœud de secours"
+  },
+  "DashboardLatency": {
+    "One": "Latence",
+    "Other": "Latence"
+  },
+  "DashboardLoad": {
+    "One": "Charge",
+    "Other": "Charge"
+  },
+  "DashboardUnconfigured": {
+    "One": "Non configuré",
+    "Other": "Non configuré"
+  },
+  "DashboardRetry": {
+    "One": "Réessayer",
+    "Other": "Réessayer"
+  },
+  "DashboardLoadFailed": {
+    "One": "Échec du chargement",
+    "Other": "Échec du chargement"
+  },
+  "DashboardLastUpdated": {
+    "One": "Dernière mise à jour {time}",
+    "Other": "Dernière mise à jour {time}"
+  },
+  "RelayNodes": {
+    "One": "Nœuds relais",
+    "Other": "Nœuds relais"
+  },
+  "RelayNodesDesc": {
+    "One": "Les nœuds relais enregistrés sont distribués aux clients.",
+    "Other": "Les nœuds relais enregistrés sont distribués aux clients."
+  },
+  "RelayNodesTip": {
+    "One": "Après avoir enregistré les nœuds ici, cliquez sur « Appliquer au serveur » pour les synchroniser avec le serveur ID et les activer.",
+    "Other": "Après avoir enregistré les nœuds ici, cliquez sur « Appliquer au serveur » pour les synchroniser avec le serveur ID et les activer."
+  },
+  "Host": {
+    "One": "Hôte",
+    "Other": "Hôte"
+  },
+  "Port": {
+    "One": "Port",
+    "Other": "Port"
+  },
+  "Region": {
+    "One": "Région",
+    "Other": "Région"
+  },
+  "ISP": {
+    "One": "FAI",
+    "Other": "FAI"
+  },
+  "Priority": {
+    "One": "Priorité",
+    "Other": "Priorité"
+  },
+  "LastCheckedAt": {
+    "One": "Dernier test",
+    "Other": "Dernier test"
+  },
+  "Enabled": {
+    "One": "Activé",
+    "Other": "Activé"
+  },
+  "PublicKey": {
+    "One": "Clé publique",
+    "Other": "Clé publique"
+  },
+  "AddNode": {
+    "One": "Ajouter un nœud",
+    "Other": "Ajouter un nœud"
+  },
+  "EditNode": {
+    "One": "Modifier le nœud",
+    "Other": "Modifier le nœud"
+  },
+  "Test": {
+    "One": "Tester",
+    "Other": "Tester"
+  },
+  "TestAll": {
+    "One": "Tout tester",
+    "Other": "Tout tester"
+  },
+  "TestConnection": {
+    "One": "Tester la connexion",
+    "Other": "Tester la connexion"
+  },
+  "TestPassed": {
+    "One": "Réussi",
+    "Other": "Réussi"
+  },
+  "TestFailed": {
+    "One": "Échec",
+    "Other": "Échec"
+  },
+  "Unknown": {
+    "One": "Inconnu",
+    "Other": "Inconnu"
+  },
+  "EffectiveConfig": {
+    "One": "Configuration effective",
+    "Other": "Configuration effective"
+  },
+  "EffectiveConfigTip": {
+    "One": "Les valeurs sensibles (clés) n'affichent que les 4 derniers caractères ; la copie est consignée dans le journal d'audit.",
+    "Other": "Les valeurs sensibles (clés) n'affichent que les 4 derniers caractères ; la copie est consignée dans le journal d'audit."
+  },
+  "ApplyToServer": {
+    "One": "Appliquer au serveur",
+    "Other": "Appliquer au serveur"
+  },
+  "ConfigMismatch": {
+    "One": "La configuration du serveur diffère de la table des nœuds",
+    "Other": "La configuration du serveur diffère de la table des nœuds"
+  },
+  "SyncNow": {
+    "One": "Synchroniser",
+    "Other": "Synchroniser"
+  },
+  "ConfigInSync": {
+    "One": "La configuration du serveur correspond à la table des nœuds",
+    "Other": "La configuration du serveur correspond à la table des nœuds"
+  },
+  "AddFirstNode": {
+    "One": "Ajouter le premier nœud",
+    "Other": "Ajouter le premier nœud"
+  },
+  "CopyAuditTip": {
+    "One": "Configuration complète copiée ; cette copie sera consignée dans le journal d'audit",
+    "Other": "Configuration complète copiée ; cette copie sera consignée dans le journal d'audit"
+  },
+  "RelayNodesResyncManual": {
+    "One": "Relais forcé enregistré, mais aucun nœud activé — ouvrez « Nœuds relais » et appliquez manuellement pour éviter la réinitialisation de la liste.",
+    "Other": "Relais forcé enregistré, mais aucun nœud activé — ouvrez « Nœuds relais » et appliquez manuellement pour éviter la réinitialisation de la liste."
+  },
+  "RelayNodesApplyHelp": {
+    "One": "Écrit les nœuds activés sur le serveur ID par priorité décroissante, en écrasant la liste relais actuelle (risque élevé).",
+    "Other": "Écrit les nœuds activés sur le serveur ID par priorité décroissante, en écrasant la liste relais actuelle (risque élevé)."
+  },
+  "Copy": {
+    "One": "Copier",
+    "Other": "Copier"
+  },
+  "ImportFromServer": {
+    "One": "Importer depuis le serveur",
+    "Other": "Importer depuis le serveur"
+  },
+  "ImportSelected": {
+    "One": "Importer la sélection",
+    "Other": "Importer la sélection"
+  },
+  "AlreadyExists": {
+    "One": "Déjà existant",
+    "Other": "Déjà existant"
+  },
+  "InSync": {
+    "One": "Synchronisé",
+    "Other": "Synchronisé"
+  },
+  "PendingSync": {
+    "One": "En attente de synchro",
+    "Other": "En attente de synchro"
+  },
+  "ServerSideNodes": {
+    "One": "{n} nœuds sur le serveur",
+    "Other": "{n} nœuds sur le serveur"
+  },
+  "Collapse": {
+    "One": "Réduire",
+    "Other": "Réduire"
+  },
+  "ImportDialogTitle": {
+    "One": "Importer des nœuds depuis le serveur",
+    "Other": "Importer des nœuds depuis le serveur"
+  },
+  "ImportSummarySuccess": {
+    "One": "{n} importés",
+    "Other": "{n} importés"
+  },
+  "ImportSummarySkip": {
+    "One": "{m} ignorés (déjà existants)",
+    "Other": "{m} ignorés (déjà existants)"
+  },
+  "ImportSummaryFail": {
+    "One": "{k} échoués",
+    "Other": "{k} échoués"
+  },
+  "ImportUnparsed": {
+    "One": "{n} entrées non analysables ignorées",
+    "Other": "{n} entrées non analysables ignorées"
+  },
+  "ReRead": {
+    "One": "Relire",
+    "Other": "Relire"
   }
 }

@@ -482,7 +482,7 @@
     "One": "Captcha"
   },
   "ServerCmd": {
-    "One": "Comando del servidor"
+    "One": "Configuración"
   },
   "Simple": {
     "One": "Simple"
@@ -535,6 +535,105 @@
   "AccountLogin": {
     "One": "Cuenta"
   },
+  "PendingApproval": {
+    "One": "Pendiente"
+  },
+  "Approve": {
+    "One": "Aprobar"
+  },
+  "Reject": {
+    "One": "Rechazar"
+  },
+  "PendingAlert": {
+    "One": "{n} dispositivo(s) nuevo(s) pendiente(s) de aprobación"
+  },
+  "ViewPending": {
+    "One": "Ver"
+  },
+  "BatchUpdateTags": {
+    "One": "Etiquetar en lote"
+  },
+  "SelectTags": {
+    "One": "Seleccionar etiquetas"
+  },
+  "ApproveSuccess": {
+    "One": "Aprobado"
+  },
+  "NavVisibility": {
+    "One": "Visibilidad de navegación"
+  },
+  "NavVisibilityNote": {
+    "One": "Solo controla la visibilidad del menú, no los permisos. Déjalo vacío para mostrar todo por defecto."
+  },
+  "NavVisibilityAll": {
+    "One": "Todo visible (predeterminado)"
+  },
+  "NavVisibilityCount": {
+    "One": "{n} visible(s)"
+  },
+  "PendingEmptyTitle": {
+    "One": "No hay dispositivos nuevos pendientes"
+  },
+  "PendingEmptyTip": {
+    "One": "Los dispositivos recién conectados aparecerán aquí. Una vez aprobados, podrás conectarte y gestionarlos."
+  },
+  "ApproveConfirm": {
+    "One": "¿Aprobar los dispositivos seleccionados?"
+  },
+  "MoreFilters": {
+    "One": "Más filtros"
+  },
+  "Reset": {
+    "One": "Restablecer"
+  },
+  "Online": {
+    "One": "En línea"
+  },
+  "Offline": {
+    "One": "Sin conexión"
+  },
+  "OnlineStatus": {
+    "One": "Estado en línea"
+  },
+  "AddPeer": {
+    "One": "Añadir dispositivo"
+  },
+  "AddUser": {
+    "One": "Añadir usuario"
+  },
+  "NoData": {
+    "One": "Sin datos"
+  },
+  "NoDataTip": {
+    "One": "No hay registros. Prueba a ajustar los filtros o añade uno."
+  },
+  "Enable": {
+    "One": "Habilitar"
+  },
+  "Disable": {
+    "One": "Deshabilitar"
+  },
+  "More": {
+    "One": "Más"
+  },
+  "WechatLogin": {
+    "One": "WeChat QR"
+  },
+  "WechatScanTip": {
+    "One": "Abre WeChat y escanea el código QR para iniciar sesión."
+  },
+  "WechatNotConfigured": {
+    "One": "El inicio de sesión con WeChat no está disponible. Utiliza otro método."
+  },
+  "UseSmsLogin": {
+    "One": "Iniciar sesión con código SMS"
+  },
+  "UsePwdLogin": {
+    "One": "Iniciar sesión con contraseña"
+  },
+  "AuthServiceUnavailable": {
+    "One": "El servicio de autenticación no está disponible. Inténtalo más tarde o contacta con el administrador."
+  },
   "SmsLogin": {
     "One": "Inicio por SMS"
   },
@@ -582,5 +681,249 @@
   "DashboardOsDist": {
     "One": "Distribución de SO",
     "Other": "Distribución de SO"
+  },
+  "DashboardActiveSessions": {
+    "One": "Sesiones activas",
+    "Other": "Sesiones activas"
+  },
+  "DashboardAlerts": {
+    "One": "Alertas",
+    "Other": "Alertas"
+  },
+  "DashboardAlertsEmpty": {
+    "One": "Sin fuente de datos",
+    "Other": "Sin fuente de datos"
+  },
+  "DashboardPeersTotalCaption": {
+    "One": "{n} dispositivos en total",
+    "Other": "{n} dispositivos en total"
+  },
+  "DashboardConnsTotalCaption": {
+    "One": "{n} conexiones en total",
+    "Other": "{n} conexiones en total"
+  },
+  "DashboardActiveHint": {
+    "One": "Según los últimos 200 registros",
+    "Other": "Según los últimos 200 registros"
+  },
+  "DashboardNodeHealth": {
+    "One": "Salud de nodos",
+    "Other": "Salud de nodos"
+  },
+  "DashboardNodeApi": {
+    "One": "Servidor API",
+    "Other": "Servidor API"
+  },
+  "DashboardNodeId": {
+    "One": "Servidor ID",
+    "Other": "Servidor ID"
+  },
+  "DashboardNodeRelay": {
+    "One": "Servidor relay",
+    "Other": "Servidor relay"
+  },
+  "DashboardNodeStandby": {
+    "One": "Nodo de reserva",
+    "Other": "Nodo de reserva"
+  },
+  "DashboardLatency": {
+    "One": "Latencia",
+    "Other": "Latencia"
+  },
+  "DashboardLoad": {
+    "One": "Carga",
+    "Other": "Carga"
+  },
+  "DashboardUnconfigured": {
+    "One": "No configurado",
+    "Other": "No configurado"
+  },
+  "DashboardRetry": {
+    "One": "Reintentar",
+    "Other": "Reintentar"
+  },
+  "DashboardLoadFailed": {
+    "One": "Error al cargar",
+    "Other": "Error al cargar"
+  },
+  "DashboardLastUpdated": {
+    "One": "Última actualización {time}",
+    "Other": "Última actualización {time}"
+  },
+  "RelayNodes": {
+    "One": "Nodos de retransmisión",
+    "Other": "Nodos de retransmisión"
+  },
+  "RelayNodesDesc": {
+    "One": "Los nodos registrados se distribuyen a los clientes.",
+    "Other": "Los nodos registrados se distribuyen a los clientes."
+  },
+  "RelayNodesTip": {
+    "One": "Tras registrar los nodos aquí, pulse «Aplicar al servidor» para sincronizarlos con el servidor ID y activarlos.",
+    "Other": "Tras registrar los nodos aquí, pulse «Aplicar al servidor» para sincronizarlos con el servidor ID y activarlos."
+  },
+  "Host": {
+    "One": "Host",
+    "Other": "Host"
+  },
+  "Port": {
+    "One": "Puerto",
+    "Other": "Puerto"
+  },
+  "Region": {
+    "One": "Región",
+    "Other": "Región"
+  },
+  "ISP": {
+    "One": "Operador",
+    "Other": "Operador"
+  },
+  "Priority": {
+    "One": "Prioridad",
+    "Other": "Prioridad"
+  },
+  "LastCheckedAt": {
+    "One": "Última comprobación",
+    "Other": "Última comprobación"
+  },
+  "Enabled": {
+    "One": "Habilitado",
+    "Other": "Habilitado"
+  },
+  "PublicKey": {
+    "One": "Clave pública",
+    "Other": "Clave pública"
+  },
+  "AddNode": {
+    "One": "Añadir nodo",
+    "Other": "Añadir nodo"
+  },
+  "EditNode": {
+    "One": "Editar nodo",
+    "Other": "Editar nodo"
+  },
+  "Test": {
+    "One": "Probar",
+    "Other": "Probar"
+  },
+  "TestAll": {
+    "One": "Probar todo",
+    "Other": "Probar todo"
+  },
+  "TestConnection": {
+    "One": "Probar conexión",
+    "Other": "Probar conexión"
+  },
+  "TestPassed": {
+    "One": "Correcto",
+    "Other": "Correcto"
+  },
+  "TestFailed": {
+    "One": "Fallido",
+    "Other": "Fallido"
+  },
+  "Unknown": {
+    "One": "Desconocido",
+    "Other": "Desconocido"
+  },
+  "EffectiveConfig": {
+    "One": "Configuración efectiva",
+    "Other": "Configuración efectiva"
+  },
+  "EffectiveConfigTip": {
+    "One": "Los valores sensibles como claves solo muestran los últimos 4 caracteres; la copia se registra en el registro de auditoría.",
+    "Other": "Los valores sensibles como claves solo muestran los últimos 4 caracteres; la copia se registra en el registro de auditoría."
+  },
+  "ApplyToServer": {
+    "One": "Aplicar al servidor",
+    "Other": "Aplicar al servidor"
+  },
+  "ConfigMismatch": {
+    "One": "La configuración del servidor difiere de la tabla de nodos",
+    "Other": "La configuración del servidor difiere de la tabla de nodos"
+  },
+  "SyncNow": {
+    "One": "Sincronizar",
+    "Other": "Sincronizar"
+  },
+  "ConfigInSync": {
+    "One": "La configuración del servidor coincide con la tabla de nodos",
+    "Other": "La configuración del servidor coincide con la tabla de nodos"
+  },
+  "AddFirstNode": {
+    "One": "Añadir el primer nodo",
+    "Other": "Añadir el primer nodo"
+  },
+  "CopyAuditTip": {
+    "One": "Configuración copiada; esta acción se registrará en el registro de auditoría",
+    "Other": "Configuración copiada; esta acción se registrará en el registro de auditoría"
+  },
+  "RelayNodesResyncManual": {
+    "One": "Retransmisión forzada guardada, pero no hay nodos habilitados; abra «Nodos de retransmisión» y aplique manualmente para evitar que la lista se restablezca.",
+    "Other": "Retransmisión forzada guardada, pero no hay nodos habilitados; abra «Nodos de retransmisión» y aplique manualmente para evitar que la lista se restablezca."
+  },
+  "RelayNodesApplyHelp": {
+    "One": "Escribe los nodos habilitados en el servidor ID por prioridad descendente, sobrescribiendo la lista de retransmisión actual (alto riesgo).",
+    "Other": "Escribe los nodos habilitados en el servidor ID por prioridad descendente, sobrescribiendo la lista de retransmisión actual (alto riesgo)."
+  },
+  "Copy": {
+    "One": "Copiar",
+    "Other": "Copiar"
+  },
+  "ImportFromServer": {
+    "One": "Importar desde el servidor",
+    "Other": "Importar desde el servidor"
+  },
+  "ImportSelected": {
+    "One": "Importar selección",
+    "Other": "Importar selección"
+  },
+  "AlreadyExists": {
+    "One": "Ya existe",
+    "Other": "Ya existe"
+  },
+  "InSync": {
+    "One": "Sincronizado",
+    "Other": "Sincronizado"
+  },
+  "PendingSync": {
+    "One": "Sincronización pendiente",
+    "Other": "Sincronización pendiente"
+  },
+  "ServerSideNodes": {
+    "One": "{n} nodos en el servidor",
+    "Other": "{n} nodos en el servidor"
+  },
+  "View": {
+    "One": "Ver",
+    "Other": "Ver"
+  },
+  "Collapse": {
+    "One": "Contraer",
+    "Other": "Contraer"
+  },
+  "ImportDialogTitle": {
+    "One": "Importar nodos desde el servidor",
+    "Other": "Importar nodos desde el servidor"
+  },
+  "ImportSummarySuccess": {
+    "One": "{n} importados",
+    "Other": "{n} importados"
+  },
+  "ImportSummarySkip": {
+    "One": "{m} omitidos (ya existen)",
+    "Other": "{m} omitidos (ya existen)"
+  },
+  "ImportSummaryFail": {
+    "One": "{k} fallidos",
+    "Other": "{k} fallidos"
+  },
+  "ImportUnparsed": {
+    "One": "{n} entradas no se pudieron analizar y se ignoraron",
+    "Other": "{n} entradas no se pudieron analizar y se ignoraron"
+  },
+  "ReRead": {
+    "One": "Releer",
+    "Other": "Releer"
   }
 }

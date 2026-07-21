@@ -4,6 +4,7 @@ export function loginOptions () {
   return request({
     url: '/login-options',
     method: 'get',
+    hideErrorMessage: true,
   })
 }
 
@@ -27,6 +28,7 @@ export function captcha () {
   return request({
     url: '/captcha',
     method: 'get',
+    hideErrorMessage: true,
   })
 }
 
@@ -35,5 +37,6 @@ export function smsCode (data) {
     url: '/sms-code',
     method: 'post',
     data,
+    hideErrorMessage: true,
   })
 }

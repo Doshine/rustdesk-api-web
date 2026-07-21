@@ -479,7 +479,7 @@
     "One": "Captcha"
   },
   "ServerCmd": {
-    "One": "Server Cmd"
+    "One": "Settings"
   },
   "Simple": {
     "One": "Simple"
@@ -535,6 +535,105 @@
   "AccountLogin": {
     "One": "Account"
   },
+  "PendingApproval": {
+    "One": "Pending"
+  },
+  "Approve": {
+    "One": "Approve"
+  },
+  "Reject": {
+    "One": "Reject"
+  },
+  "PendingAlert": {
+    "One": "{n} new device(s) awaiting approval"
+  },
+  "ViewPending": {
+    "One": "View"
+  },
+  "BatchUpdateTags": {
+    "One": "Batch tag"
+  },
+  "SelectTags": {
+    "One": "Select tags"
+  },
+  "ApproveSuccess": {
+    "One": "Approved"
+  },
+  "NavVisibility": {
+    "One": "Navigation visibility"
+  },
+  "NavVisibilityNote": {
+    "One": "Controls menu visibility only, not functional permissions. Leave empty to show everything by default."
+  },
+  "NavVisibilityAll": {
+    "One": "All visible (default)"
+  },
+  "NavVisibilityCount": {
+    "One": "{n} visible"
+  },
+  "PendingEmptyTitle": {
+    "One": "No new devices awaiting approval"
+  },
+  "PendingEmptyTip": {
+    "One": "Newly connected devices will appear here. Once approved, they are ready to connect and manage."
+  },
+  "ApproveConfirm": {
+    "One": "Approve the selected device(s) for access?"
+  },
+  "MoreFilters": {
+    "One": "More filters"
+  },
+  "Reset": {
+    "One": "Reset"
+  },
+  "Online": {
+    "One": "Online"
+  },
+  "Offline": {
+    "One": "Offline"
+  },
+  "OnlineStatus": {
+    "One": "Online status"
+  },
+  "AddPeer": {
+    "One": "Add device"
+  },
+  "AddUser": {
+    "One": "Add user"
+  },
+  "NoData": {
+    "One": "No data"
+  },
+  "NoDataTip": {
+    "One": "No records under current conditions. Try adjusting the filters or adding one."
+  },
+  "Enable": {
+    "One": "Enable"
+  },
+  "Disable": {
+    "One": "Disable"
+  },
+  "More": {
+    "One": "More"
+  },
+  "WechatLogin": {
+    "One": "WeChat Scan"
+  },
+  "WechatScanTip": {
+    "One": "Open WeChat and scan the QR code to sign in."
+  },
+  "WechatNotConfigured": {
+    "One": "WeChat login is not available. Please use another method."
+  },
+  "UseSmsLogin": {
+    "One": "Sign in with SMS code"
+  },
+  "UsePwdLogin": {
+    "One": "Sign in with password"
+  },
+  "AuthServiceUnavailable": {
+    "One": "The authentication service is unavailable. Please try again later or contact your administrator."
+  },
   "SmsLogin": {
     "One": "SMS Login"
   },
@@ -582,5 +681,249 @@
   "DashboardOsDist": {
     "One": "OS Distribution",
     "Other": "OS Distribution"
+  },
+  "DashboardActiveSessions": {
+    "One": "Active Sessions",
+    "Other": "Active Sessions"
+  },
+  "DashboardAlerts": {
+    "One": "Alerts",
+    "Other": "Alerts"
+  },
+  "DashboardAlertsEmpty": {
+    "One": "No data source yet",
+    "Other": "No data source yet"
+  },
+  "DashboardPeersTotalCaption": {
+    "One": "{n} devices total",
+    "Other": "{n} devices total"
+  },
+  "DashboardConnsTotalCaption": {
+    "One": "{n} connections total",
+    "Other": "{n} connections total"
+  },
+  "DashboardActiveHint": {
+    "One": "Counted from the latest 200 connection records",
+    "Other": "Counted from the latest 200 connection records"
+  },
+  "DashboardNodeHealth": {
+    "One": "Node Health",
+    "Other": "Node Health"
+  },
+  "DashboardNodeApi": {
+    "One": "API Server",
+    "Other": "API Server"
+  },
+  "DashboardNodeId": {
+    "One": "ID Server",
+    "Other": "ID Server"
+  },
+  "DashboardNodeRelay": {
+    "One": "Relay Server",
+    "Other": "Relay Server"
+  },
+  "DashboardNodeStandby": {
+    "One": "Standby Node",
+    "Other": "Standby Node"
+  },
+  "DashboardLatency": {
+    "One": "Latency",
+    "Other": "Latency"
+  },
+  "DashboardLoad": {
+    "One": "Load",
+    "Other": "Load"
+  },
+  "DashboardUnconfigured": {
+    "One": "Not configured",
+    "Other": "Not configured"
+  },
+  "DashboardRetry": {
+    "One": "Retry",
+    "Other": "Retry"
+  },
+  "DashboardLoadFailed": {
+    "One": "Failed to load",
+    "Other": "Failed to load"
+  },
+  "DashboardLastUpdated": {
+    "One": "Last updated {time}",
+    "Other": "Last updated {time}"
+  },
+  "RelayNodes": {
+    "One": "Relay Nodes",
+    "Other": "Relay Nodes"
+  },
+  "RelayNodesDesc": {
+    "One": "Registered relay nodes are distributed to clients.",
+    "Other": "Registered relay nodes are distributed to clients."
+  },
+  "RelayNodesTip": {
+    "One": "After registering nodes here, click 'Apply to server' to sync them to the ID server and take effect.",
+    "Other": "After registering nodes here, click 'Apply to server' to sync them to the ID server and take effect."
+  },
+  "Host": {
+    "One": "Host",
+    "Other": "Host"
+  },
+  "Port": {
+    "One": "Port",
+    "Other": "Port"
+  },
+  "Region": {
+    "One": "Region",
+    "Other": "Region"
+  },
+  "ISP": {
+    "One": "ISP",
+    "Other": "ISP"
+  },
+  "Priority": {
+    "One": "Priority",
+    "Other": "Priority"
+  },
+  "LastCheckedAt": {
+    "One": "Last checked",
+    "Other": "Last checked"
+  },
+  "Enabled": {
+    "One": "Enabled",
+    "Other": "Enabled"
+  },
+  "PublicKey": {
+    "One": "Public key",
+    "Other": "Public key"
+  },
+  "AddNode": {
+    "One": "Add node",
+    "Other": "Add node"
+  },
+  "EditNode": {
+    "One": "Edit node",
+    "Other": "Edit node"
+  },
+  "Test": {
+    "One": "Test",
+    "Other": "Test"
+  },
+  "TestAll": {
+    "One": "Test all",
+    "Other": "Test all"
+  },
+  "TestConnection": {
+    "One": "Test connection",
+    "Other": "Test connection"
+  },
+  "TestPassed": {
+    "One": "Passed",
+    "Other": "Passed"
+  },
+  "TestFailed": {
+    "One": "Failed",
+    "Other": "Failed"
+  },
+  "Unknown": {
+    "One": "Unknown",
+    "Other": "Unknown"
+  },
+  "EffectiveConfig": {
+    "One": "Effective config",
+    "Other": "Effective config"
+  },
+  "EffectiveConfigTip": {
+    "One": "Sensitive values such as keys show only the last 4 characters; copying is written to the audit log.",
+    "Other": "Sensitive values such as keys show only the last 4 characters; copying is written to the audit log."
+  },
+  "ApplyToServer": {
+    "One": "Apply to server",
+    "Other": "Apply to server"
+  },
+  "ConfigMismatch": {
+    "One": "Server config differs from the node table",
+    "Other": "Server config differs from the node table"
+  },
+  "SyncNow": {
+    "One": "Sync now",
+    "Other": "Sync now"
+  },
+  "ConfigInSync": {
+    "One": "Server config matches the node table",
+    "Other": "Server config matches the node table"
+  },
+  "AddFirstNode": {
+    "One": "Add the first node",
+    "Other": "Add the first node"
+  },
+  "CopyAuditTip": {
+    "One": "Full config copied; this copy action will be written to the audit log",
+    "Other": "Full config copied; this copy action will be written to the audit log"
+  },
+  "RelayNodesResyncManual": {
+    "One": "Force-relay saved, but no enabled nodes found — open 'Relay Nodes' and apply to the server manually to prevent the relay list from being reset.",
+    "Other": "Force-relay saved, but no enabled nodes found — open 'Relay Nodes' and apply to the server manually to prevent the relay list from being reset."
+  },
+  "RelayNodesApplyHelp": {
+    "One": "Write enabled nodes to the ID server in priority order, overwriting the current relay list (high risk).",
+    "Other": "Write enabled nodes to the ID server in priority order, overwriting the current relay list (high risk)."
+  },
+  "Copy": {
+    "One": "Copy",
+    "Other": "Copy"
+  },
+  "ImportFromServer": {
+    "One": "Import from server",
+    "Other": "Import from server"
+  },
+  "ImportSelected": {
+    "One": "Import selected",
+    "Other": "Import selected"
+  },
+  "AlreadyExists": {
+    "One": "Already exists",
+    "Other": "Already exists"
+  },
+  "InSync": {
+    "One": "In sync",
+    "Other": "In sync"
+  },
+  "PendingSync": {
+    "One": "Pending sync",
+    "Other": "Pending sync"
+  },
+  "ServerSideNodes": {
+    "One": "{n} nodes on server",
+    "Other": "{n} nodes on server"
+  },
+  "View": {
+    "One": "View",
+    "Other": "View"
+  },
+  "Collapse": {
+    "One": "Collapse",
+    "Other": "Collapse"
+  },
+  "ImportDialogTitle": {
+    "One": "Import nodes from server",
+    "Other": "Import nodes from server"
+  },
+  "ImportSummarySuccess": {
+    "One": "Imported {n}",
+    "Other": "Imported {n}"
+  },
+  "ImportSummarySkip": {
+    "One": "Skipped {m} (already exist)",
+    "Other": "Skipped {m} (already exist)"
+  },
+  "ImportSummaryFail": {
+    "One": "Failed {k}",
+    "Other": "Failed {k}"
+  },
+  "ImportUnparsed": {
+    "One": "{n} entries could not be parsed and were ignored",
+    "Other": "{n} entries could not be parsed and were ignored"
+  },
+  "ReRead": {
+    "One": "Re-read",
+    "Other": "Re-read"
   }
 }

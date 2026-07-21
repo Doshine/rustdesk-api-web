@@ -16,6 +16,7 @@ export function useRepositories () {
     page: 1,
     page_size: 10,
     username: '',
+    status: '',
   })
 
   const getList = async () => {

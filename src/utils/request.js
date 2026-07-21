@@ -63,11 +63,14 @@ service.interceptors.response.use(
 
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {
-      ElMessage({
-        message: res.message || 'error',
-        type: 'error',
-        duration: 5 * 1000,
-      })
+      // hideErrorMessage：调用方（如登录页）自行做页内错误展示时置 true，跳过全局 toast
+      if (!response.config.hideErrorMessage) {
+        ElMessage({
+          message: res.message || 'error',
+          type: 'error',
+          duration: 5 * 1000,
+        })
+      }
 
       if (res.code === 403) {
         removeToken()
@@ -83,11 +86,14 @@ service.interceptors.response.use(
       && error.message.indexOf('timeout') > -1) {
       error.message = 'Connection Time Out!'
     }
-    ElMessage({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000,
-    })
+    // hideErrorMessage：调用方自行展示服务异常警示条，避免裸 500 toast
+    if (!error.config || !error.config.hideErrorMessage) {
+      ElMessage({
+        message: error.message,
+        type: 'error',
+        duration: 5 * 1000,
+      })
+    }
     return Promise.reject(error)
   },
 )

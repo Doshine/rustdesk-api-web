@@ -4,46 +4,48 @@
  * （源文件在管理仓 https://github.com/Doshine/yinhe/blob/master/docs/design/tokens.json）
  * 命名约定：统一 --yj- 前缀（yj = yinhe / 银河）
  * 暗色：遵循 Element Plus 约定，挂 html.dark 选择器
+ * v2.1 对齐：语义色/表面/文字/边界/阴影/动效曲线/层级取 tokens.json v2.1 值；
+ * 字体链、sidebar、页面布局尺寸、z-overlay/modal、table-zebra 等为 web 工程性 token，保留原值
  */
 
 :root {
   /* ============ 品牌色 color.brand ============ */
   --yj-primary: #2F80FF;
-  --yj-primary-hover: #5C9AFF;
-  --yj-primary-active: #1F66E5;
+  --yj-primary-hover: #5A9EFF;
+  --yj-primary-active: #1768E8;
   --yj-primary-subtle: rgba(47, 128, 255, 0.12);
   --yj-accent: #00C2FF;
   --yj-deep-navy: #0B1437;
   --yj-gradient: linear-gradient(135deg, #2F80FF 0%, #00C2FF 100%);
 
-  /* ============ 语义色 color.semantic ============ */
-  --yj-success: #22C55E;
-  --yj-warning: #F59E0B;
-  --yj-danger: #EF4444;
-  --yj-info: #2F80FF;
+  /* ============ 语义色 color.semantic（v2.1 §1.1，废弃 v1 Tailwind 系） ============ */
+  --yj-success: #167C59;
+  --yj-warning: #A86608;
+  --yj-danger: #C53B4C;
+  --yj-info: #1768E8;
 
   /* ============ 质量色 color.quality ============ */
-  --yj-quality-good: #22C55E;
-  --yj-quality-fair: #F59E0B;
-  --yj-quality-poor: #EF4444;
+  --yj-quality-good: #167C59;
+  --yj-quality-fair: #A86608;
+  --yj-quality-poor: #C53B4C;
 
   /* ============ 中性色 color.neutral.light（默认/light 套） ============ */
-  --yj-bg: #F7F8FA;
-  --yj-surface: #FFFFFF;
-  --yj-surface-hover: #F0F2F5;
-  --yj-border: #E5E7EB;
-  --yj-divider: #EFF0F1;
-  --yj-text-primary: #1F2329;
-  --yj-text-secondary: #646A73;
-  --yj-text-tertiary: #9AA0A6;
+  --yj-bg: #F5F7FA;
+  --yj-surface: #FCFDFE;
+  --yj-surface-hover: #EEF2F7;
+  --yj-border: #DDE3EC;
+  --yj-divider: #E8ECF2;
+  --yj-text-primary: #172033;
+  --yj-text-secondary: #4F5E73;
+  --yj-text-tertiary: #718096;
   --yj-text-inverse: #FFFFFF;
 
-  /* ============ 字体 font ============ */
+  /* ============ 字体 font（web 工程性字体链，保留） ============ */
   --yj-font-family-base: -apple-system, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --yj-font-family-mono: 'SF Mono', Consolas, 'JetBrains Mono', monospace;
   --yj-font-family-id-display: 'SF Pro Display', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 
-  /* font.size（数值 → px） */
+  /* font.size（数值 → px；档位与 v2.1 §1.3 对应：xs=caption / sm=label / base=bodyS / md=bodyM / lg=bodyL / xl=titleM / xxl=titleL / display=h2 / id-card=h1） */
   --yj-font-size-xs: 11px;
   --yj-font-size-sm: 12px;
   --yj-font-size-base: 13px;
@@ -60,7 +62,7 @@
   --yj-font-weight-semibold: 600;
   --yj-font-weight-bold: 700;
 
-  /* font.lineHeight */
+  /* font.lineHeight（web 工程性 token，tokens.json 未覆盖，保留） */
   --yj-line-height-tight: 1.25;
   --yj-line-height-base: 1.5;
   --yj-line-height-relaxed: 1.75;
@@ -83,26 +85,26 @@
   --yj-radius-xl: 16px;
   --yj-radius-full: 9999px;
 
-  /* ============ 阴影 shadow.light（默认/light 套） ============ */
-  --yj-shadow-sm: 0 1px 2px rgba(31, 35, 41, 0.06);
-  --yj-shadow-md: 0 4px 12px rgba(31, 35, 41, 0.10);
-  --yj-shadow-lg: 0 8px 24px rgba(31, 35, 41, 0.14);
+  /* ============ 阴影 shadow.light（默认/light 套，v2.1 §1.4 elev1/2/3） ============ */
+  --yj-shadow-sm: 0 1px 2px rgba(18, 37, 63, 0.06), 0 4px 12px rgba(18, 37, 63, 0.04);
+  --yj-shadow-md: 0 8px 24px rgba(18, 37, 63, 0.10), 0 1px 3px rgba(18, 37, 63, 0.06);
+  --yj-shadow-lg: 0 20px 56px rgba(18, 37, 63, 0.16), 0 4px 12px rgba(18, 37, 63, 0.08);
 
   /* ============ 动效 motion ============ */
   --yj-duration-fast: 120ms;
   --yj-duration-normal: 200ms;
   --yj-duration-slow: 320ms;
-  --yj-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --yj-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --yj-easing-emphasis: cubic-bezier(0.2, 0, 0, 1);
 
-  /* ============ 层级 zIndex ============ */
-  --yj-z-dropdown: 1000;
-  --yj-z-sticky: 1100;
+  /* ============ 层级 zIndex（v2.1 §9.2；overlay/modal 为 web 工程性补充，保留原值） ============ */
+  --yj-z-dropdown: 300;
+  --yj-z-sticky: 100;
   --yj-z-overlay: 1200;
   --yj-z-modal: 1300;
-  --yj-z-toast: 1400;
+  --yj-z-toast: 800;
 
-  /* ============ 布局 layout（W5 页面级） ============ */
+  /* ============ 布局 layout（W5 页面级，web 工程性 token，保留） ============ */
   --yj-header-height: 56px;
   --yj-sidebar-collapsed-width: 64px;
   --yj-content-max-width: 1560px;
@@ -115,33 +117,46 @@
   --yj-sidebar-hover-bg: rgba(255, 255, 255, 0.07);
   --yj-sidebar-active-bg: #2F80FF;
 
-  /* ============ 状态点 status ============ */
-  --yj-online: #22C55E;
-  --yj-offline: #9AA0A6;
-  --yj-success-subtle: rgba(34, 197, 94, 0.14);
-  --yj-offline-subtle: rgba(154, 160, 166, 0.16);
+  /* ============ 状态点 status（v2.1 语义色派生） ============ */
+  --yj-online: #167C59;
+  --yj-offline: #94A3B8;
+  --yj-success-subtle: rgba(22, 124, 89, 0.14);
+  --yj-offline-subtle: rgba(148, 163, 184, 0.16);
 
-  /* ============ 表格 table ============ */
+  /* ============ 表格 table（web 工程性 token，保留） ============ */
   --yj-table-zebra: #FAFBFC;
 }
 
 /* ============ 暗色覆盖（Element Plus 暗色约定） ============ */
 html.dark {
-  /* color.neutral.dark */
+  /* color.neutral.dark（深色 Surface 统一 #141B2A，废弃旧值 #1A2130） */
   --yj-bg: #0F1420;
-  --yj-surface: #1A2130;
-  --yj-surface-hover: #242D40;
-  --yj-border: #2A3346;
-  --yj-divider: #232B3B;
-  --yj-text-primary: #E8EAED;
-  --yj-text-secondary: #9AA4B2;
-  --yj-text-tertiary: #6B7280;
-  --yj-text-inverse: #1F2329;
+  --yj-surface: #141B2A;
+  --yj-surface-hover: #192234;
+  --yj-border: #273247;
+  --yj-divider: #202B3D;
+  --yj-text-primary: #F2F6FC;
+  --yj-text-secondary: #AAB7CA;
+  --yj-text-tertiary: #7F8EA4;
+  --yj-text-inverse: #172033;
 
-  /* shadow.dark */
-  --yj-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --yj-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --yj-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  /* semantic.dark + 深色主交互（v2.1 §1.1：主交互 Blue 400，hover Blue 300） */
+  --yj-primary: #5A9EFF;
+  --yj-primary-hover: #88BCFF;
+  --yj-success: #39C894;
+  --yj-warning: #F5B94C;
+  --yj-danger: #FF6B7C;
+  --yj-info: #5A9EFF;
+  --yj-quality-good: #39C894;
+  --yj-quality-fair: #F5B94C;
+  --yj-quality-poor: #FF6B7C;
+  --yj-online: #39C894;
+  --yj-success-subtle: rgba(57, 200, 148, 0.14);
+
+  /* shadow.dark（v2.1 §1.4 深色 elev1/2/3） */
+  --yj-shadow-sm: 0 1px 2px rgba(2, 6, 14, 0.28), 0 4px 14px rgba(2, 6, 14, 0.18);
+  --yj-shadow-md: 0 10px 28px rgba(2, 6, 14, 0.38), 0 1px 3px rgba(2, 6, 14, 0.28);
+  --yj-shadow-lg: 0 24px 64px rgba(2, 6, 14, 0.54), 0 4px 14px rgba(2, 6, 14, 0.34);
 
   /* sidebar.dark：比 deep navy 更深，贴近暗色底 */
   --yj-sidebar-bg: #0A1024;

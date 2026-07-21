@@ -1,26 +1,34 @@
 <template>
-  <el-card class="simple-card" shadow="hover" v-loading="form.loading">
-    <template #header>
-      <div class="card-header">
-        <span>USAGE</span>
-      </div>
-    </template>
-    <el-form :disabled="!canSend">
-      <el-form-item>
-        <el-table :data="form.list" size="small">
-          <el-table-column prop="0" label="IP"></el-table-column>
-          <el-table-column prop="1" label="TIME"></el-table-column>
-          <el-table-column prop="2" label="TOTAL"></el-table-column>
-          <el-table-column prop="3" label="HIGHEST"></el-table-column>
-          <el-table-column prop="4" label="AVG"></el-table-column>
-          <el-table-column prop="5" label="SPEED"></el-table-column>
+  <div class="yj-settings-panel" v-loading="form.loading">
+    <header class="yj-settings-panel__header">
+      <h2 class="yj-settings-panel__title">流量统计 <span class="yj-settings-panel__code">USAGE</span></h2>
+      <p class="yj-settings-panel__desc">中继服务器各节点的连接用量统计，只读。</p>
+    </header>
+
+    <div class="yj-settings-group">
+      <div class="yj-settings-row yj-settings-row--column">
+        <el-table :data="form.list" size="small" border>
+          <el-table-column prop="0" label="IP" min-width="120" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="1" label="TIME" min-width="90" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="2" label="TOTAL" min-width="80" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="3" label="HIGHEST" min-width="80" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="4" label="AVG" min-width="80" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="5" label="SPEED" min-width="80" show-overflow-tooltip></el-table-column>
+          <template #empty>
+            <span class="yj-ip-list__empty">暂无用量数据</span>
+          </template>
         </el-table>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getList">{{ T('Refresh') }}</el-button>
-      </el-form-item>
-    </el-form>
-  </el-card>
+      </div>
+
+      <div class="yj-settings-row">
+        <div class="yj-settings-row__main">
+          <div class="yj-settings-row__name">重新读取</div>
+          <div class="yj-settings-row__help">从中继服务器重新获取最新用量统计。</div>
+        </div>
+        <el-button :disabled="!canSend" @click="getList">{{ T('Refresh') }}</el-button>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
 
@@ -56,7 +64,5 @@
 
 </script>
 <style scoped lang="scss">
-.simple-card{
-  width: 500px;
-}
+
 </style>

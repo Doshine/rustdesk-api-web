@@ -5,6 +5,7 @@ export function login (data) {
     url: '/login',
     method: 'post',
     data,
+    hideErrorMessage: true,
   })
 }
 
@@ -13,6 +14,7 @@ export function loginSms (data) {
     url: '/login-sms',
     method: 'post',
     data,
+    hideErrorMessage: true,
   })
 }
 

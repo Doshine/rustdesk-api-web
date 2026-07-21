@@ -21,6 +21,11 @@
             <span v-else>{{ T('SharedGroup') }}</span>
           </template>
         </el-table-column>
+        <el-table-column :label="T('NavVisibility')" align="center" width="140">
+          <template #default="{row}">
+            <span>{{ navVisibilityText(row) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
         <el-table-column prop="updated_at" :label="T('UpdatedAt')" align="center"/>
         <el-table-column :label="T('Actions')" align="center" width="120" class-name="table-actions">
@@ -56,6 +61,21 @@
               <span style="font-size: 12px;color: #999">{{ item.note }}</span>
             </el-radio>
           </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="T('NavVisibility')">
+          <div class="route-tree-wrap">
+            <el-tree
+                :key="treeKey"
+                ref="routeTree"
+                :data="routeTreeData"
+                show-checkbox
+                node-key="name"
+                :props="{ label: 'title', children: 'children' }"
+                :default-checked-keys="formData.route_names"
+                default-expand-all
+            />
+            <p class="route-tree-note">{{ T('NavVisibilityNote') }}</p>
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button @click="formVisible = false">{{ T('Cancel') }}</el-button>
@@ -125,11 +145,49 @@
     { label: T('CommonGroup'), value: 1, note: T('CommonGroupNote') },
     { label: T('SharedGroup'), value: 2, note: T('SharedGroupNote') },
   ]
+
+  // 导航可见性：基于 asyncRoutes 的 route_names 勾选树（仅控制菜单可见性，空 = 默认全部）
+  import { asyncRoutes } from '@/router'
+
+  const buildRouteTree = (routes) => routes
+    .filter(r => r.name && !r.meta?.hide)
+    .map(r => ({
+      name: r.name,
+      title: T(r.meta?.title || r.name),
+      children: r.children?.length ? buildRouteTree(r.children) : [],
+    }))
+
+  const routeTreeData = buildRouteTree(asyncRoutes)
+  const allRouteNames = []
+  const flattenNames = (nodes) => nodes.forEach(n => {
+    allRouteNames.push(n.name)
+    if (n.children?.length) flattenNames(n.children)
+  })
+  flattenNames(routeTreeData)
+
+  const routeTree = ref(null)
+  const treeKey = ref(0)
+
+  const parseRouteNames = (val) => {
+    if (!val) return []
+    try {
+      const arr = JSON.parse(val)
+      return Array.isArray(arr) ? arr : []
+    } catch (_) {
+      return []
+    }
+  }
+  const navVisibilityText = (row) => {
+    const names = parseRouteNames(row.route_names)
+    return names.length ? T('NavVisibilityCount', { n: names.length }) : T('NavVisibilityAll')
+  }
+
   const formVisible = ref(false)
   const formData = reactive({
     id: 0,
     name: '',
     type: 1,
+    route_names: [],
   })
 
   const toEdit = (row) => {
@@ -137,16 +195,25 @@
     formData.id = row.id
     formData.name = row.name
     formData.type = row.type
+    formData.route_names = parseRouteNames(row.route_names)
+    treeKey.value++
   }
   const toAdd = () => {
     formVisible.value = true
     formData.id = 0
     formData.name = ''
     formData.type = 1
+    formData.route_names = allRouteNames.slice() // 新建默认全选 = 默认全部
+    treeKey.value++
   }
   const submit = async () => {
+    const checked = routeTree.value ? routeTree.value.getCheckedKeys() : formData.route_names
+    const halfChecked = routeTree.value ? routeTree.value.getHalfCheckedKeys() : []
+    const names = [...new Set([...checked, ...halfChecked])]
+    // 全选等同于默认全部 → 存空字符串
+    const routeNamesStr = names.length >= allRouteNames.length ? '' : JSON.stringify(names)
     const api = formData.id ? update : create
-    const res = await api(formData).catch(_ => false)
+    const res = await api({ ...formData, route_names: routeNamesStr }).catch(_ => false)
     if (res) {
       ElMessage.success(T('OperationSuccess'))
       formVisible.value = false
@@ -157,5 +224,19 @@
 </script>
 
 <style scoped lang="scss">
+.route-tree-wrap {
+  width: 100%;
+  padding: var(--yj-spacing-md) var(--yj-spacing-lg);
+  border: 1px solid var(--yj-border);
+  border-radius: var(--yj-radius-md);
+  max-height: 320px;
+  overflow: auto;
+}
 
+.route-tree-note {
+  margin: var(--yj-spacing-sm) 0 0;
+  font-size: var(--yj-font-size-sm);
+  line-height: var(--yj-line-height-base);
+  color: var(--yj-text-tertiary);
+}
 </style>
