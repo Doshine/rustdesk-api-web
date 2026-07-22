@@ -16,6 +16,32 @@
       </template>
     </YjPageHeader>
 
+    <section class="session-launcher">
+      <div class="session-launcher__copy">
+        <span>SESSION ROUTER</span>
+        <strong>{{ T('SessionLauncherTitle') }}</strong>
+        <small>{{ T('SessionLauncherDescription') }}</small>
+      </div>
+      <div class="session-launcher__actions">
+        <button type="button" @click="openAssistance('temporary')">
+          <span>01</span>
+          <span>
+            <strong>{{ T('TemporaryAssistance') }}</strong>
+            <small>{{ T('TemporaryAssistanceDescription') }}</small>
+          </span>
+          <el-icon><Right /></el-icon>
+        </button>
+        <button type="button" @click="openAssistance('fixed')">
+          <span>02</span>
+          <span>
+            <strong>{{ T('FixedDeviceAccess') }}</strong>
+            <small>{{ T('FixedDeviceAccessDescription') }}</small>
+          </span>
+          <el-icon><Right /></el-icon>
+        </button>
+      </div>
+    </section>
+
     <!-- 首行统计：2+2 非等宽栅格（在线设备/活跃会话为主指标，用户数/告警为次指标） -->
     <div class="stat-grid">
       <ModuleError
@@ -208,12 +234,13 @@
 
 <script>
   import { defineComponent, ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
+  import { useRouter } from 'vue-router'
   import { T } from '@/utils/i18n'
   import { list as peerList } from '@/api/peer'
   import { list as userList } from '@/api/user'
   import { list as auditList } from '@/api/audit'
   import { server } from '@/api/config'
-  import { Connection, Link, User, Bell, Refresh } from '@element-plus/icons-vue'
+  import { Connection, Link, User, Bell, Refresh, Right } from '@element-plus/icons-vue'
   import ModuleError from '@/views/index/components/ModuleError.vue'
   import YjPageHeader from '@/components/yj/YjPageHeader.vue'
   import YjStatusDot from '@/components/yj/YjStatusDot.vue'
@@ -234,6 +261,8 @@
     name: 'Home',
     components: { ModuleError, YjPageHeader, YjStatusDot },
     setup () {
+      const router = useRouter()
+      const openAssistance = (mode) => router.push({ name: 'MyAssist', query: { mode } })
       /* ================= 模块状态（骨架 / 就绪 / 错误，互不阻塞） ================= */
       const mkMod = () => reactive({ status: 'loading', lastUpdated: null })
       const statsMod = mkMod()
@@ -502,7 +531,9 @@
         dashboardStateText,
         lastUpdatedText,
         refreshAll,
+        openAssistance,
         Refresh,
+        Right,
         loadStats,
         loadTrend,
         loadNodes,
@@ -514,6 +545,104 @@
 
 <style scoped lang="scss">
   .dashboard {
+    .session-launcher {
+      display: grid;
+      grid-template-columns: minmax(220px, .72fr) minmax(0, 1.28fr);
+      overflow: hidden;
+      margin-bottom: var(--yj-spacing-xl);
+      border: 1px solid var(--yj-border);
+      border-radius: var(--yj-radius-lg);
+      background: var(--yj-deep-navy);
+      color: var(--yj-text-inverse);
+    }
+
+    .session-launcher__copy {
+      display: grid;
+      align-content: center;
+      gap: var(--yj-spacing-xs);
+      padding: var(--yj-spacing-xl) var(--yj-spacing-xxl);
+      border-right: 1px solid rgba(255, 255, 255, .12);
+
+      > span {
+        color: var(--yj-accent);
+        font-family: var(--yj-font-family-mono);
+        font-size: var(--yj-font-size-xs);
+        font-weight: var(--yj-font-weight-semibold);
+        letter-spacing: var(--yj-letter-spacing-section-label);
+      }
+
+      > strong {
+        font-size: var(--yj-font-size-title-m);
+      }
+
+      > small {
+        color: rgba(255, 255, 255, .64);
+        font-size: var(--yj-font-size-sm);
+        line-height: var(--yj-line-height-base);
+      }
+    }
+
+    .session-launcher__actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      button {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--yj-spacing-md);
+        min-height: 112px;
+        padding: var(--yj-spacing-xl);
+        border: 0;
+        border-right: 1px solid rgba(255, 255, 255, .1);
+        background: transparent;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color var(--yj-duration-fast) var(--yj-easing-standard);
+
+        &:last-child {
+          border-right: 0;
+        }
+
+        &:hover,
+        &:focus-visible {
+          background: rgba(255, 255, 255, .07);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--yj-accent);
+          outline-offset: -2px;
+        }
+
+        > span:first-child {
+          align-self: start;
+          color: var(--yj-accent);
+          font-family: var(--yj-font-family-mono);
+          font-size: var(--yj-font-size-xs);
+        }
+
+        > span:nth-child(2) {
+          display: grid;
+          gap: var(--yj-spacing-xs);
+        }
+
+        strong {
+          font-size: var(--yj-font-size-base);
+        }
+
+        small {
+          color: rgba(255, 255, 255, .62);
+          font-size: var(--yj-font-size-sm);
+          line-height: var(--yj-line-height-base);
+        }
+
+        .el-icon {
+          color: var(--yj-accent);
+        }
+      }
+    }
+
     .dashboard-updated {
       color: var(--yj-text-tertiary);
       font-family: var(--yj-font-family-mono);
@@ -991,6 +1120,26 @@
     @media (max-width: 560px) {
       .dashboard-updated {
         display: none;
+      }
+
+      .session-launcher,
+      .session-launcher__actions {
+        grid-template-columns: 1fr;
+      }
+
+      .session-launcher__copy {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, .12);
+      }
+
+      .session-launcher__actions button {
+        min-height: 88px;
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, .1);
+
+        &:last-child {
+          border-bottom: 0;
+        }
       }
     }
   }

@@ -213,6 +213,7 @@
   const selfServiceRouteNames = [
     'MyInfo',
     'MyPeer',
+    'MyAssist',
     'MyAddressBookCollection',
     'MyAddressBookList',
     'MyTagList',
