@@ -6,6 +6,7 @@ import ru from '@/utils/i18n/ru.json'
 import es from '@/utils/i18n/es.json'
 import zhTW from '@/utils/i18n/zh_TW.json'
 import { useAppStore } from '@/store/app'
+import deployment from '@/utils/i18n/deployment'
 
 const trans = {
   'en': en,
@@ -19,7 +20,7 @@ const trans = {
 export function T (key, params, num = 0) {
   const appStore = useAppStore()
   const lang = appStore.setting.lang
-  const tran = trans[lang]?.[key]
+  const tran = deployment[lang]?.[key] || trans[lang]?.[key]
   if (!tran) {
     return key
   }
@@ -28,6 +29,6 @@ export function T (key, params, num = 0) {
   //params 是这样 {name: 'zhangsan'}
   //替换
   return msg.replace(/{(\w+)}/g, function (match, key) {
-    return params[key] || match
+    return params && Object.prototype.hasOwnProperty.call(params, key) ? params[key] : match
   })
 }

@@ -1,7 +1,14 @@
 <template>
   <el-config-provider :locale="appStore.setting.locale.value">
-    <el-container :style="{'--sideBarWidth': sideBarWidth}">
-      <el-aside :width="leftWidth" class="app-left">
+    <el-container class="app-shell" :class="{ 'is-mobile': isMobile }" :style="{'--sideBarWidth': sideBarWidth}">
+      <button
+        v-if="isMobile && !appStore.setting.sideIsCollapse"
+        class="sidebar-scrim"
+        type="button"
+        aria-label="Close navigation"
+        @click="appStore.sideCollapse()"
+      ></button>
+      <el-aside :width="leftWidth" class="app-left" :class="{ 'is-collapsed': appStore.setting.sideIsCollapse }">
         <g-aside></g-aside>
       </el-aside>
       <el-container class="app-container ">
@@ -29,7 +36,8 @@
 <script setup>
   import { useAppStore } from '@/store/app'
   import { useTagsStore } from '@/store/tags'
-  import { ref, computed } from 'vue'
+  import { ref, computed, onBeforeUnmount, onMounted, watch } from 'vue'
+  import { useRoute } from 'vue-router'
   import Tags from '@/layout/components/tags/index.vue'
   import GAside from '@/layout/components/aside.vue'
   import GHeader from '@/layout/components/header.vue'
@@ -37,7 +45,28 @@
   const appStore = useAppStore()
   const tagStore = useTagsStore()
   const sideBarWidth = computed(() => appStore.setting.locale.sideBarWidth)
-  const leftWidth = computed(() => appStore.setting.sideIsCollapse ? 'var(--yj-sidebar-collapsed-width)' : 'var(--sideBarWidth)')
+  const isMobile = ref(false)
+  const leftWidth = computed(() => {
+    if (isMobile.value) return 'min(82vw, 280px)'
+    return appStore.setting.sideIsCollapse ? 'var(--yj-sidebar-collapsed-width)' : 'var(--sideBarWidth)'
+  })
+
+  const syncViewport = () => {
+    const next = window.innerWidth <= 900
+    if (next && !isMobile.value) appStore.setting.sideIsCollapse = true
+    isMobile.value = next
+  }
+
+  onMounted(() => {
+    syncViewport()
+    window.addEventListener('resize', syncViewport, { passive: true })
+  })
+  onBeforeUnmount(() => window.removeEventListener('resize', syncViewport))
+
+  const route = useRoute()
+  watch(() => route.fullPath, () => {
+    if (isMobile.value) appStore.setting.sideIsCollapse = true
+  })
 
   const cachedTags = ref([])
 
@@ -75,12 +104,72 @@
 
 .app-container {
   min-height: 100vh;
+  min-width: 0;
+  width: 100%;
 }
 
 .app-main {
   background-color: var(--yj-bg);
   padding: var(--yj-spacing-xxl);
 }
+
+.sidebar-scrim {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    min-width: 0;
+  }
+
+  .app-left {
+    position: fixed;
+    inset: 0 auto 0 0;
+    height: 100dvh;
+    transform: translateX(0);
+    transition: transform var(--yj-duration-normal) var(--yj-easing-standard);
+    z-index: calc(var(--yj-z-dialog) + 1);
+
+    &.is-collapsed {
+      transform: translateX(-100%);
+    }
+  }
+
+  .sidebar-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(5, 9, 22, .58);
+    backdrop-filter: blur(3px);
+    z-index: var(--yj-z-scrim);
+  }
+
+  .app-header {
+    padding: 0 var(--yj-spacing-md);
+  }
+
+  .header-tags {
+    padding: 0 var(--yj-spacing-md);
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .app-main {
+    min-width: 0;
+    padding: var(--yj-spacing-lg);
+    overflow-x: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-left {
+    transition: none;
+  }
+}
 </style>
-
-

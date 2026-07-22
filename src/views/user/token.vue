@@ -29,7 +29,7 @@
         </el-table-column>
         <el-table-column :label="T('Token')" align="center">
           <template #default="{row}">
-            <span> {{ maskToken(row.token) }} </span>
+            <span class="token-hint"> {{ row.token_hint || '••••' }} </span>
           </template>
         </el-table-column>
         <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
@@ -64,7 +64,7 @@
   import { loadAllUsers } from '@/global'
   import { useRepositories } from '@/views/user/token.js'
   import { T } from '@/utils/i18n'
-  import { SwitchButton } from '@element-plus/icons'
+  import { SwitchButton } from '@element-plus/icons-vue'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   getAllUsers()
@@ -84,9 +84,6 @@
   watch(() => listQuery.page, getList)
 
   watch(() => listQuery.page_size, handlerQuery)
-  const maskToken = (token) => {
-    return token.slice(0, 4) + '****' + token.slice(-4)
-  }
   const expired = (row) => {
     const now = new Date().getTime()
     return row.expired_at * 1000 < now

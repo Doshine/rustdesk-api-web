@@ -47,7 +47,7 @@
   import { onActivated, onMounted, ref, watch } from 'vue'
   import { useRepositories } from '@/views/login/log.js'
   import { T } from '@/utils/i18n'
-  import { Delete } from '@element-plus/icons'
+  import { Delete } from '@element-plus/icons-vue'
 
   const {
     listRes,

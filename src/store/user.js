@@ -1,9 +1,9 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { current, login, loginSms } from '@/api/user'
+import { current, login, loginSms, mfaBootstrapBegin, mfaBootstrapComplete, passkeyRegisterBegin, passkeyRegisterComplete, passkeyList, passkeyRevoke } from '@/api/user'
 import { setToken, removeToken, setCode, removeCode } from '@/utils/auth'
 import { useRouteStore } from '@/store/router'
 import { useAppStore } from '@/store/app'
-import { oidcAuth, oidcQuery } from '@/api/login'
+import { oidcAuth, oidcMfaVerify, oidcQuery, passkeyLoginBegin, passkeyLoginComplete } from '@/api/login'
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -13,6 +13,7 @@ export const useUserStore = defineStore({
     email: '',
     token: '',
     role: '',
+    mfa_enabled: false,
     avatar: '',
     route_names: [],
   }),
@@ -44,8 +45,11 @@ export const useUserStore = defineStore({
       const res = await login(form).catch(e => e)
       console.log('login', res)
       if (!res.code) {
-        useAppStore().loadConfig()
         const userData = res.data
+        if (userData?.mfa_enrollment_required) {
+          return userData
+        }
+        useAppStore().loadConfig()
         this.saveUserData(userData)
         return userData
       } else {
@@ -55,8 +59,11 @@ export const useUserStore = defineStore({
     async loginBySms (form) {
       const res = await loginSms(form).catch(e => e)
       if (!res.code) {
-        useAppStore().loadConfig()
         const userData = res.data
+        if (userData?.mfa_enrollment_required) {
+          return userData
+        }
+        useAppStore().loadConfig()
         this.saveUserData(userData)
         return userData
       } else {
@@ -105,12 +112,76 @@ export const useUserStore = defineStore({
       const res = await oidcQuery(params).catch(_ => false)
       if (res) {
         removeCode()
+        if (res.data?.mfa_required || res.data?.mfa_enrollment_required) {
+          return res.data
+        }
         useAppStore().loadConfig()
         const userData = res.data
         this.saveUserData(userData)
         return userData
       }
       return false
+    },
+    async oidcMfa (challenge, code) {
+      const res = await oidcMfaVerify({ challenge, code }).catch(e => e)
+      if (res && !res.code) {
+        useAppStore().loadConfig()
+        const userData = res.data
+        this.saveUserData(userData)
+        return userData
+      }
+      return Promise.reject(res)
+    },
+    async beginMfaEnrollment (challenge) {
+      const res = await mfaBootstrapBegin({ challenge }).catch(e => e)
+      if (res && !res.code) return res.data
+      return Promise.reject(res)
+    },
+    async completeMfaEnrollment (challenge, code) {
+      const res = await mfaBootstrapComplete({ challenge, code }).catch(e => e)
+      if (res && !res.code) {
+        useAppStore().loadConfig()
+        const userData = res.data
+        this.saveUserData(userData)
+        return userData
+      }
+      return Promise.reject(res)
+    },
+    async passkeyLogin (data) {
+      const res = await passkeyLoginComplete(data).catch(e => e)
+      if (res && !res.code) {
+        if (res.data?.mfa_required || res.data?.mfa_enrollment_required) return res.data
+        useAppStore().loadConfig()
+        const userData = res.data
+        this.saveUserData(userData)
+        return userData
+      }
+      return Promise.reject(res)
+    },
+    async beginPasskeyLogin () {
+      const res = await passkeyLoginBegin().catch(e => e)
+      if (res && !res.code) return res.data
+      return Promise.reject(res)
+    },
+    async beginPasskeyRegistration () {
+      const res = await passkeyRegisterBegin().catch(e => e)
+      if (res && !res.code) return res.data
+      return Promise.reject(res)
+    },
+    async completePasskeyRegistration (data) {
+      const res = await passkeyRegisterComplete(data).catch(e => e)
+      if (res && !res.code) return res.data
+      return Promise.reject(res)
+    },
+    async listPasskeys () {
+      const res = await passkeyList().catch(e => e)
+      if (res && !res.code) return res.data
+      return Promise.reject(res)
+    },
+    async revokePasskey (id, data = {}) {
+      const res = await passkeyRevoke(id, data).catch(e => e)
+      if (res && !res.code) return res.data
+      return Promise.reject(res)
     },
   },
 })

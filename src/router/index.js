@@ -67,6 +67,12 @@ export const asyncRoutes = [
         component: () => import('@/views/my/peer/index.vue'),
       },
       {
+        path: 'assist',
+        name: 'MyAssist',
+        meta: { title: 'AssistanceCenter', icon: 'Connection' },
+        component: () => import('@/views/assist/index.vue'),
+      },
+      {
         path: 'address_book_collection',
         name: 'MyAddressBookCollection',
         meta: { title: 'AddressBookName', icon: 'Collection' /*keepAlive: true*/ },
@@ -105,6 +111,12 @@ export const asyncRoutes = [
     meta: { title: 'System', icon: 'Setting' },
     component: () => import('@/layout/index.vue'),
     children: [
+      {
+        path: 'deploymentCodes',
+        name: 'DeploymentCodes',
+        meta: { title: 'DeploymentCodes', icon: 'Key' },
+        component: () => import('@/views/deployment/index.vue'),
+      },
       {
         path: 'peer',
         name: 'Peer',
@@ -212,4 +224,3 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes: constantRoutes,
 })
-

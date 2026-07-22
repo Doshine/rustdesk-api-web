@@ -1,105 +1,174 @@
 <template>
-  <div>
-    <el-card class="list-query" shadow="hover">
-      <el-form inline label-width="80px">
-        <!--        <el-form-item label="名称">
-                  <el-input v-model="listQuery.name"></el-input>
-                </el-form-item>-->
-        <el-form-item>
-          <el-button type="primary" @click="handlerQuery">{{ T('Filter') }}</el-button>
-          <el-button type="danger" @click="toAdd">{{ T('Add') }}</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card class="list-body" shadow="hover">
-      <el-table :data="listRes.list" v-loading="listRes.loading" border>
-        <el-table-column prop="id" label="ID" align="center"></el-table-column>
-        <el-table-column prop="name" :label="T('Name')" align="center"/>
-        <el-table-column prop="type" :label="T('Type')" align="center">
+  <div class="control-page">
+    <YjPageHeader
+        eyebrow="ACCESS POLICIES"
+        :title="T('GroupManage')"
+        :description="T('GroupManageDescription')"
+    >
+      <template #actions>
+        <el-button type="primary" :icon="Plus" @click="toAdd">{{ T('AddGroup') }}</el-button>
+      </template>
+    </YjPageHeader>
+
+    <el-card class="list-body" shadow="never">
+      <div class="table-summary-bar">
+        <span>{{ T('GroupSummary', { n: listRes.total }) }}</span>
+      </div>
+      <el-table :data="listRes.list" v-loading="listRes.loading">
+        <el-table-column prop="id" label="ID" align="center" width="80" class-name="yj-mono"/>
+        <el-table-column prop="name" :label="T('Name')" min-width="180" show-overflow-tooltip/>
+        <el-table-column prop="type" :label="T('Type')" width="130">
           <template #default="{row}">
-            <span v-if="row.type === 1">{{ T('CommonGroup') }}</span>
-            <span v-else>{{ T('SharedGroup') }}</span>
+            <span class="neutral-chip">{{ row.type === 1 ? T('CommonGroup') : T('SharedGroup') }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="T('NavVisibility')" align="center" width="140">
+        <el-table-column :label="T('NavigationPolicy')" min-width="260">
           <template #default="{row}">
-            <span>{{ navVisibilityText(row) }}</span>
+            <div class="nav-policy-cell">
+              <el-icon><Compass/></el-icon>
+              <span>
+                <strong>{{ navPolicyTitle(row) }}</strong>
+                <small>{{ navPolicyMeta(row) }}</small>
+              </span>
+            </div>
           </template>
         </el-table-column>
-        <el-table-column prop="created_at" :label="T('CreatedAt')" align="center"/>
-        <el-table-column prop="updated_at" :label="T('UpdatedAt')" align="center"/>
-        <el-table-column :label="T('Actions')" align="center" width="120" class-name="table-actions">
+        <el-table-column prop="created_at" :label="T('CreatedAt')" width="170" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column prop="updated_at" :label="T('UpdatedAt')" width="170" class-name="yj-mono" show-overflow-tooltip/>
+        <el-table-column :label="T('Actions')" align="center" width="112" class-name="table-actions" fixed="right">
           <template #default="{row}">
             <el-tooltip :content="T('Edit')" placement="top">
-              <el-button circle :icon="Edit" @click="toEdit(row)"/>
+              <el-button type="primary" circle :icon="Edit" :aria-label="T('Edit')" @click="toEdit(row)"/>
             </el-tooltip>
             <el-tooltip :content="T('Delete')" placement="top">
-              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
+              <el-button type="danger" circle :icon="Delete" :aria-label="T('Delete')" @click="del(row)"/>
             </el-tooltip>
           </template>
         </el-table-column>
+        <template #empty>
+          <YjEmpty>
+            <template #action>
+              <el-button type="primary" @click="toAdd">{{ T('AddGroup') }}</el-button>
+            </template>
+          </YjEmpty>
+        </template>
       </el-table>
     </el-card>
-    <el-card class="list-page" shadow="hover">
-      <el-pagination background
-                     layout="prev, pager, next, sizes, jumper"
-                     :page-sizes="[10,20,50,100]"
-                     v-model:page-size="listQuery.page_size"
-                     v-model:current-page="listQuery.page"
-                     :total="listRes.total">
-      </el-pagination>
+
+    <el-card class="list-page" shadow="never">
+      <el-pagination
+          background
+          layout="prev, pager, next, sizes, jumper"
+          :page-sizes="[10,20,50,100]"
+          v-model:page-size="listQuery.page_size"
+          v-model:current-page="listQuery.page"
+          :total="listRes.total"
+      />
     </el-card>
-    <el-dialog v-model="formVisible" :title="!formData.id?T('Create'):T('Update')" width="800">
-      <el-form class="dialog-form" ref="form" :model="formData" label-width="120px">
-        <el-form-item :label="T('Name')" prop="name" required>
-          <el-input v-model="formData.name"></el-input>
-        </el-form-item>
-        <el-form-item :label="T('Type')" prop="type" required>
-          <el-radio-group v-model="formData.type">
-            <el-radio v-for="item in groupTypes" :key="item.value" :label="item.value" style="display: block">
-              {{ item.label }}
-              <span style="font-size: 12px;color: #999">{{ item.note }}</span>
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item :label="T('NavVisibility')">
-          <div class="route-tree-wrap">
-            <el-tree
-                :key="treeKey"
-                ref="routeTree"
-                :data="routeTreeData"
-                show-checkbox
-                node-key="name"
-                :props="{ label: 'title', children: 'children' }"
-                :default-checked-keys="formData.route_names"
-                default-expand-all
-            />
-            <p class="route-tree-note">{{ T('NavVisibilityNote') }}</p>
+
+    <el-dialog
+        v-model="formVisible"
+        class="policy-dialog"
+        :title="!formData.id ? T('CreateGroup') : T('UpdateGroup')"
+        width="760"
+        top="4vh"
+        destroy-on-close
+    >
+      <el-form class="group-form" ref="form" :model="formData" label-position="top">
+        <section class="form-section">
+          <div class="form-section__heading">
+            <span class="form-section__index">01</span>
+            <span>
+              <strong>{{ T('GroupIdentity') }}</strong>
+              <small>{{ T('GroupIdentityDescription') }}</small>
+            </span>
           </div>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="formVisible = false">{{ T('Cancel') }}</el-button>
-          <el-button @click="submit" type="primary">{{ T('Submit') }}</el-button>
-        </el-form-item>
+          <div class="group-form__grid">
+            <el-form-item :label="T('Name')" prop="name" required>
+              <el-input v-model="formData.name"/>
+            </el-form-item>
+            <el-form-item :label="T('Type')" prop="type" required>
+              <el-select v-model="formData.type">
+                <el-option
+                    v-for="item in groupTypes"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </div>
+          <p class="group-type-note">{{ activeGroupTypeNote }}</p>
+        </section>
+
+        <section class="form-section">
+          <div class="form-section__heading">
+            <span class="form-section__index">02</span>
+            <span>
+              <strong>{{ T('NavigationPolicy') }}</strong>
+              <small>{{ T('NavigationPolicyDescription') }}</small>
+            </span>
+          </div>
+
+          <el-radio-group v-model="policyMode" class="policy-mode">
+            <el-radio-button value="default">
+              <span class="policy-mode__label">{{ T('DefaultNavigation') }}</span>
+              <small>{{ T('DefaultNavigationDescription') }}</small>
+            </el-radio-button>
+            <el-radio-button value="custom">
+              <span class="policy-mode__label">{{ T('CustomNavigation') }}</span>
+              <small>{{ T('CustomNavigationDescription') }}</small>
+            </el-radio-button>
+          </el-radio-group>
+
+          <div v-if="policyMode === 'custom'" class="navigation-editor">
+            <div class="navigation-editor__toolbar">
+              <span>{{ T('SelfServiceEntries') }}</span>
+              <span>
+                <el-button text @click="selectAllRoutes">{{ T('SelectAll') }}</el-button>
+                <el-button text @click="clearRoutes">{{ T('ClearAll') }}</el-button>
+              </span>
+            </div>
+            <el-checkbox-group v-model="formData.route_names" class="route-options">
+              <el-checkbox
+                  v-for="item in routeOptions"
+                  :key="item.name"
+                  :value="item.name"
+                  class="route-option"
+              >
+                <span class="route-option__title">{{ item.title }}</span>
+                <span class="route-option__code">{{ item.name }}</span>
+              </el-checkbox>
+            </el-checkbox-group>
+          </div>
+
+          <div class="security-boundary-note">
+            <el-icon><Lock/></el-icon>
+            <span>{{ T('NavigationSecurityNote') }}</span>
+          </div>
+        </section>
       </el-form>
+
+      <template #footer>
+        <el-button @click="formVisible = false">{{ T('Cancel') }}</el-button>
+        <el-button type="primary" @click="submit">{{ T('SavePolicy') }}</el-button>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-  import { onMounted, reactive, watch, ref, onActivated } from 'vue'
-  import { list, create, update, detail, remove } from '@/api/group'
+  import { computed, onActivated, onMounted, reactive, ref, watch } from 'vue'
+  import { create, list, remove, update } from '@/api/group'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { T } from '@/utils/i18n'
-  import { Delete, Edit } from '@element-plus/icons'
+  import { Compass, Delete, Edit, Lock, Plus } from '@element-plus/icons-vue'
+  import { asyncRoutes } from '@/router'
+  import YjEmpty from '@/components/yj/YjEmpty.vue'
+  import YjPageHeader from '@/components/yj/YjPageHeader.vue'
 
-  const listRes = reactive({
-    list: [], total: 0, loading: false,
-  })
-  const listQuery = reactive({
-    page: 1,
-    page_size: 10,
-  })
+  const listRes = reactive({ list: [], total: 0, loading: false })
+  const listQuery = reactive({ page: 1, page_size: 10 })
 
   const getList = async () => {
     listRes.loading = true
@@ -111,11 +180,8 @@
     }
   }
   const handlerQuery = () => {
-    if (listQuery.page === 1) {
-      getList()
-    } else {
-      listQuery.page = 1
-    }
+    if (listQuery.page === 1) getList()
+    else listQuery.page = 1
   }
 
   const del = async (row) => {
@@ -124,9 +190,7 @@
       cancelButtonText: T('Cancel'),
       type: 'warning',
     }).catch(_ => false)
-    if (!cf) {
-      return false
-    }
+    if (!cf) return false
 
     const res = await remove({ id: row.id }).catch(_ => false)
     if (res) {
@@ -134,109 +198,356 @@
       getList()
     }
   }
+
   onMounted(getList)
   onActivated(getList)
-
   watch(() => listQuery.page, getList)
-
   watch(() => listQuery.page_size, handlerQuery)
 
-  const groupTypes = [
+  const groupTypes = computed(() => [
     { label: T('CommonGroup'), value: 1, note: T('CommonGroupNote') },
     { label: T('SharedGroup'), value: 2, note: T('SharedGroupNote') },
+  ])
+
+  // 组导航只开放后端默认允许的自助路由，避免把无接口权限的管理页面展示给普通用户。
+  const selfServiceRouteNames = [
+    'MyInfo',
+    'MyPeer',
+    'MyAssist',
+    'MyAddressBookCollection',
+    'MyAddressBookList',
+    'MyTagList',
+    'MyShareRecordList',
+    'MyLoginLog',
   ]
-
-  // 导航可见性：基于 asyncRoutes 的 route_names 勾选树（仅控制菜单可见性，空 = 默认全部）
-  import { asyncRoutes } from '@/router'
-
-  const buildRouteTree = (routes) => routes
-    .filter(r => r.name && !r.meta?.hide)
-    .map(r => ({
-      name: r.name,
-      title: T(r.meta?.title || r.name),
-      children: r.children?.length ? buildRouteTree(r.children) : [],
-    }))
-
-  const routeTreeData = buildRouteTree(asyncRoutes)
-  const allRouteNames = []
-  const flattenNames = (nodes) => nodes.forEach(n => {
-    allRouteNames.push(n.name)
-    if (n.children?.length) flattenNames(n.children)
-  })
-  flattenNames(routeTreeData)
-
-  const routeTree = ref(null)
-  const treeKey = ref(0)
+  const myRoute = asyncRoutes.find(route => route.name === 'My')
+  const routeOptions = computed(() => (myRoute?.children || [])
+    .filter(route => selfServiceRouteNames.includes(route.name))
+    .map(route => ({ name: route.name, title: T(route.meta?.title || route.name) })))
 
   const parseRouteNames = (val) => {
     if (!val) return []
     try {
-      const arr = JSON.parse(val)
-      return Array.isArray(arr) ? arr : []
+      const names = JSON.parse(val)
+      return Array.isArray(names) ? names.filter(name => selfServiceRouteNames.includes(name)) : []
     } catch (_) {
       return []
     }
   }
-  const navVisibilityText = (row) => {
-    const names = parseRouteNames(row.route_names)
-    return names.length ? T('NavVisibilityCount', { n: names.length }) : T('NavVisibilityAll')
+  const navPolicyTitle = (row) => parseRouteNames(row.route_names).length
+    ? T('CustomNavigation')
+    : T('DefaultNavigation')
+  const navPolicyMeta = (row) => {
+    const count = parseRouteNames(row.route_names).length
+    return count
+      ? T('CustomNavigationCount', { n: count })
+      : T('DefaultNavigationCount', { n: selfServiceRouteNames.length })
   }
 
   const formVisible = ref(false)
-  const formData = reactive({
-    id: 0,
-    name: '',
-    type: 1,
-    route_names: [],
-  })
+  const policyMode = ref('default')
+  const formData = reactive({ id: 0, name: '', type: 1, route_names: [] })
+  const activeGroupTypeNote = computed(() =>
+    groupTypes.value.find(item => item.value === formData.type)?.note || '')
 
-  const toEdit = (row) => {
-    formVisible.value = true
-    formData.id = row.id
-    formData.name = row.name
-    formData.type = row.type
-    formData.route_names = parseRouteNames(row.route_names)
-    treeKey.value++
-  }
-  const toAdd = () => {
-    formVisible.value = true
+  const resetForm = () => {
     formData.id = 0
     formData.name = ''
     formData.type = 1
-    formData.route_names = allRouteNames.slice() // 新建默认全选 = 默认全部
-    treeKey.value++
+    formData.route_names = selfServiceRouteNames.slice()
+    policyMode.value = 'default'
+  }
+  const toEdit = (row) => {
+    const names = parseRouteNames(row.route_names)
+    formData.id = row.id
+    formData.name = row.name
+    formData.type = row.type
+    formData.route_names = names.length ? names : selfServiceRouteNames.slice()
+    policyMode.value = names.length ? 'custom' : 'default'
+    formVisible.value = true
+  }
+  const toAdd = () => {
+    resetForm()
+    formVisible.value = true
+  }
+  const selectAllRoutes = () => {
+    formData.route_names = selfServiceRouteNames.slice()
+  }
+  const clearRoutes = () => {
+    formData.route_names = []
   }
   const submit = async () => {
-    const checked = routeTree.value ? routeTree.value.getCheckedKeys() : formData.route_names
-    const halfChecked = routeTree.value ? routeTree.value.getHalfCheckedKeys() : []
-    const names = [...new Set([...checked, ...halfChecked])]
-    // 全选等同于默认全部 → 存空字符串
-    const routeNamesStr = names.length >= allRouteNames.length ? '' : JSON.stringify(names)
+    if (!formData.name.trim()) {
+      ElMessage.warning(T('ParamRequired', { param: T('Name') }))
+      return false
+    }
+    if (policyMode.value === 'custom' && !formData.route_names.length) {
+      ElMessage.warning(T('NavigationRequired'))
+      return false
+    }
+    const routeNames = policyMode.value === 'default'
+      ? ''
+      : JSON.stringify(formData.route_names)
     const api = formData.id ? update : create
-    const res = await api({ ...formData, route_names: routeNamesStr }).catch(_ => false)
+    const res = await api({ ...formData, route_names: routeNames }).catch(_ => false)
     if (res) {
       ElMessage.success(T('OperationSuccess'))
       formVisible.value = false
       getList()
     }
   }
-
 </script>
 
 <style scoped lang="scss">
-.route-tree-wrap {
-  width: 100%;
-  padding: var(--yj-spacing-md) var(--yj-spacing-lg);
-  border: 1px solid var(--yj-border);
-  border-radius: var(--yj-radius-md);
-  max-height: 320px;
-  overflow: auto;
+.nav-policy-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--yj-spacing-md);
+
+  > .el-icon {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--yj-border);
+    border-radius: var(--yj-radius-md);
+    background: var(--yj-surface-hover);
+    color: var(--yj-primary);
+  }
+
+  span {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  strong {
+    color: var(--yj-text-primary);
+    font-size: var(--yj-font-size-base);
+    font-weight: var(--yj-font-weight-medium);
+  }
+
+  small {
+    color: var(--yj-text-tertiary);
+    font-size: var(--yj-font-size-sm);
+  }
 }
 
-.route-tree-note {
-  margin: var(--yj-spacing-sm) 0 0;
+.group-form {
+  display: grid;
+  gap: var(--yj-spacing-xl);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(180px, .6fr);
+    gap: var(--yj-spacing-lg);
+  }
+}
+
+.form-section {
+  padding: var(--yj-spacing-xl);
+  border: 1px solid var(--yj-border);
+  border-radius: var(--yj-radius-lg);
+  background: var(--yj-surface);
+
+  &__heading {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--yj-spacing-md);
+    margin-bottom: var(--yj-spacing-xl);
+
+    > span:last-child {
+      display: flex;
+      flex-direction: column;
+      gap: var(--yj-spacing-xs);
+    }
+
+    strong {
+      color: var(--yj-text-primary);
+      font-size: var(--yj-font-size-md);
+      font-weight: var(--yj-font-weight-semibold);
+    }
+
+    small {
+      color: var(--yj-text-tertiary);
+      font-size: var(--yj-font-size-sm);
+      line-height: var(--yj-line-height-base);
+    }
+  }
+
+  &__index {
+    color: var(--yj-primary);
+    font-family: var(--yj-font-family-mono);
+    font-size: var(--yj-font-size-sm);
+    font-weight: var(--yj-font-weight-semibold);
+    letter-spacing: .08em;
+  }
+}
+
+.group-type-note {
+  margin: calc(var(--yj-spacing-sm) * -1) 0 0;
+  color: var(--yj-text-tertiary);
+  font-size: var(--yj-font-size-sm);
+}
+
+.policy-mode {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+
+  :deep(.el-radio-button__inner) {
+    display: flex;
+    align-items: flex-start;
+    min-height: 76px;
+    padding: var(--yj-spacing-lg);
+    flex-direction: column;
+    gap: var(--yj-spacing-xs);
+    width: 100%;
+    border-color: var(--yj-border);
+    border-radius: 0;
+    box-shadow: none;
+    text-align: left;
+    white-space: normal;
+  }
+
+  :deep(.el-radio-button:first-child .el-radio-button__inner) {
+    border-radius: var(--yj-radius-md) 0 0 var(--yj-radius-md);
+  }
+
+  :deep(.el-radio-button:last-child .el-radio-button__inner) {
+    border-radius: 0 var(--yj-radius-md) var(--yj-radius-md) 0;
+  }
+
+  :deep(.el-radio-button.is-active .el-radio-button__inner) {
+    border-color: var(--yj-primary);
+    background: var(--yj-surface-selected);
+    color: var(--yj-text-primary);
+  }
+
+  &__label {
+    font-weight: var(--yj-font-weight-semibold);
+  }
+
+  small {
+    color: var(--yj-text-tertiary);
+    font-size: var(--yj-font-size-sm);
+    line-height: var(--yj-line-height-base);
+  }
+}
+
+.navigation-editor {
+  margin-top: var(--yj-spacing-lg);
+  border: 1px solid var(--yj-border);
+  border-radius: var(--yj-radius-md);
+  overflow: hidden;
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    padding: 0 var(--yj-spacing-lg);
+    border-bottom: 1px solid var(--yj-divider);
+    background: var(--yj-surface-hover);
+    color: var(--yj-text-secondary);
+    font-size: var(--yj-font-size-sm);
+    font-weight: var(--yj-font-weight-medium);
+  }
+}
+
+.route-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: var(--yj-spacing-sm);
+}
+
+.route-option {
+  display: flex;
+  align-items: flex-start;
+  min-height: 58px;
+  margin: 0 !important;
+  padding: var(--yj-spacing-md);
+  border-radius: var(--yj-radius-md);
+
+  &:hover {
+    background: var(--yj-surface-hover);
+  }
+
+  :deep(.el-checkbox__label) {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: var(--yj-spacing-xxs);
+  }
+
+  &__title {
+    color: var(--yj-text-primary);
+    font-size: var(--yj-font-size-base);
+  }
+
+  &__code {
+    color: var(--yj-text-tertiary);
+    font-family: var(--yj-font-family-mono);
+    font-size: var(--yj-font-size-xs);
+  }
+}
+
+.security-boundary-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--yj-spacing-sm);
+  margin-top: var(--yj-spacing-lg);
+  padding: var(--yj-spacing-md) var(--yj-spacing-lg);
+  border-left: 2px solid var(--yj-primary);
+  background: var(--yj-surface-hover);
+  color: var(--yj-text-secondary);
   font-size: var(--yj-font-size-sm);
   line-height: var(--yj-line-height-base);
-  color: var(--yj-text-tertiary);
+
+  .el-icon {
+    flex: none;
+    margin-top: 2px;
+    color: var(--yj-primary);
+  }
+}
+
+@media (max-width: 768px) {
+  .group-form__grid,
+  .policy-mode,
+  .route-options {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-mode {
+    gap: var(--yj-spacing-sm);
+
+    :deep(.el-radio-button__inner),
+    :deep(.el-radio-button:first-child .el-radio-button__inner),
+    :deep(.el-radio-button:last-child .el-radio-button__inner) {
+      border: 1px solid var(--yj-border);
+      border-radius: var(--yj-radius-md);
+    }
+  }
+
+  .form-section {
+    padding: var(--yj-spacing-lg);
+  }
+}
+
+:global(.policy-dialog) {
+  display: flex;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  flex-direction: column;
+}
+
+:global(.policy-dialog .el-dialog__header),
+:global(.policy-dialog .el-dialog__footer) {
+  flex: none;
+}
+
+:global(.policy-dialog .el-dialog__body) {
+  min-height: 0;
+  overflow-y: auto;
 }
 </style>

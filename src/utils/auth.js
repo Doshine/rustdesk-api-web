@@ -3,16 +3,22 @@ const OidcCode = 'oidc_code'
 const OidcCodeExpiry = 'oidc_code_expiry';
 
 export function getToken () {
-  return localStorage.getItem(TokenKey)
+  // Remove credentials persisted by older releases before reading the tab-scoped copy.
+  localStorage.removeItem(TokenKey)
+  localStorage.removeItem('wc-option:local:access_token')
+  return sessionStorage.getItem(TokenKey)
 }
 
 export function setToken (token) {
-  localStorage.setItem(`wc-option:local:access_token`, token)
-  return localStorage.setItem(TokenKey, token)
+  localStorage.removeItem(TokenKey)
+  localStorage.removeItem('wc-option:local:access_token')
+  return sessionStorage.setItem(TokenKey, token)
 }
 
 export function removeToken () {
-  return localStorage.removeItem(TokenKey)
+  localStorage.removeItem(TokenKey)
+  localStorage.removeItem('wc-option:local:access_token')
+  return sessionStorage.removeItem(TokenKey)
 }
 
 // 设置 code，并存储当前时间戳（单位：毫秒）
@@ -20,13 +26,13 @@ export function setCode(code) {
   const now = Date.now(); // 当前时间戳（毫秒）
   const expiry = now + 60 * 1000; // 60 秒后过期
 
-  localStorage.setItem(OidcCode, code); // 存储 code
-  localStorage.setItem(OidcCodeExpiry, expiry); // 存储过期时间戳
+  sessionStorage.setItem(OidcCode, code)
+  sessionStorage.setItem(OidcCodeExpiry, expiry)
 }
 
 // 获取 code，如果已过期则删除并返回 null
 export function getCode() {
-  const expiry = localStorage.getItem(OidcCodeExpiry); // 获取过期时间戳
+  const expiry = sessionStorage.getItem(OidcCodeExpiry)
   const now = Date.now(); // 当前时间戳
 
   if (expiry && now > parseInt(expiry)) {
@@ -34,11 +40,13 @@ export function getCode() {
     removeCode();
     return null;
   }
-  return localStorage.getItem(OidcCode); // 返回 code（如果未过期）
+  return sessionStorage.getItem(OidcCode)
 }
 
 // 删除 code 和过期时间
 export function removeCode() {
-  localStorage.removeItem(OidcCode);
-  localStorage.removeItem(OidcCodeExpiry);
+  localStorage.removeItem(OidcCode)
+  localStorage.removeItem(OidcCodeExpiry)
+  sessionStorage.removeItem(OidcCode)
+  sessionStorage.removeItem(OidcCodeExpiry)
 }

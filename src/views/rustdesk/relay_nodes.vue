@@ -233,7 +233,7 @@
   import { T } from '@/utils/i18n'
   import { computed, onMounted, reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
-  import { CopyDocument as CopyIcon, Refresh as RefreshIcon } from '@element-plus/icons'
+  import { CopyDocument as CopyIcon, Refresh as RefreshIcon } from '@element-plus/icons-vue'
   import { timeAgo } from '@/utils/time'
   import { sendCmd } from '@/api/rustdesk'
   import { confirmRisk, ID_TARGET } from '@/views/rustdesk/options'

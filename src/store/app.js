@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import logo from '@/assets/brand-logo.png'
+import logo from '@/assets/brand-logo.webp'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import en from 'element-plus/es/locale/lang/en'
 import ko from 'element-plus/es/locale/lang/ko'

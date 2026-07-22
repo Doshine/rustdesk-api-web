@@ -1,6 +1,6 @@
 <template>
   <!-- 统一页面骨架 · 筛选区：主筛选一行收拢，低频筛选进「更多筛选」抽屉 -->
-  <div class="yj-filter-bar">
+  <div class="yj-filter-bar" role="search">
     <el-form inline class="yj-filter-bar__form" @submit.prevent>
       <slot/>
       <el-form-item class="yj-filter-bar__actions">
@@ -27,7 +27,7 @@
 
 <script setup>
   import { computed, ref, useSlots } from 'vue'
-  import { ArrowDown } from '@element-plus/icons'
+  import { ArrowDown } from '@element-plus/icons-vue'
   import { T } from '@/utils/i18n'
 
   const emit = defineEmits(['search', 'reset'])
@@ -50,13 +50,12 @@
   &__form {
     display: flex;
     flex-wrap: nowrap;
-    align-items: flex-start;
-    overflow-x: auto;
+    align-items: flex-end;
+    gap: var(--yj-spacing-md);
 
     :deep(.el-form-item) {
       flex: none;
-      margin-right: var(--yj-spacing-lg);
-      margin-bottom: var(--yj-spacing-lg);
+      margin: 0;
     }
 
     :deep(.el-input),
@@ -67,6 +66,7 @@
 
   &__actions {
     margin-left: auto;
+    white-space: nowrap;
   }
 
   &__more {
@@ -75,6 +75,33 @@
     .el-icon {
       margin-left: var(--yj-spacing-xxs);
     }
+  }
+}
+
+@media (max-width: 960px) {
+  .yj-filter-bar__form {
+    flex-wrap: wrap;
+
+    :deep(.el-form-item) {
+      flex: 1 1 180px;
+    }
+
+    :deep(.el-input),
+    :deep(.el-select) {
+      width: 100%;
+    }
+
+    .yj-filter-bar__actions {
+      flex: 1 0 100%;
+      justify-content: flex-end;
+    }
+  }
+}
+
+@media (max-width: 560px) {
+  .yj-filter-bar__form .yj-filter-bar__actions {
+    justify-content: flex-start;
+    overflow-x: auto;
   }
 }
 

@@ -88,7 +88,7 @@
   import { onActivated, onMounted, watch } from 'vue'
   import Rule from '@/views/address_book/rule.vue'
   import { loadAllUsers } from '@/global'
-  import { Delete, Edit, Share } from '@element-plus/icons'
+  import { Delete, Edit, Share } from '@element-plus/icons-vue'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   getAllUsers()

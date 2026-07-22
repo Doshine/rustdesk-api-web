@@ -44,7 +44,7 @@
   import { onActivated, onMounted, watch } from 'vue'
   import { T } from '@/utils/i18n'
   import { useRepositories } from '@/views/share_record'
-  import { Delete } from '@element-plus/icons'
+  import { Delete } from '@element-plus/icons-vue'
 
   const {
     listRes,

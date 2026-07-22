@@ -1,29 +1,38 @@
 <template>
-  <!-- 状态点：语义色点 + 文字（规范 §2.3-C：状态列用文字加状态点，不用彩色标签） -->
-  <span class="yj-status-dot" :class="`yj-status-dot--${status}`">
-    <span class="yj-status-dot__dot"></span>
-    <span class="yj-status-dot__text"><slot>{{ text }}</slot></span>
+  <!-- 雷达状态节点：环 + 中心点，状态由结构与语义色共同表达 -->
+  <span
+    class="yj-status-dot"
+    :class="[`yj-status-dot--${status}`, `yj-status-dot--${size}`, { 'is-icon-only': iconOnly }]"
+    role="status"
+    :aria-label="label || text || status"
+  >
+    <span class="yj-status-dot__node" aria-hidden="true"></span>
+    <span v-if="!iconOnly" class="yj-status-dot__text"><slot>{{ text }}</slot></span>
   </span>
 </template>
 
 <script setup>
   defineProps({
-    // online 在线 / offline 离线 / warning 警告 / danger 危险
+    // online 在线 / connecting 连接中 / offline 离线 / unknown 未知 / warning 警告 / danger 危险
     status: {
       type: String,
       default: 'offline',
-      validator: (v) => ['online', 'offline', 'warning', 'danger'].includes(v),
+      validator: (v) => ['online', 'connecting', 'offline', 'unknown', 'warning', 'danger'].includes(v),
     },
     text: { type: String, default: '' },
+    label: { type: String, default: '' },
+    size: {
+      type: String,
+      default: 'md',
+      validator: (v) => ['sm', 'md'].includes(v),
+    },
+    iconOnly: { type: Boolean, default: false },
   })
 </script>
 
 <style scoped lang="scss">
-/* 语义色值取自规范 v2.1 §1.1（在线 #167C59 / 警告 #A86608 / 危险 #C53B4C），待 WS0 并入 tokens.css 后切换 */
 .yj-status-dot {
-  --yj-status-online: #167C59;
-  --yj-status-warning: #A86608;
-  --yj-status-danger: #C53B4C;
+  --yj-status-color: var(--yj-offline);
 
   display: inline-flex;
   align-items: center;
@@ -33,28 +42,105 @@
   color: var(--yj-text-primary);
   white-space: nowrap;
 
-  &__dot {
+  &__node {
+    position: relative;
     flex: none;
+    width: 12px;
+    height: 12px;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    &::before {
+      inset: 0;
+      border: 1.5px solid var(--yj-status-color);
+    }
+
+    &::after {
+      left: 50%;
+      top: 50%;
+      width: 4px;
+      height: 4px;
+      transform: translate(-50%, -50%);
+      background: var(--yj-status-color);
+    }
+  }
+
+  &--sm &__node {
     width: 8px;
     height: 8px;
-    border-radius: var(--yj-radius-full);
-    background-color: var(--yj-offline);
-    box-shadow: 0 0 0 3px var(--yj-offline-subtle);
+
+    &::before {
+      border-width: 1px;
+    }
+
+    &::after {
+      width: 3px;
+      height: 3px;
+    }
   }
 
-  &--online &__dot {
-    background-color: var(--yj-status-online);
-    box-shadow: 0 0 0 3px rgba(22, 124, 89, 0.14);
+  &--online {
+    --yj-status-color: var(--yj-online);
+
+    .yj-status-dot__node::before {
+      animation: yj-radar-pulse var(--yj-motion-ambient) ease-in-out infinite;
+    }
   }
 
-  &--warning &__dot {
-    background-color: var(--yj-status-warning);
-    box-shadow: 0 0 0 3px rgba(168, 102, 8, 0.14);
+  &--connecting {
+    --yj-status-color: var(--yj-primary);
+
+    .yj-status-dot__node::before {
+      border-right-color: transparent;
+      animation: yj-radar-spin var(--yj-motion-ambient) linear infinite;
+    }
+
+    .yj-status-dot__node::after {
+      display: none;
+    }
   }
 
-  &--danger &__dot {
-    background-color: var(--yj-status-danger);
-    box-shadow: 0 0 0 3px rgba(197, 59, 76, 0.14);
+  &--warning {
+    --yj-status-color: var(--yj-warning);
+  }
+
+  &--danger {
+    --yj-status-color: var(--yj-danger);
+  }
+
+  &--unknown .yj-status-dot__node::before {
+    border-style: dashed;
+  }
+
+  &--offline .yj-status-dot__node::after,
+  &--unknown .yj-status-dot__node::after {
+    display: none;
+  }
+
+  &.is-icon-only {
+    gap: 0;
+  }
+}
+
+@keyframes yj-radar-pulse {
+  50% {
+    opacity: .52;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--yj-status-color) 12%, transparent);
+  }
+}
+
+@keyframes yj-radar-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yj-status-dot__node::before {
+    animation: none !important;
   }
 }
 </style>

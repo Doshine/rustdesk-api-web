@@ -78,6 +78,63 @@ export function changeCurPwd (data) {
   })
 }
 
+export function mfaEnroll () {
+  return request({
+    url: '/user/mfa/enroll',
+    method: 'post',
+  })
+}
+
+export function mfaEnable (data) {
+  return request({
+    url: '/user/mfa/enable',
+    method: 'post',
+    data,
+  })
+}
+
+export function mfaDisable (data) {
+  return request({
+    url: '/user/mfa/disable',
+    method: 'post',
+    data,
+  })
+}
+
+export function mfaBootstrapBegin (data) {
+  return request({
+    url: '/mfa/bootstrap/begin',
+    method: 'post',
+    data,
+    hideErrorMessage: true,
+  })
+}
+
+export function mfaBootstrapComplete (data) {
+  return request({
+    url: '/mfa/bootstrap/complete',
+    method: 'post',
+    data,
+    hideErrorMessage: true,
+  })
+}
+
+export function passkeyRegisterBegin () {
+  return request({ url: '/user/passkeys/register/begin', method: 'post', data: {}, hideErrorMessage: true })
+}
+
+export function passkeyRegisterComplete (data) {
+  return request({ url: '/user/passkeys/register/complete', method: 'post', data, hideErrorMessage: true })
+}
+
+export function passkeyList () {
+  return request({ url: '/user/passkeys', method: 'get', hideErrorMessage: true })
+}
+
+export function passkeyRevoke (id, data = {}) {
+  return request({ url: `/user/passkeys/${id}`, method: 'delete', data, hideErrorMessage: true })
+}
+
 export function myOauth () {
   return request({
     url: '/user/myOauth',

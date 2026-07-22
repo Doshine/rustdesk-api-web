@@ -14,7 +14,7 @@
 <script>
   import { defineComponent, computed } from 'vue'
   import { T } from '@/utils/i18n'
-  import { RefreshRight } from '@element-plus/icons'
+  import { RefreshRight } from '@element-plus/icons-vue'
 
   export default defineComponent({
     name: 'DashboardModuleError',

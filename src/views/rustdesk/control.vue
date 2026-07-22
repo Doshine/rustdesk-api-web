@@ -59,8 +59,10 @@
           <div class="yj-settings-panel">
             <header class="yj-settings-panel__header">
               <h2 class="yj-settings-panel__title">命令控制台 <span class="yj-settings-panel__code">ADVANCED</span></h2>
-              <p class="yj-settings-panel__desc"
-                 v-html="T('ServerCmdTips', {wiki: '<a target=\'_blank\' href=\'https://github.com/lejianwen/rustdesk-api/wiki/Rustdesk-Command\'>WIKI</a>'})"></p>
+              <p class="yj-settings-panel__desc">
+                {{ serverCmdTips[0] }}<a target="_blank" rel="noopener noreferrer"
+                  href="https://github.com/lejianwen/rustdesk-api/wiki/Rustdesk-Command">WIKI</a>{{ serverCmdTips[1] }}
+              </p>
             </header>
 
             <div class="yj-settings-group">
@@ -182,6 +184,7 @@
   /* ================= 设置中心导航与面板切换（?panel=xxx 可直达） ================= */
   const route = useRoute()
   const router = useRouter()
+  const serverCmdTips = computed(() => T('ServerCmdTips', { wiki: '__WIKI__' }).split('__WIKI__'))
   const panelKeys = SETTINGS_NAV.flatMap(g => g.items.map(i => i.key))
   // 旧面板入口重定向（防止书签 404）：relay_servers 已并入 relay_nodes
   const LEGACY_PANEL = { relay_servers: 'relay_nodes' }
