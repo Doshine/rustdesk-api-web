@@ -259,7 +259,7 @@
 
   export default defineComponent({
     name: 'Home',
-    components: { ModuleError, YjPageHeader, YjStatusDot },
+    components: { ModuleError, YjPageHeader, YjStatusDot, Right },
     setup () {
       const router = useRouter()
       const openAssistance = (mode) => router.push({ name: 'MyAssist', query: { mode } })
