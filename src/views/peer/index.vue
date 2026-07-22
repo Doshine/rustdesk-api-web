@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <YjPageHeader :title="T('PeerManage')">
+  <div class="control-page">
+    <YjPageHeader
+      eyebrow="DEVICE OPERATIONS"
+      :title="T('PeerManage')"
+      :description="T('PeerManageDescription')"
+    >
       <template #actions>
         <el-button type="primary" :icon="Plus" @click="toAdd">{{ T('AddPeer') }}</el-button>
         <el-dropdown trigger="click" @command="handleMoreCommand">
@@ -22,7 +26,7 @@
       </template>
     </YjPageHeader>
 
-    <el-card class="list-query" shadow="hover">
+    <el-card class="list-query" shadow="never">
       <YjFilterBar @search="handlerQuery" @reset="onResetFilter">
         <el-form-item label="ID">
           <el-input v-model="listQuery.id" clearable @keyup.enter="handlerQuery"/>
@@ -37,20 +41,20 @@
             <el-option :label="T('PendingApproval')" value="pending"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="T('Os')">
-          <el-input v-model="listQuery.os" clearable @keyup.enter="handlerQuery"/>
-        </el-form-item>
-        <el-form-item :label="T('Group')">
-          <el-select v-model="listQuery.group_id" clearable filterable>
-            <el-option
-                v-for="item in groupListRes.list"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
         <template #more>
+          <el-form-item :label="T('Os')">
+            <el-input v-model="listQuery.os" clearable/>
+          </el-form-item>
+          <el-form-item :label="T('Group')">
+            <el-select v-model="listQuery.group_id" clearable filterable>
+              <el-option
+                  v-for="item in groupListRes.list"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item :label="T('Username')">
             <el-input v-model="listQuery.username" clearable/>
           </el-form-item>
@@ -81,18 +85,38 @@
     >
       <template #title>
         <span>{{ T('PendingAlert', { n: pendingCount }) }}</span>
-        <el-link type="primary" class="pending-alert__link" :underline="false" @click="onlineStatus = 'pending'; handlerQuery()">
+        <el-link type="primary" class="pending-alert__link" underline="never" @click="onlineStatus = 'pending'; handlerQuery()">
           {{ T('ViewPending') }}
         </el-link>
       </template>
     </el-alert>
 
-    <el-card class="list-body" shadow="hover">
-      <div class="table-toolbar">
-        <el-button :icon="Setting" @click="showColumnSetting"></el-button>
+    <el-card class="list-body" shadow="never">
+      <div class="table-summary-bar">
+        <span>{{ T('DashboardPeersTotalCaption', { n: listRes.total }) }}</span>
+        <el-button :icon="Setting" :aria-label="T('Setting')" @click="showColumnSetting"></el-button>
       </div>
 
-      <el-table :data="listRes.list" v-loading="listRes.loading" border @selection-change="handleSelectionChange">
+      <YjSelectionBar
+          :count="multipleSelection.length"
+          :summary="T('SelectedDevices', { n: multipleSelection.length })"
+          :detail="selectedPendingCount ? T('PendingSelected', { n: selectedPendingCount }) : ''"
+          :clear-text="T('ClearSelection')"
+          @clear="clearSelection"
+      >
+        <el-button v-if="selectedPendingCount" type="primary" :icon="Check" @click="toBatchApprove">
+          {{ T('ApproveSelected') }}
+        </el-button>
+        <el-button v-if="selectedApprovedCount" @click="toBatchAddToAB">
+          {{ T('BatchAddToAB') }}
+        </el-button>
+        <el-button v-if="selectedApprovedCount" @click="toBatchTags">
+          {{ T('BatchUpdateTags') }}
+        </el-button>
+        <el-button type="danger" plain @click="toBatchDelete">{{ T('Delete') }}</el-button>
+      </YjSelectionBar>
+
+      <el-table ref="peerTable" :data="listRes.list" v-loading="listRes.loading" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40" align="center"/>
         <template v-for="c in visibleColumns.filter(cc => cc.visible)" :key="c">
           <el-table-column v-if="c.name==='id'" prop="id" label="ID" align="center" width="148" class-name="yj-mono">
@@ -102,7 +126,7 @@
           </el-table-column>
           <el-table-column v-if="c.name==='online_status'" :label="T('OnlineStatus')" align="center" width="92">
             <template #default="{row}">
-              <YjStatusDot v-if="isPending(row)" status="warning" :text="T('PendingApproval')"/>
+              <YjStatusDot v-if="isPending(row)" status="connecting" :text="T('PendingApproval')"/>
               <YjStatusDot v-else :status="onlineOf(row)" :text="onlineOf(row) === 'online' ? T('Online') : T('Offline')"/>
             </template>
           </el-table-column>
@@ -121,7 +145,7 @@
           <el-table-column v-if="c.name==='username'" prop="username" :label="T('Username')" align="center" width="120" show-overflow-tooltip/>
           <el-table-column v-if="c.name==='group_id'" prop="group_id" :label="T('Group')" align="center" width="120">
             <template #default="{row}">
-              <span v-if="row.group_id"> <el-tag>{{ groupListRes.list?.find(g => g.id === row.group_id)?.name }} </el-tag> </span>
+              <span v-if="row.group_id" class="neutral-chip">{{ groupListRes.list?.find(g => g.id === row.group_id)?.name }}</span>
               <span v-else> - </span>
             </template>
           </el-table-column>
@@ -132,26 +156,26 @@
           <el-table-column v-if="c.name==='updated_at'" prop="updated_at" :label="T('UpdatedAt')" align="center" width="160" class-name="yj-mono" show-overflow-tooltip/>
         </template>
 
-        <el-table-column :label="T('Actions')" align="center" width="120" class-name="table-actions" fixed="right">
+        <el-table-column :label="T('Actions')" align="center" width="136" class-name="table-actions" fixed="right">
           <template #default="{row}">
             <!-- 待审批行：批准 / 拒绝 -->
             <template v-if="isPending(row)">
               <el-tooltip :content="T('Approve')" placement="top">
-                <el-button type="success" circle :icon="Check" @click="toApprove(row)"/>
+                <el-button type="success" circle :icon="Check" :aria-label="T('Approve')" @click="toApprove(row)"/>
               </el-tooltip>
               <el-tooltip :content="T('Reject')" placement="top">
-                <el-button type="danger" circle :icon="Close" @click="toReject(row)"/>
+                <el-button type="danger" circle :icon="Close" :aria-label="T('Reject')" @click="toReject(row)"/>
               </el-tooltip>
             </template>
             <template v-else>
               <el-tooltip :content="T('Link')" placement="top">
-                <el-button type="success" circle :icon="Connection" @click="connectByClient(row.id)"/>
+                <el-button type="success" circle :icon="Connection" :aria-label="T('Link')" @click="connectByClient(row.id)"/>
               </el-tooltip>
               <el-tooltip :content="T('Edit')" placement="top">
-                <el-button circle :icon="Edit" @click="toEdit(row)"/>
+                <el-button circle :icon="Edit" :aria-label="T('Edit')" @click="toEdit(row)"/>
               </el-tooltip>
               <el-dropdown trigger="click" @command="(cmd) => handleRowCommand(cmd, row)">
-                <el-button circle :icon="MoreFilled"/>
+                <el-button circle :icon="MoreFilled" :aria-label="T('More')"/>
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item v-if="appStore.setting.appConfig.web_client" command="webclient">Web Client</el-dropdown-item>
@@ -174,7 +198,7 @@
         </template>
       </el-table>
     </el-card>
-    <el-card class="list-page" shadow="hover">
+    <el-card class="list-page" shadow="never">
       <el-pagination background
                      layout="prev, pager, next, sizes, jumper"
                      :page-sizes="[10,20,50,100]"
@@ -352,7 +376,7 @@
   import { loadAllUsers } from '@/global'
   import { useAppStore } from '@/store/app'
   import { connectByClient } from '@/utils/peer'
-  import { ArrowDown, ArrowUp, Check, Close, Connection, CopyDocument, Edit, MoreFilled, Plus, Setting } from '@element-plus/icons'
+  import { ArrowDown, ArrowUp, Check, Close, Connection, CopyDocument, Edit, MoreFilled, Plus, Setting } from '@element-plus/icons-vue'
   import { handleClipboard } from '@/utils/clipboard'
   import { batchCreateFromPeers } from '@/api/address_book'
   import { useRepositories as useCollectionRepositories } from '@/views/address_book/collection'
@@ -362,6 +386,7 @@
   import YjFilterBar from '@/components/yj/YjFilterBar.vue'
   import YjStatusDot from '@/components/yj/YjStatusDot.vue'
   import YjEmpty from '@/components/yj/YjEmpty.vue'
+  import YjSelectionBar from '@/components/yj/YjSelectionBar.vue'
   import { formatTime } from '@/utils/time'
 
   const appStore = useAppStore()
@@ -523,6 +548,7 @@
     if (res) {
       ElMessage.success(T('OperationSuccess'))
       getList()
+      getPendingCount()
     }
   }
   onMounted(getList)
@@ -666,9 +692,33 @@
     ABFormVisible.value = true
   }
 
+  const peerTable = ref(null)
   const multipleSelection = ref([])
+  const selectedPending = computed(() => multipleSelection.value.filter(isPending))
+  const selectedApproved = computed(() => multipleSelection.value.filter(row => !isPending(row)))
+  const selectedPendingCount = computed(() => selectedPending.value.length)
+  const selectedApprovedCount = computed(() => selectedApproved.value.length)
   const handleSelectionChange = (val) => {
     multipleSelection.value = val
+  }
+  const clearSelection = () => {
+    peerTable.value?.clearSelection()
+  }
+  const toBatchApprove = async () => {
+    if (!selectedPendingCount.value) return false
+    const cf = await ElMessageBox.confirm(T('ApproveConfirm'), {
+      confirmButtonText: T('Approve'),
+      cancelButtonText: T('Cancel'),
+      type: 'warning',
+    }).catch(_ => false)
+    if (!cf) return false
+    const res = await approve({ row_ids: selectedPending.value.map(i => i.row_id) }).catch(_ => false)
+    if (res) {
+      ElMessage.success(T('ApproveSuccess'))
+      clearSelection()
+      getList()
+      getPendingCount()
+    }
   }
   const toBatchDelete = async () => {
     if (!multipleSelection.value.length) {
@@ -687,7 +737,9 @@
     const res = await batchRemove({ row_ids: multipleSelection.value.map(i => i.row_id) }).catch(_ => false)
     if (res) {
       ElMessage.success(T('OperationSuccess'))
+      clearSelection()
       getList()
+      getPendingCount()
     }
   }
 
@@ -707,6 +759,10 @@
   }
   const batchABFormVisible = ref(false)
   const toBatchAddToAB = () => {
+    if (!selectedApprovedCount.value) {
+      ElMessage.warning(T('PleaseSelectData'))
+      return false
+    }
     batchABFormVisible.value = true
   }
   const batchABFormData = ref({
@@ -716,11 +772,11 @@
     user_id: null,
   })
   const submitBatchAddToAB = async () => {
-    if (multipleSelection.value.length === 0) {
+    if (selectedApprovedCount.value === 0) {
       ElMessage.warning(T('PleaseSelectData'))
       return false
     }
-    batchABFormData.value.peer_ids = multipleSelection.value.map(i => i.row_id)
+    batchABFormData.value.peer_ids = selectedApproved.value.map(i => i.row_id)
     if (!batchABFormData.value.peer_ids.length) {
       ElMessage.warning(T('PleaseSelectData'))
       return false
@@ -747,7 +803,7 @@
     }
   }
   const toBatchTags = () => {
-    if (!multipleSelection.value.length) {
+    if (!selectedApprovedCount.value) {
       ElMessage.warning(T('PleaseSelectData'))
       return false
     }
@@ -757,7 +813,7 @@
   }
   const submitBatchTags = async () => {
     const res = await batchUpdateTags({
-      row_ids: multipleSelection.value.map(i => i.row_id),
+      row_ids: selectedApproved.value.map(i => i.row_id),
       tags: batchTagsForm.tags,
     }).catch(_ => false)
     if (res) {
@@ -772,19 +828,19 @@
   const allColumns = ref([
     { name: 'id', visible: true, label: 'Id' },
     { name: 'online_status', visible: true, label: 'OnlineStatus' },
-    { name: 'cpu', visible: true, label: 'Cpu' },
+    { name: 'cpu', visible: false, label: 'Cpu' },
     { name: 'hostname', visible: true, label: 'Hostname' },
-    { name: 'memory', visible: true, label: 'Memory' },
+    { name: 'memory', visible: false, label: 'Memory' },
     { name: 'os', visible: true, label: 'Os' },
     { name: 'last_online_time', visible: true, label: 'LastOnlineTime' },
-    { name: 'last_online_ip', visible: true, label: 'LastOnlineIp' },
+    { name: 'last_online_ip', visible: false, label: 'LastOnlineIp' },
     { name: 'username', visible: true, label: 'Username' },
     { name: 'group_id', visible: true, label: 'Group' },
-    { name: 'uuid', visible: true, label: 'Uuid' },
-    { name: 'version', visible: true, label: 'Version' },
-    { name: 'alias', visible: true, label: 'Alias' },
-    { name: 'created_at', visible: true, label: 'CreatedAt' },
-    { name: 'updated_at', visible: true, label: 'UpdatedAt' },
+    { name: 'uuid', visible: false, label: 'Uuid' },
+    { name: 'version', visible: false, label: 'Version' },
+    { name: 'alias', visible: false, label: 'Alias' },
+    { name: 'created_at', visible: false, label: 'CreatedAt' },
+    { name: 'updated_at', visible: false, label: 'UpdatedAt' },
   ])
   // 与本地保存的列配置按 name 合并：新增列默认可见，已删列自动剔除
   const savedColumns = JSON.parse(localStorage.getItem('peer_visible_columns') || 'null')
@@ -826,12 +882,6 @@
     margin-left: var(--yj-spacing-md);
     vertical-align: baseline;
   }
-}
-
-.table-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--yj-spacing-md);
 }
 
 .yj-danger-text {

@@ -1,13 +1,19 @@
 <template>
-  <div>
-    <YjPageHeader :title="T('AuditFileLog')">
+  <div class="control-page">
+    <YjPageHeader
+      eyebrow="SECURITY JOURNAL"
+      :title="T('AuditFileLog')"
+      :description="T('AuditFileDescription')"
+    >
+      <template #status>
+        <YjStatusDot class="audit-integrity" status="online" :text="T('AuditImmutable')"/>
+      </template>
       <template #actions>
         <el-button @click="toExport">{{ T('Export') }}</el-button>
-        <el-button type="danger" plain @click="toBatchDelete">{{ T('BatchDelete') }}</el-button>
       </template>
     </YjPageHeader>
 
-    <el-card class="list-query" shadow="hover">
+    <el-card class="list-query" shadow="never">
       <YjFilterBar @search="handlerQuery" @reset="onResetFilter">
         <el-form-item :label="T('Peer')">
           <el-input v-model="listQuery.peer_id" clearable @keyup.enter="handlerQuery"></el-input>
@@ -17,10 +23,12 @@
         </el-form-item>
       </YjFilterBar>
     </el-card>
-    <el-card class="list-body" shadow="hover">
+    <el-card class="list-body" shadow="never">
+      <div class="table-summary-bar">
+        <span>{{ T('AuditFileLog') }} <strong>{{ listRes.total }}</strong></span>
+      </div>
       <!-- 日志页默认紧凑密度 -->
-      <el-table :data="listRes.list" v-loading="listRes.loading" border size="small" max-height="750" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" align="center" width="40"/>
+      <el-table :data="listRes.list" v-loading="listRes.loading" size="small" max-height="750">
         <el-table-column prop="id" label="ID" align="center" width="100" class-name="yj-mono"/>
         <el-table-column :label="T('Peer')" prop="peer_id" align="center" width="148" class-name="yj-mono" show-overflow-tooltip/>
         <el-table-column :label="T('FromPeer')" prop="from_peer" align="center" width="148" class-name="yj-mono" show-overflow-tooltip/>
@@ -28,18 +36,18 @@
         <el-table-column :label="T('Ip')" prop="ip" align="center" width="132" class-name="yj-mono" show-overflow-tooltip/>
         <el-table-column prop="type" :label="T('Type')" align="center" width="200">
           <template #default="{row}">
-            <el-tag v-if="row.type === 1" type="warning"> {{ T('ToRemote') }}:
+            <span v-if="row.type === 1" class="transfer-route">{{ T('ToRemote') }}
               <el-icon>
                 <Right/>
               </el-icon>
               {{ row.peer_id }}
-            </el-tag>
-            <el-tag v-else>{{ T('ToLocal') }}:
+            </span>
+            <span v-else class="transfer-route">{{ T('ToLocal') }}
               <el-icon>
                 <Right/>
               </el-icon>
               {{ row.from_peer }}
-            </el-tag>
+            </span>
           </template>
         </el-table-column>
         <el-table-column prop="num" :label="T('Num')" align="center" width="100"/>
@@ -67,19 +75,12 @@
         <el-table-column prop="path" :label="T('Path')" align="center" width="150" class-name="yj-mono" show-overflow-tooltip/>
         <el-table-column prop="uuid" label="uuid" align="center" width="120" class-name="yj-mono" show-overflow-tooltip/>
         <el-table-column prop="created_at" :label="T('CreatedAt')" align="center" width="160" class-name="yj-mono" show-overflow-tooltip/>
-        <el-table-column :label="T('Actions')" align="center" width="120" class-name="table-actions" fixed="right">
-          <template #default="{row}">
-            <el-tooltip :content="T('Delete')" placement="top">
-              <el-button type="danger" circle :icon="Delete" @click="del(row)"/>
-            </el-tooltip>
-          </template>
-        </el-table-column>
         <template #empty>
           <YjEmpty/>
         </template>
       </el-table>
     </el-card>
-    <el-card class="list-page" shadow="hover">
+    <el-card class="list-page" shadow="never">
       <el-pagination background
                      layout="prev, pager, next, sizes, jumper"
                      :page-sizes="[10,20,50,100]"
@@ -108,10 +109,11 @@
   import { useFileRepositories } from '@/views/audit/reponsitories'
   import { T } from '@/utils/i18n'
   import { sizeFormat } from '@/utils/file'
-  import { Right, Delete } from '@element-plus/icons'
+  import { Right } from '@element-plus/icons-vue'
   import YjPageHeader from '@/components/yj/YjPageHeader.vue'
   import YjFilterBar from '@/components/yj/YjFilterBar.vue'
   import YjEmpty from '@/components/yj/YjEmpty.vue'
+  import YjStatusDot from '@/components/yj/YjStatusDot.vue'
 
   const showDirFileNum = 3
   const {
@@ -119,8 +121,6 @@
     listQuery,
     getList,
     handlerQuery,
-    del,
-    batchdel,
     toExport,
   } = useFileRepositories()
 
@@ -144,18 +144,15 @@
     allFilesVisible.value = true
   }
 
-  const multipleSelection = ref([])
-  const handleSelectionChange = (val) => {
-    multipleSelection.value = val
-  }
-  const toBatchDelete = () => {
-    if (multipleSelection.value.length === 0) {
-      return
-    }
-    batchdel(multipleSelection.value)
-  }
 </script>
 
 <style scoped lang="scss">
-
+.transfer-route {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yj-spacing-xs);
+  color: var(--yj-text-secondary);
+  font-family: var(--yj-font-family-mono);
+  font-size: var(--yj-font-size-xs);
+}
 </style>

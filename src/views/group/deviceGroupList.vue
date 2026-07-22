@@ -57,7 +57,7 @@
   import { list, create, update, detail, remove } from '@/api/device_group'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { T } from '@/utils/i18n'
-  import { Delete, Edit } from '@element-plus/icons'
+  import { Delete, Edit } from '@element-plus/icons-vue'
 
   const listRes = reactive({
     list: [], total: 0, loading: false,

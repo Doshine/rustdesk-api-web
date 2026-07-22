@@ -45,18 +45,23 @@ html.dark {
   margin-right: auto;
 }
 
-/* ============ 卡片：radius 12 + tokens 阴影 sm，hover 微上浮 ============ */
+/* ============ 卡片：Linear 式表面梯度 + hairline；用受光边而非大阴影分层 ============ */
 .app-main .el-card {
   border-radius: var(--yj-radius-lg);
   border: 1px solid var(--yj-border);
-  box-shadow: var(--yj-shadow-sm);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
   background-color: var(--yj-surface);
-  transition: box-shadow var(--yj-duration-normal) var(--yj-easing-standard),
-    transform var(--yj-duration-normal) var(--yj-easing-standard);
+  transition: border-color var(--yj-duration-fast) var(--yj-easing-standard),
+    background-color var(--yj-duration-fast) var(--yj-easing-standard);
 
   &.is-hover-shadow:hover {
-    box-shadow: var(--yj-shadow-md);
+    border-color: var(--yj-border-strong);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .055);
   }
+}
+
+.control-page {
+  position: relative;
 }
 
 /* ============ 筛选区：紧凑工具条 ============ */
@@ -64,12 +69,11 @@ html.dark {
   margin-bottom: var(--yj-spacing-lg);
 
   > .el-card__body {
-    padding: var(--yj-spacing-xl) var(--yj-spacing-xl) var(--yj-spacing-xs);
+    padding: var(--yj-spacing-lg) var(--yj-spacing-xl);
   }
 
   .el-form--inline .el-form-item {
-    margin-right: var(--yj-spacing-lg);
-    margin-bottom: var(--yj-spacing-lg);
+    margin: 0;
   }
 
   .el-form-item__label {
@@ -81,6 +85,10 @@ html.dark {
 /* ============ 表格区：行高 / 斑马纹 / 表头 ============ */
 .list-body {
   margin: 0 0 var(--yj-spacing-lg);
+
+  > .el-card__body {
+    padding: 0;
+  }
 
   .el-table {
     --el-table-cell-padding: 0 var(--yj-spacing-md);
@@ -98,17 +106,18 @@ html.dark {
     th.el-table__cell {
       font-size: var(--yj-font-size-sm);
       font-weight: var(--yj-font-weight-semibold);
-      letter-spacing: 0.02em;
+      letter-spacing: .045em;
+      text-transform: uppercase;
     }
 
-    /* 斑马纹（奇偶行），hover 优先级更高 */
-    .el-table__body tr:nth-child(even) > td {
-      background-color: var(--yj-table-zebra);
+    /* 正文不使用斑马纹；层级由分隔线、hover 与选中态共同表达。 */
+    .el-table__body td.el-table__cell {
+      border-bottom-color: var(--yj-divider);
     }
 
-    .el-table__body tr:nth-child(even):hover > td,
-    .el-table__body tr.hover-row:nth-child(even) > td {
-      background-color: var(--yj-surface-hover);
+    .el-table__body tr:hover > td,
+    .el-table__body tr.hover-row > td {
+      background-color: color-mix(in srgb, var(--yj-surface-selected) 55%, var(--yj-surface));
     }
   }
 }
@@ -131,6 +140,50 @@ html.dark {
   .el-button.is-circle {
     margin: 0 var(--yj-spacing-xxs);
   }
+}
+
+.table-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--yj-spacing-lg);
+  min-height: 48px;
+  padding: 0 var(--yj-spacing-xl);
+  border-bottom: 1px solid var(--yj-divider);
+  color: var(--yj-text-tertiary);
+  font-size: var(--yj-font-size-sm);
+
+  strong {
+    color: var(--yj-text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.role-code,
+.neutral-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 2px var(--yj-spacing-sm);
+  border: 1px solid var(--yj-border);
+  border-radius: var(--yj-radius-sm);
+  background: var(--yj-surface-hover);
+  color: var(--yj-text-secondary);
+  font-family: var(--yj-font-family-mono);
+  font-size: var(--yj-font-size-xs);
+}
+
+.status-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--yj-spacing-md);
+}
+
+.audit-integrity {
+  padding: 6px var(--yj-spacing-md);
+  border: 1px solid var(--yj-border);
+  border-radius: var(--yj-radius-md);
+  background: var(--yj-surface-hover);
 }
 
 /* ============ 状态点：在线 / 离线（tokens 语义色 + 光晕） ============ */
@@ -200,6 +253,21 @@ html.dark {
 
 .el-tag {
   font-weight: var(--yj-font-weight-medium);
+}
+
+@media (max-width: 768px) {
+  .list-query > .el-card__body {
+    padding: var(--yj-spacing-lg);
+  }
+
+  .table-summary-bar {
+    padding: 0 var(--yj-spacing-lg);
+  }
+
+  .list-page > .el-card__body {
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
 }
 
 /* ============ 设置页简单卡片栅格（rustdesk/*） ============ */

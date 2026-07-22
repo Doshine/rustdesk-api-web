@@ -116,7 +116,7 @@
   import { useRepositories } from '@/views/tag/index'
   import { T } from '@/utils/i18n'
   import { loadAllUsers } from '@/global'
-  import { Delete, Edit } from '@element-plus/icons'
+  import { Delete, Edit } from '@element-plus/icons-vue'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   onMounted(getAllUsers)

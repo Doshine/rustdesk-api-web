@@ -65,7 +65,7 @@
   import { useRepositories } from '@/views/address_book/collection'
   import { onActivated, onMounted, watch } from 'vue'
   import Rule from '@/views/address_book/rule.vue'
-  import { Delete, Edit, Share } from '@element-plus/icons'
+  import { Delete, Edit, Share } from '@element-plus/icons-vue'
 
   const {
     listRes,

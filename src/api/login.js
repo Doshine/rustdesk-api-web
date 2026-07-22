@@ -24,6 +24,33 @@ export function oidcQuery (params) {
   })
 }
 
+export function oidcMfaVerify (data) {
+  return request({
+    url: '/oidc/mfa/verify',
+    method: 'post',
+    data,
+    hideErrorMessage: true,
+  })
+}
+
+export function passkeyLoginBegin () {
+  return request({
+    url: '/passkeys/login/begin',
+    method: 'post',
+    data: {},
+    hideErrorMessage: true,
+  })
+}
+
+export function passkeyLoginComplete (data) {
+  return request({
+    url: '/passkeys/login/complete',
+    method: 'post',
+    data,
+    hideErrorMessage: true,
+  })
+}
+
 export function captcha () {
   return request({
     url: '/captcha',

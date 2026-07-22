@@ -192,7 +192,7 @@
   import { useAppStore } from '@/store/app'
   import { connectByClient } from '@/utils/peer'
   import { handleClipboard } from '@/utils/clipboard'
-  import { CopyDocument, Connection, Delete, Edit, Monitor, Share } from '@element-plus/icons'
+  import { CopyDocument, Connection, Delete, Edit, Monitor, Share } from '@element-plus/icons-vue'
   import PlatformIcons from '@/components/icons/platform.vue'
 
   const appStore = useAppStore()

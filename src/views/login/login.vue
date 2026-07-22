@@ -1,16 +1,28 @@
 <template>
   <div class="login-page">
-    <!-- 左侧深空品牌区（桌面 42%；移动端折叠为 88px 顶部 Logo 条） -->
+    <!-- 沉浸式品牌画布：只承载品牌记忆与安全信任，不放业务表单。 -->
     <aside class="brand-pane">
       <div class="brand-inner">
-        <!-- 占位鲸 Logo：正式品牌资产到位后仅替换资源文件（实施方案 R6） -->
-        <img src="@/assets/brand-logo.png" alt="蓝鲸银河" class="brand-logo"/>
-        <h1 class="brand-name">蓝鲸银河</h1>
-        <p class="brand-slogan">深空可信 · 通透连接 · 克制高效</p>
+        <p class="brand-kicker"><span></span>SECURE ACCESS · PRIVATE CONTROL PLANE</p>
+        <div class="brand-lockup">
+          <img src="@/assets/brand-logo.webp" alt="" class="brand-logo"/>
+          <strong>蓝鲸银河</strong>
+        </div>
+        <h1 class="brand-name">让距离<br/><span>从连接中消失</span></h1>
+        <p class="brand-slogan">面向企业的私有远程基础设施。设备、会话与审计，在同一片安全星域中清晰可见。</p>
+        <div class="brand-connection" aria-hidden="true">
+          <div class="connection-head"><span>YINHE SECURE ROUTE</span><em><i></i> 链路在线</em></div>
+          <div class="connection-route">
+            <span class="route-node route-node-origin">本地</span>
+            <span class="route-line"><i></i></span>
+            <span class="route-node route-node-target">远端设备</span>
+          </div>
+          <div class="connection-meta"><span>AES-256</span><span>PRIVATE NODE</span><span>12 MS</span></div>
+        </div>
         <ul class="brand-points">
-          <li>跨平台远程桌面，随时随地安全接入</li>
-          <li>端到端加密通信，支持私有化部署</li>
-          <li>设备、用户与会话的统一管理</li>
+          <li><strong>全平台</strong><span>随时安全接入</span></li>
+          <li><strong>私有化</strong><span>企业数据主权</span></li>
+          <li><strong>可审计</strong><span>每次连接留痕</span></li>
         </ul>
       </div>
       <!-- 银河三段渐变点缀 -->
@@ -19,22 +31,83 @@
       <div class="brand-glow-bar"></div>
     </aside>
 
-    <!-- 右侧登录区（桌面 58%，内容最大宽 420px） -->
+    <!-- 右侧认证区：聚焦身份验证，弱化传统“后台登录框”观感。 -->
     <main class="form-pane">
+      <div class="form-stage">
+        <div class="form-stage-meta"><span>ENTERPRISE CONTROL PLANE</span><span class="form-stage-status"><i></i> 服务就绪</span></div>
       <div class="login-card">
         <div class="card-head">
-          <img src="@/assets/brand-logo.png" alt="蓝鲸银河" class="card-logo"/>
-          <h2 class="card-title">蓝鲸银河管理后台</h2>
-          <p class="card-subtitle">登录以管理你的设备与远程会话</p>
+          <img src="@/assets/brand-logo.webp" alt="蓝鲸银河" class="card-logo"/>
+          <p class="card-eyebrow">WELCOME BACK</p>
+          <h2 class="card-title">欢迎回到蓝鲸银河</h2>
+          <p class="card-subtitle">验证身份，进入你的企业远程控制平面</p>
         </div>
 
         <!-- 认证服务异常：页内警示条（3px severity 左边条），不使用裸 500 toast -->
         <div v-if="pageAlert" class="page-alert" role="alert">
           <span class="page-alert-text">{{ pageAlert }}</span>
-          <button type="button" class="page-alert-close" aria-label="close" @click="pageAlert = ''">×</button>
+          <button type="button" class="page-alert-close" aria-label="关闭提示" @click="pageAlert = ''">×</button>
         </div>
 
-        <el-tabs v-if="!disablePwd" v-model="activeTab" class="login-tabs">
+        <div v-if="mfaChallenge" class="challenge-pane">
+          <div class="challenge-mark">2FA</div>
+          <h3>{{ T('MfaChallengeTitle') }}</h3>
+          <p class="challenge-hint">{{ T('MfaChallengeHint') }}</p>
+          <el-form class="login-form" @submit.prevent>
+            <el-form-item :label="T('MfaVerificationCode')" :error="mfaChallengeError">
+              <el-input v-model="mfaChallengeCode" maxlength="10" inputmode="text" autocomplete="one-time-code"
+                        :placeholder="T('MfaCodePlaceholder')" @input="mfaChallengeError = ''" @keyup.enter="completeMfaChallenge"></el-input>
+            </el-form-item>
+            <el-button @click="completeMfaChallenge" type="primary" class="login-button" :loading="loading">
+              {{ T('MfaChallengeButton') }}
+            </el-button>
+            <el-button @click="restartLogin" class="login-button register-btn">
+              {{ T('BackToLogin') }}
+            </el-button>
+          </el-form>
+        </div>
+
+        <div v-if="mfaEnrollment" class="challenge-pane enrollment-pane">
+          <div class="challenge-mark">MFA</div>
+          <h3>{{ T('MfaEnrollmentRequiredTitle') }}</h3>
+          <p class="challenge-hint">{{ T('MfaEnrollmentRequiredHint') }}</p>
+          <div class="bootstrap-field">
+            <span class="bootstrap-label">{{ T('MfaSecret') }}</span>
+            <el-input :model-value="mfaEnrollment.enrollment.secret" readonly />
+          </div>
+          <div class="bootstrap-field">
+            <span class="bootstrap-label">{{ T('MfaOtpAuthUrl') }}</span>
+            <el-input :model-value="mfaEnrollment.enrollment.otpauth_url" readonly />
+          </div>
+          <div class="bootstrap-field">
+            <span class="bootstrap-label">{{ T('MfaBackupCodes') }}</span>
+            <div class="bootstrap-codes">
+              <el-tag v-for="code in mfaEnrollment.enrollment.backup_codes" :key="code" effect="plain">{{ code }}</el-tag>
+            </div>
+          </div>
+          <el-form class="login-form" @submit.prevent>
+            <el-form-item :label="T('MfaVerificationCode')" :error="mfaEnrollmentError">
+              <el-input v-model="mfaEnrollmentCode" maxlength="6" inputmode="numeric" autocomplete="one-time-code"
+                        :placeholder="T('MfaCodePlaceholder')" @input="mfaEnrollmentError = ''" @keyup.enter="completeMfaEnrollment"></el-input>
+            </el-form-item>
+            <el-button @click="completeMfaEnrollment" type="primary" class="login-button" :loading="loading">
+              {{ T('MfaEnrollmentComplete') }}
+            </el-button>
+            <el-button @click="restartLogin" class="login-button register-btn">
+              {{ T('BackToLogin') }}
+            </el-button>
+          </el-form>
+        </div>
+
+        <div v-if="!mfaChallenge && !mfaEnrollment && passkeyEnabled && passkeySupported" class="passkey-login-pane">
+          <el-button type="primary" plain class="passkey-login-button" :loading="passkeyLoading" @click="loginWithPasskey">
+            {{ T('PasskeyLogin') }}
+          </el-button>
+          <p class="field-hint passkey-hint">{{ T('PasskeyLoginHint') }}</p>
+          <p v-if="passkeyError" class="passkey-error" role="alert">{{ passkeyError }}</p>
+        </div>
+
+        <el-tabs v-if="!mfaChallenge && !mfaEnrollment && !disablePwd" v-model="activeTab" class="login-tabs">
           <el-tab-pane :label="T('AccountLogin')" name="account">
             <!-- 账号密码登录 -->
             <el-form v-if="accountMode === 'pwd'" label-position="top" class="login-form" @submit.prevent>
@@ -45,6 +118,11 @@
               <el-form-item :label="T('Password')" :error="errors.password">
                 <el-input v-model="form.password" type="password" show-password class="login-input"
                           @input="errors.password = ''" @keyup.enter="login"></el-input>
+              </el-form-item>
+              <el-form-item :label="T('MfaVerificationCode')" :error="errors.mfa_code">
+                <el-input v-model="form.mfa_code" maxlength="10" inputmode="text" autocomplete="one-time-code" class="login-input"
+                          :placeholder="T('MfaCodeOptional')" @input="errors.mfa_code = ''" @keyup.enter="login"></el-input>
+                <div class="field-hint">{{ T('MfaLoginHint') }}</div>
               </el-form-item>
               <el-form-item :label="T('Captcha')" v-if="captchaCode" :error="errors.captcha">
                 <el-input v-model="form.captcha" class="login-input captcha-input"
@@ -63,7 +141,7 @@
                 </el-button>
               </el-form-item>
               <div class="form-switch">
-                <el-link type="primary" :underline="false" @click="accountMode = 'sms'">
+                <el-link type="primary" underline="never" @click="accountMode = 'sms'">
                   {{ T('UseSmsLogin') }}
                 </el-link>
               </div>
@@ -93,13 +171,18 @@
                   </template>
                 </el-input>
               </el-form-item>
+              <el-form-item :label="T('MfaVerificationCode')" :error="errors.mfa_code">
+                <el-input v-model="smsForm.mfa_code" maxlength="10" inputmode="text" autocomplete="one-time-code" class="login-input"
+                          :placeholder="T('MfaCodeOptional')" @input="errors.mfa_code = ''" @keyup.enter="loginBySms"></el-input>
+                <div class="field-hint">{{ T('MfaLoginHint') }}</div>
+              </el-form-item>
               <el-form-item>
                 <el-button @click="loginBySms" type="primary" class="login-button" :loading="loading">
                   {{ T('Login') }}
                 </el-button>
               </el-form-item>
               <div class="form-switch">
-                <el-link type="primary" :underline="false" @click="accountMode = 'pwd'">
+                <el-link type="primary" underline="never" @click="accountMode = 'pwd'">
                   {{ T('UsePwdLogin') }}
                 </el-link>
               </div>
@@ -121,11 +204,11 @@
           </el-tab-pane>
         </el-tabs>
 
-        <div class="divider" v-if="oidcList.length > 0 && !disablePwd">
+        <div class="divider" v-if="!mfaChallenge && !mfaEnrollment && oidcList.length > 0 && !disablePwd">
           <span>{{ T('or login in with') }}</span>
         </div>
 
-        <div class="oidc-options">
+        <div v-if="!mfaChallenge && !mfaEnrollment" class="oidc-options">
           <div v-for="(option, index) in oidcList" :key="index" class="oidc-option">
             <el-button @click="handleOIDCLogin(option.name)" class="oidc-btn">
               <img :src="getProviderImage(option.name)" alt="provider" class="oidc-icon"/>
@@ -133,6 +216,8 @@
             </el-button>
           </div>
         </div>
+      </div>
+        <p class="form-security-note"><span aria-hidden="true">◇</span> 身份凭据与会话信息全程加密传输</p>
       </div>
     </main>
   </div>
@@ -145,7 +230,8 @@
   import { T } from '@/utils/i18n'
   import { useRoute, useRouter } from 'vue-router'
   import { loginOptions, captcha, smsCode } from '@/api/login'
-  import { getCode, removeCode } from '@/utils/auth'
+  import { getPasskey } from '@/utils/passkey'
+  import { getCode } from '@/utils/auth'
 
   const oauthInfo = ref({})
   const userStore = useUserStore()
@@ -175,7 +261,8 @@
     password: '',
     platform: platform,
     captcha: '',
-    captcha_id: ''
+    captcha_id: '',
+    mfa_code: ''
   })
 
   const activeTab = ref('account')
@@ -184,16 +271,27 @@
     phone: '',
     code: '',
     captcha: '',
-    captcha_id: ''
+    captcha_id: '',
+    mfa_code: ''
   })
   const smsCountdown = ref(0)
   let smsTimer = null
   const phoneReg = /^1[3-9]\d{9}$/
 
   // 字段级行内错误 + 页内服务异常警示条
-  const errors = reactive({ username: '', password: '', captcha: '', phone: '', smsCaptcha: '', code: '' })
+  const errors = reactive({ username: '', password: '', captcha: '', phone: '', smsCaptcha: '', code: '', mfa_code: '' })
   const pageAlert = ref('')
   const loading = ref(false)
+  const mfaChallenge = ref(null)
+  const mfaChallengeCode = ref('')
+  const mfaChallengeError = ref('')
+  const mfaEnrollment = ref(null)
+  const mfaEnrollmentCode = ref('')
+  const mfaEnrollmentError = ref('')
+  const passkeyEnabled = ref(false)
+  const passkeySupported = ref(false)
+  const passkeyLoading = ref(false)
+  const passkeyError = ref('')
 
   const captchaCode = ref('')
   const redirect = route.query?.redirect
@@ -219,6 +317,10 @@
     const res = await userStore.login(form).catch(e => e)
     loading.value = false
     if (res && !res.code) {
+      if (res.mfa_enrollment_required) {
+        await beginMfaEnrollment(res.mfa_enrollment_challenge)
+        return
+      }
       ElMessage.success(T('LoginSuccess'))
       router.push({ path: redirect || '/', replace: true })
       return
@@ -286,10 +388,15 @@
     const res = await userStore.loginBySms({
       phone: smsForm.phone,
       code: smsForm.code,
+      mfa_code: smsForm.mfa_code,
       platform: platform,
     }).catch(e => e)
     loading.value = false
     if (res && !res.code) {
+      if (res.mfa_enrollment_required) {
+        await beginMfaEnrollment(res.mfa_enrollment_challenge)
+        return
+      }
       ElMessage.success(T('LoginSuccess'))
       router.push({ path: redirect || '/', replace: true })
       return
@@ -299,6 +406,96 @@
       return
     }
     errors.code = res.message || T('Error')
+  }
+
+  const completeMfaChallenge = async () => {
+    const normalized = String(mfaChallengeCode.value || '').replace(/[\s-]/g, '')
+    if (!/^(\d{6}|[a-fA-F0-9]{10})$/.test(normalized)) {
+      mfaChallengeError.value = T('MfaCodePlaceholder')
+      return
+    }
+    loading.value = true
+    const res = await userStore.oidcMfa(mfaChallenge.value.mfa_challenge, normalized).catch(e => e)
+    loading.value = false
+    if (res && !res.code) {
+      ElMessage.success(T('LoginSuccess'))
+      router.push({ path: redirect || '/', replace: true })
+      return
+    }
+    mfaChallengeError.value = res?.message || T('Error')
+  }
+
+  const beginMfaEnrollment = async (challenge) => {
+    loading.value = true
+    const res = await userStore.beginMfaEnrollment(challenge).catch(e => e)
+    loading.value = false
+    if (res && res.enrollment) {
+      mfaEnrollment.value = res
+      return true
+    }
+    mfaEnrollmentError.value = res?.message || T('Error')
+    return false
+  }
+
+  const completeMfaEnrollment = async () => {
+    const normalized = String(mfaEnrollmentCode.value || '').replace(/\s/g, '')
+    if (!/^\d{6}$/.test(normalized)) {
+      mfaEnrollmentError.value = T('MfaCodePlaceholder')
+      return
+    }
+    loading.value = true
+    const res = await userStore.completeMfaEnrollment(mfaEnrollment.value.challenge, normalized).catch(e => e)
+    loading.value = false
+    if (res && !res.code) {
+      ElMessage.success(T('LoginSuccess'))
+      router.push({ path: redirect || '/', replace: true })
+      return
+    }
+    mfaEnrollmentError.value = res?.message || T('Error')
+  }
+
+  const loginWithPasskey = async () => {
+    if (!passkeySupported.value) {
+      passkeyError.value = T('PasskeyUnsupported')
+      return
+    }
+    passkeyLoading.value = true
+    passkeyError.value = ''
+    try {
+      const begin = await userStore.beginPasskeyLogin()
+      const credential = await getPasskey(begin)
+      const res = await userStore.passkeyLogin({
+        challenge: begin.challenge,
+        credential,
+        deviceInfo: { name: browser, os: platform, type: 'webadmin' },
+        id: `${platform}-${browser}`,
+        uuid: '',
+      })
+      if (res?.mfa_enrollment_required) {
+        await beginMfaEnrollment(res.mfa_enrollment_challenge)
+        return res
+      }
+      if (res?.mfa_required) {
+        mfaChallenge.value = res
+        return res
+      }
+      ElMessage.success(T('LoginSuccess'))
+      router.push({ path: redirect || '/', replace: true })
+      return res
+    } catch (err) {
+      passkeyError.value = err?.message === 'PasskeyUnsupported' ? T('PasskeyUnsupported') : (err?.message || T('PasskeyFailed'))
+    } finally {
+      passkeyLoading.value = false
+    }
+  }
+
+  const restartLogin = () => {
+    mfaChallenge.value = null
+    mfaChallengeCode.value = ''
+    mfaChallengeError.value = ''
+    mfaEnrollment.value = null
+    mfaEnrollmentCode.value = ''
+    mfaEnrollmentError.value = ''
   }
 
   const loadCaptcha = async () => {
@@ -359,6 +556,8 @@
       }
       disablePwd.value = res.data.disable_pwd
       allowRegister.value = res.data.register
+      passkeyEnabled.value = Boolean(res.data.passkey_enabled)
+      passkeySupported.value = Boolean(window.PublicKeyCredential && navigator.credentials?.get)
       if (res.data.need_captcha) {
         loadCaptcha()
       }
@@ -373,9 +572,11 @@
     if (code) {
       // 如果code存在，进行query获取user info
       const res = await userStore.query(code)
-      if (res) {
-        // 删除code，确保跳转之前对code进行清楚
-        removeCode()
+      if (res?.mfa_enrollment_required) {
+        await beginMfaEnrollment(res.mfa_enrollment_challenge)
+      } else if (res?.mfa_required) {
+        mfaChallenge.value = res
+      } else if (res) {
         ElMessage.success(T('LoginSuccess'))
         router.push({ path: redirect || '/', replace: true })
       }
@@ -402,6 +603,32 @@
   display: flex;
   min-height: 100vh;
   background: var(--yj-bg);
+}
+
+.passkey-login-pane {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(47, 128, 255, .24);
+  border-radius: 14px;
+  background: rgba(47, 128, 255, .06);
+}
+
+.passkey-login-button {
+  width: 100%;
+  min-height: 42px;
+  font-weight: 600;
+}
+
+.passkey-hint {
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+.passkey-error {
+  margin: 8px 0 0;
+  color: var(--el-color-danger);
+  text-align: center;
+  font-size: 12px;
 }
 
 /* ============ 左侧深空品牌区 42% ============ */
@@ -520,6 +747,67 @@
   border: 1px solid var(--yj-border);
   border-radius: var(--yj-radius-lg);
   box-shadow: var(--yj-shadow-md);
+}
+
+.field-hint {
+  margin-top: var(--yj-spacing-xs);
+  color: var(--yj-text-tertiary);
+  font-size: var(--yj-font-size-xs);
+  line-height: var(--yj-line-height-base);
+}
+
+.challenge-pane {
+  text-align: center;
+
+  h3 {
+    margin: var(--yj-spacing-lg) 0 var(--yj-spacing-sm);
+    color: var(--yj-text-primary);
+    font-size: var(--yj-font-size-xl);
+  }
+
+  .challenge-hint {
+    margin: 0 auto var(--yj-spacing-xxl);
+    max-width: 34ch;
+    color: var(--yj-text-secondary);
+    line-height: var(--yj-line-height-relaxed);
+  }
+
+  .login-form {
+    text-align: left;
+  }
+}
+
+.bootstrap-field {
+  margin-bottom: var(--yj-spacing-md);
+  text-align: left;
+}
+
+.bootstrap-label {
+  display: block;
+  margin-bottom: var(--yj-spacing-xs);
+  color: var(--yj-text-secondary);
+  font-size: var(--yj-font-size-sm);
+}
+
+.bootstrap-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--yj-spacing-xs);
+}
+
+.challenge-mark {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--yj-radius-full);
+  background: var(--yj-primary-subtle);
+  color: var(--yj-primary);
+  font-size: var(--yj-font-size-md);
+  font-weight: var(--yj-font-weight-bold);
+  letter-spacing: 0.04em;
 }
 
 .card-head {
@@ -770,6 +1058,575 @@
   .page-alert-close,
   .oidc-btn {
     transition: none;
+  }
+}
+
+/* ========================================================================
+   P0 · 品牌重设计
+   深色数字画布承载品牌记忆，浅色认证面聚焦身份验证。
+   ======================================================================== */
+.login-page {
+  --yj-login-canvas: #080B12;
+  --yj-login-panel: rgba(255, 255, 255, .82);
+  --yj-login-panel-border: rgba(23, 32, 51, .10);
+  min-height: 100dvh;
+  background: var(--yj-canvas);
+}
+
+.brand-pane {
+  flex-basis: 54%;
+  justify-content: flex-start;
+  background:
+    radial-gradient(circle at 78% 24%, rgba(47, 128, 255, .20), transparent 30%),
+    radial-gradient(circle at 12% 86%, rgba(0, 194, 255, .10), transparent 32%),
+    var(--yj-login-canvas);
+}
+
+.brand-pane::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .30;
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: linear-gradient(to bottom right, rgba(0,0,0,.9), transparent 82%);
+  mask-image: linear-gradient(to bottom right, rgba(0,0,0,.9), transparent 82%);
+}
+
+.brand-inner {
+  width: 100%;
+  max-width: 680px;
+  padding: clamp(48px, 7vw, 88px);
+}
+
+.brand-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 34px;
+  color: rgba(242, 246, 252, .54);
+  font-family: var(--yj-font-mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+}
+
+.brand-kicker span,
+.form-stage-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--yj-success);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--yj-success) 18%, transparent);
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 34px;
+}
+
+.brand-lockup .brand-logo {
+  width: 58px;
+  height: 58px;
+  margin: 0;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .28));
+}
+
+.brand-lockup strong {
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -.025em;
+}
+
+.brand-name {
+  margin: 0 0 24px;
+  color: #FFFFFF;
+  font-size: clamp(46px, 5.1vw, 72px);
+  font-weight: 600;
+  line-height: .98;
+  letter-spacing: -.065em;
+}
+
+.brand-name span {
+  background: linear-gradient(110deg, #FFFFFF 6%, var(--yj-blue-300) 52%, var(--yj-cyan-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-slogan {
+  max-width: 560px;
+  margin: 0 0 30px;
+  color: rgba(170, 183, 202, .70);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.brand-connection {
+  max-width: 540px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .10);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+  box-shadow: inset 0 1px rgba(255, 255, 255, .06), 0 28px 70px rgba(0, 0, 0, .22);
+  backdrop-filter: blur(18px);
+}
+
+.connection-head,
+.connection-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  color: rgba(170, 183, 202, .50);
+  font-family: var(--yj-font-mono);
+  font-size: 9px;
+  letter-spacing: .10em;
+}
+
+.connection-head {
+  height: 48px;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.connection-head em {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(242, 246, 252, .66);
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+.connection-head em i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--yj-success);
+}
+
+.connection-route {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 100px;
+  padding: 0 22px;
+}
+
+.route-node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 74px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, .11);
+  border-radius: var(--yj-radius-full);
+  background: rgba(8, 11, 18, .64);
+  color: rgba(242, 246, 252, .78);
+  font-size: 11px;
+}
+
+.route-line {
+  position: relative;
+  height: 1px;
+  overflow: visible;
+  background: linear-gradient(90deg, var(--yj-blue-600), var(--yj-cyan-400));
+}
+
+.route-line::before,
+.route-line::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--yj-blue-300);
+  transform: translateY(-50%);
+}
+
+.route-line::before { left: 0; }
+.route-line::after { right: 0; background: var(--yj-cyan-300); }
+
+.route-line i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 22px;
+  height: 3px;
+  border-radius: var(--yj-radius-full);
+  background: #FFFFFF;
+  box-shadow: 0 0 16px var(--yj-cyan-300);
+  transform: translateY(-50%);
+  animation: route-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes route-pulse {
+  0% { left: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: calc(100% - 22px); opacity: 0; }
+}
+
+.connection-meta {
+  height: 42px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.brand-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 540px;
+  gap: 0;
+  padding-top: 4px;
+}
+
+.brand-points li {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+}
+
+.brand-points li::before {
+  display: none;
+}
+
+.brand-points strong {
+  color: rgba(242, 246, 252, .92);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.brand-points span {
+  color: rgba(170, 183, 202, .48);
+  font-size: 10px;
+}
+
+.brand-glow-a {
+  right: -80px;
+  top: 8%;
+  background: rgba(47, 128, 255, .23);
+}
+
+.brand-glow-b {
+  background: rgba(0, 194, 255, .12);
+}
+
+.brand-glow-bar {
+  display: none;
+}
+
+.form-pane {
+  position: relative;
+  align-items: center;
+  padding: clamp(32px, 5vw, 72px);
+  overflow: auto;
+  background:
+    radial-gradient(circle at 82% 10%, rgba(47, 128, 255, .13), transparent 28%),
+    radial-gradient(circle at 10% 92%, rgba(0, 194, 255, .08), transparent 30%),
+    var(--yj-canvas);
+}
+
+.form-pane::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .30;
+  background-image: radial-gradient(rgba(23, 32, 51, .16) .7px, transparent .7px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.55), transparent 72%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.55), transparent 72%);
+}
+
+.form-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 486px;
+}
+
+.form-stage-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 4px 14px;
+  color: var(--yj-text-tertiary);
+  font-family: var(--yj-font-mono);
+  font-size: 9px;
+  letter-spacing: .10em;
+}
+
+.form-stage-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: 0;
+}
+
+.form-stage-status i {
+  width: 6px;
+  height: 6px;
+  box-shadow: none;
+}
+
+.login-card {
+  max-width: none;
+  padding: clamp(30px, 4vw, 44px);
+  border: 1px solid var(--yj-login-panel-border);
+  border-radius: 28px;
+  background: var(--yj-login-panel);
+  box-shadow: 0 28px 80px rgba(18, 37, 63, .14), inset 0 1px rgba(255, 255, 255, .90);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+}
+
+.card-head {
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.card-eyebrow {
+  margin: 0 0 10px;
+  color: var(--yj-blue-600);
+  font-family: var(--yj-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .13em;
+}
+
+.card-title {
+  margin-bottom: 8px;
+  color: var(--yj-text-primary);
+  font-size: clamp(28px, 3vw, 34px);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -.045em;
+}
+
+.card-subtitle {
+  color: var(--yj-text-secondary);
+  font-size: 14px;
+}
+
+.login-card :deep(.el-form-item) {
+  margin-bottom: 20px;
+}
+
+.login-card :deep(.el-form-item__label) {
+  height: auto;
+  margin-bottom: 8px;
+  color: var(--yj-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.login-card :deep(.el-input__wrapper) {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: rgba(247, 249, 252, .88);
+  box-shadow: 0 0 0 1px var(--yj-border) inset;
+  transition: box-shadow var(--yj-motion-hover) var(--yj-easing-standard),
+              background-color var(--yj-motion-hover) var(--yj-easing-standard);
+}
+
+.login-card :deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--yj-border-strong) inset;
+}
+
+.login-card :deep(.el-input__wrapper.is-focus) {
+  background: #FFFFFF;
+  box-shadow: 0 0 0 1.5px var(--yj-blue-600) inset, var(--yj-focus-ring);
+}
+
+.login-card :deep(.el-tabs__header) {
+  margin-bottom: 24px;
+}
+
+.login-card :deep(.el-tabs__nav-wrap) {
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--yj-surface-sunken);
+}
+
+.login-card :deep(.el-tabs__nav-wrap::after),
+.login-card :deep(.el-tabs__active-bar) {
+  display: none;
+}
+
+.login-card :deep(.el-tabs__nav) {
+  width: 100%;
+  gap: 4px;
+}
+
+.login-card :deep(.el-tabs__item) {
+  flex: 1;
+  justify-content: center;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 9px;
+  color: var(--yj-text-secondary);
+  font-size: 13px;
+}
+
+.login-card :deep(.el-tabs__item.is-active) {
+  color: var(--yj-text-primary);
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(18, 37, 63, .10);
+}
+
+.login-card :deep(.el-button--primary) {
+  --el-button-bg-color: var(--yj-blue-600);
+  --el-button-border-color: var(--yj-blue-600);
+  --el-button-hover-bg-color: var(--yj-blue-700);
+  --el-button-hover-border-color: var(--yj-blue-700);
+  --el-button-active-bg-color: var(--yj-blue-800);
+  --el-button-active-border-color: var(--yj-blue-800);
+  --el-button-text-color: #FFFFFF;
+}
+
+.login-button,
+.oidc-btn,
+.passkey-login-button {
+  min-height: 44px;
+  border-radius: var(--yj-radius-full);
+  font-size: 14px;
+}
+
+.page-alert {
+  background: color-mix(in srgb, var(--yj-danger) 8%, transparent);
+}
+
+.page-alert-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.form-security-note {
+  margin: 16px 0 0;
+  color: var(--yj-text-tertiary);
+  font-size: 11px;
+  text-align: center;
+}
+
+.form-security-note span {
+  margin-right: 6px;
+  color: var(--yj-blue-600);
+}
+
+@media (max-width: 1180px) {
+  .brand-pane {
+    flex-basis: 50%;
+  }
+
+  .brand-inner {
+    padding: 48px;
+  }
+
+  .brand-name {
+    font-size: clamp(44px, 5vw, 58px);
+  }
+}
+
+@media (max-width: 900px) {
+  .brand-connection {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    min-height: 100dvh;
+  }
+
+  .brand-pane {
+    flex: none;
+    height: 106px;
+    justify-content: center;
+  }
+
+  .brand-pane::before {
+    background-size: 48px 48px;
+  }
+
+  .brand-inner {
+    width: auto;
+    padding: 0;
+  }
+
+  .brand-kicker,
+  .brand-name,
+  .brand-slogan,
+  .brand-connection,
+  .brand-points,
+  .brand-glow {
+    display: none;
+  }
+
+  .brand-lockup {
+    margin: 0;
+  }
+
+  .brand-lockup .brand-logo {
+    display: block;
+    width: 54px;
+    height: 54px;
+  }
+
+  .brand-lockup strong {
+    display: block;
+    font-size: 18px;
+  }
+
+  .form-pane {
+    align-items: flex-start;
+    padding: 18px 16px 28px;
+  }
+
+  .form-stage-meta {
+    display: none;
+  }
+
+  .login-card {
+    padding: 28px 22px;
+    border-radius: 22px;
+    box-shadow: 0 16px 44px rgba(18, 37, 63, .11), inset 0 1px rgba(255,255,255,.9);
+  }
+
+  .card-head {
+    margin-bottom: 24px;
+  }
+
+  .card-logo {
+    display: none;
+  }
+
+  .card-title {
+    font-size: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-line i {
+    left: calc(50% - 11px);
+    opacity: .72;
+    animation: none;
   }
 }
 </style>

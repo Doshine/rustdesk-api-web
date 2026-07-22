@@ -62,7 +62,7 @@
   import { remove, list, batchDelete } from '@/api/share_record'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { useRepositories } from '@/views/share_record/index'
-  import { Delete } from '@element-plus/icons'
+  import { Delete } from '@element-plus/icons-vue'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   getAllUsers()

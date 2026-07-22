@@ -90,7 +90,7 @@
   import { onMounted, watch, onActivated } from 'vue'
   import { useRepositories } from '@/views/tag'
   import { T } from '@/utils/i18n'
-  import { Delete, Edit } from '@element-plus/icons'
+  import { Delete, Edit } from '@element-plus/icons-vue'
 
   const {
     listRes,

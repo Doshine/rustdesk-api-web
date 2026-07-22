@@ -4,15 +4,19 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { list as groups } from '@/api/group'
 import { T } from '@/utils/i18n'
+import { ENABLE_STATUS } from '@/utils/common_options'
 
 export function useGetDetail (id) {
   let item = ref({})  //保留原始值
-  let form = ref({})
+  let form = ref({ role: 'user', is_admin: false, status: ENABLE_STATUS, group_id: null })
   const groupsList = ref([])
   const getDetail = async (id) => {
     const res = await detail(id)
     item.value = { ...res.data }
-    form.value = { ...res.data }
+    form.value = {
+      ...res.data,
+      role: res.data.role || (res.data.is_admin ? 'admin' : 'user'),
+    }
   }
   if (id > 0) {
     onMounted(_ => {getDetail(id)})
@@ -85,5 +89,3 @@ export function useSubmit (form, id) {
     cancel,
   }
 }
-
-

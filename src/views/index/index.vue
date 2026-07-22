@@ -1,5 +1,21 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard control-page">
+    <YjPageHeader
+      eyebrow="CONTROL PLANE"
+      :title="T('DashboardTitle')"
+      :description="T('DashboardDescription')"
+    >
+      <template #status>
+        <YjStatusDot :status="dashboardState" :text="dashboardStateText"/>
+      </template>
+      <template #actions>
+        <span v-if="lastUpdatedText" class="dashboard-updated">{{ lastUpdatedText }}</span>
+        <el-button :icon="Refresh" :loading="dashboardRefreshing" @click="refreshAll">
+          {{ T('DashboardRefresh') }}
+        </el-button>
+      </template>
+    </YjPageHeader>
+
     <!-- 首行统计：2+2 非等宽栅格（在线设备/活跃会话为主指标，用户数/告警为次指标） -->
     <div class="stat-grid">
       <ModuleError
@@ -14,7 +30,7 @@
           :key="card.key"
           shadow="never"
           class="stat-card"
-          :class="card.tier"
+          :class="[card.tier, `stat-card--${card.key}`]"
           :title="card.hint || ''"
         >
           <!-- 骨架屏：结构与最终一致（图标块 + 大数 + 标签） -->
@@ -142,7 +158,11 @@
               <span class="node-col-metric">{{ T('DashboardLoad') }}</span>
             </div>
             <div v-for="n in nodes" :key="n.key" class="node-row" :class="{ 'is-empty': n.state === 'empty' }">
-              <span class="radar" :class="radarClass(n.state)"></span>
+              <YjStatusDot
+                :status="nodeStatus(n.state)"
+                :label="n.name"
+                icon-only
+              />
               <span class="node-col-main">
                 <span class="node-name">{{ n.name }}</span>
                 <span class="node-host">{{ n.host || T('DashboardUnconfigured') }}</span>
@@ -193,8 +213,10 @@
   import { list as userList } from '@/api/user'
   import { list as auditList } from '@/api/audit'
   import { server } from '@/api/config'
-  import { Connection, Link, User, Bell } from '@element-plus/icons'
+  import { Connection, Link, User, Bell, Refresh } from '@element-plus/icons-vue'
   import ModuleError from '@/views/index/components/ModuleError.vue'
+  import YjPageHeader from '@/components/yj/YjPageHeader.vue'
+  import YjStatusDot from '@/components/yj/YjStatusDot.vue'
 
   // 图表内边距（常量，模板网格线也要用）
   const PAD = { l: 34, r: 10, t: 14, b: 26 }
@@ -210,7 +232,7 @@
 
   export default defineComponent({
     name: 'Home',
-    components: { ModuleError },
+    components: { ModuleError, YjPageHeader, YjStatusDot },
     setup () {
       /* ================= 模块状态（骨架 / 就绪 / 错误，互不阻塞） ================= */
       const mkMod = () => reactive({ status: 'loading', lastUpdated: null })
@@ -218,6 +240,28 @@
       const trendMod = mkMod()
       const nodesMod = mkMod()
       const distMod = mkMod()
+
+      const dashboardRefreshing = computed(() =>
+        [statsMod, trendMod, nodesMod, distMod].some(mod => mod.status === 'loading'))
+      const dashboardState = computed(() => {
+        const states = [statsMod, trendMod, nodesMod, distMod].map(mod => mod.status)
+        if (states.includes('error')) return 'warning'
+        if (states.includes('loading')) return 'connecting'
+        return 'online'
+      })
+      const dashboardStateText = computed(() => {
+        if (dashboardState.value === 'warning') return T('DashboardLoadFailed')
+        if (dashboardState.value === 'connecting') return T('DashboardLoading')
+        return T('Online')
+      })
+      const lastUpdatedText = computed(() => {
+        const times = [statsMod, trendMod, nodesMod, distMod]
+          .map(mod => mod.lastUpdated)
+          .filter(Boolean)
+        if (!times.length) return ''
+        const time = new Date(Math.max(...times)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        return T('DashboardLastUpdated', { time })
+      })
 
       /* ================= 首行统计 ================= */
       const stats = reactive({
@@ -336,11 +380,11 @@
 
       /* ================= 节点健康 ================= */
       const nodes = ref([])
-      const radarClass = (state) => ({
-        'is-online': state === 'online',
-        'is-unknown': state === 'unknown',
-        'is-empty': state === 'empty',
-      })
+      const nodeStatus = (state) => {
+        if (state === 'online') return 'online'
+        if (state === 'unknown') return 'unknown'
+        return 'offline'
+      }
 
       const loadNodes = async () => {
         nodesMod.status = 'loading'
@@ -414,6 +458,13 @@
         distMod.lastUpdated = Date.now()
       }
 
+      const refreshAll = () => Promise.all([
+        loadStats(),
+        loadTrend(),
+        loadNodes(),
+        loadOsDist(),
+      ])
+
       onMounted(() => {
         // 各模块独立加载，单模块失败不阻塞其他模块
         loadStats()
@@ -444,8 +495,14 @@
         chart,
         chartWrap,
         nodes,
-        radarClass,
+        nodeStatus,
         osDist,
+        dashboardRefreshing,
+        dashboardState,
+        dashboardStateText,
+        lastUpdatedText,
+        refreshAll,
+        Refresh,
         loadStats,
         loadTrend,
         loadNodes,
@@ -457,6 +514,13 @@
 
 <style scoped lang="scss">
   .dashboard {
+    .dashboard-updated {
+      color: var(--yj-text-tertiary);
+      font-family: var(--yj-font-family-mono);
+      font-size: var(--yj-font-size-xs);
+      white-space: nowrap;
+    }
+
     /* ---------- 首行统计：2+2 非等宽栅格 ---------- */
     .stat-grid {
       display: grid;
@@ -474,17 +538,34 @@
     }
 
     .stat-card {
-      transition: transform var(--yj-duration-fast) var(--yj-easing-standard),
-        box-shadow var(--yj-duration-fast) var(--yj-easing-standard);
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--yj-duration-fast) var(--yj-easing-standard),
+        background-color var(--yj-duration-fast) var(--yj-easing-standard);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 2px;
+        background: var(--yj-divider);
+      }
+
+      &.primary::after {
+        background: linear-gradient(90deg, var(--yj-primary), var(--yj-accent), transparent 82%);
+      }
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--yj-shadow-md);
+        border-color: var(--yj-border-strong);
+        background-color: color-mix(in srgb, var(--yj-surface-hover) 38%, var(--yj-surface));
       }
 
       .stat-body {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: var(--yj-spacing-lg);
       }
 
@@ -498,6 +579,8 @@
         border-radius: var(--yj-radius-md);
         background-color: var(--yj-primary-subtle);
         color: var(--yj-primary);
+        order: 2;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06);
 
         &.secondary {
           width: 40px;
@@ -506,6 +589,7 @@
       }
 
       .stat-meta {
+        order: 1;
         min-width: 0;
 
         .num {
@@ -679,49 +763,6 @@
       font-size: var(--yj-font-size-sm);
       color: var(--yj-text-secondary);
       font-variant-numeric: tabular-nums;
-    }
-
-    /* 雷达节点状态点（§3.11）：在线=圆环+实心点+1.5s 呼吸；未知=空心中性环；未配置=虚线空环 -->
-    .radar {
-      position: relative;
-      width: 12px;
-      height: 12px;
-      flex: none;
-
-      &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: 50%;
-        border: 1.5px solid var(--yj-offline);
-      }
-
-      &.is-online::before {
-        border-color: var(--yj-online);
-        animation: db-radar-breathe 1.5s ease-in-out infinite;
-      }
-
-      &.is-online::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 4px;
-        height: 4px;
-        margin: -2px 0 0 -2px;
-        border-radius: 50%;
-        background-color: var(--yj-online);
-      }
-
-      &.is-empty::before {
-        border-style: dashed;
-      }
-    }
-
-    @keyframes db-radar-breathe {
-      50% {
-        opacity: 0.45;
-      }
     }
 
     /* ---------- 设备系统分布 ---------- */
@@ -942,8 +983,14 @@
 
       .db-skel-block,
       .chart-anim,
-      .radar.is-online::before {
+      :deep(.yj-status-dot__node::before) {
         animation: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .dashboard-updated {
+        display: none;
       }
     }
   }

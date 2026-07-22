@@ -1,73 +1,135 @@
-/**
- * 蓝鲸银河 Web 主题 tokens（W5 设计系统主题层）
- * 单一事实源：docs/design/tokens.json —— 改色改字只改源头，再同步本文件
- * （源文件在管理仓 https://github.com/Doshine/yinhe/blob/master/docs/design/tokens.json）
- * 命名约定：统一 --yj- 前缀（yj = yinhe / 银河）
- * 暗色：遵循 Element Plus 约定，挂 html.dark 选择器
- * v2.1 对齐：语义色/表面/文字/边界/阴影/动效曲线/层级取 tokens.json v2.1 值；
- * 字体链、sidebar、页面布局尺寸、z-overlay/modal、table-zebra 等为 web 工程性 token，保留原值
+/*
+ * GENERATED · 勿手改 · 由 yinhe/scripts/generate_tokens.py 生成
+ * Source : docs/design/tokens.json (version 2.1, updated 2026-07-21)
+ * Hash   : sha256:8241354af01a9d24c32be073f262c1432cc651dfc366deeffe3b64837fd8e4b3
+ * Check  : python3 yinhe/scripts/check_tokens_drift.py  （退出码非零即漂移）
+ * Usage : Web 管理后台（对应规范 §9.4 产物 rustdesk-api-web/src/styles/tokens.css，由 WS3 接入）
  */
 
+/* ================================================================
+ * :root · 浅色主题
+ * ============================================================== */
 :root {
-  /* ============ 品牌色 color.brand ============ */
-  --yj-primary: #2F80FF;
-  --yj-primary-hover: #5A9EFF;
-  --yj-primary-active: #1768E8;
-  --yj-primary-subtle: rgba(47, 128, 255, 0.12);
+  /* ---- 品牌与色阶 ---- */
+  --yj-brand: #2F80FF;
+  --yj-brand-hover: #5A9EFF;
+  --yj-brand-active: #1768E8;
+  --yj-brand-subtle: rgba(47,128,255,0.12);
   --yj-accent: #00C2FF;
   --yj-deep-navy: #0B1437;
-  --yj-gradient: linear-gradient(135deg, #2F80FF 0%, #00C2FF 100%);
+  --yj-deep-space: #0F1420;
+  --yj-brand-hover-icon-bg: rgba(90,158,255,0.12);
+  --yj-gradient-galaxy: linear-gradient(135deg, #102647 0%, #2F80FF 45%, #00C2FF 100%);
+  --yj-gradient-blue-cyan: linear-gradient(135deg, #2F80FF 0%, #00C2FF 100%);
+  --yj-blue-50: #EEF6FF;
+  --yj-blue-100: #D9EAFF;
+  --yj-blue-200: #B9D7FF;
+  --yj-blue-300: #88BCFF;
+  --yj-blue-400: #5A9EFF;
+  --yj-blue-500: #2F80FF;
+  --yj-blue-600: #1768E8;
+  --yj-blue-700: #1554BB;
+  --yj-blue-800: #174894;
+  --yj-blue-900: #193E73;
+  --yj-blue-950: #102647;
+  --yj-cyan-50: #E9FCFF;
+  --yj-cyan-100: #C9F7FF;
+  --yj-cyan-200: #98EEFF;
+  --yj-cyan-300: #5BE1FF;
+  --yj-cyan-400: #25D1FF;
+  --yj-cyan-500: #00C2FF;
+  --yj-cyan-600: #009BD6;
+  --yj-cyan-700: #087BAD;
+  --yj-cyan-800: #0D638C;
+  --yj-cyan-900: #125374;
+  --yj-cyan-950: #07354F;
+  --yj-neutral-0: #FCFDFE;
+  --yj-neutral-50: #F7F9FC;
+  --yj-neutral-100: #F1F4F8;
+  --yj-neutral-200: #E2E8F0;
+  --yj-neutral-300: #CBD5E1;
+  --yj-neutral-400: #94A3B8;
+  --yj-neutral-500: #64748B;
+  --yj-neutral-600: #475569;
+  --yj-neutral-700: #334155;
+  --yj-neutral-800: #1E293B;
+  --yj-neutral-850: #182131;
+  --yj-neutral-900: #141B2A;
+  --yj-neutral-950: #0F1420;
 
-  /* ============ 语义色 color.semantic（v2.1 §1.1，废弃 v1 Tailwind 系） ============ */
+  /* ---- 语义色（浅色，规范 §1.1） ---- */
   --yj-success: #167C59;
   --yj-warning: #A86608;
   --yj-danger: #C53B4C;
   --yj-info: #1768E8;
-
-  /* ============ 质量色 color.quality ============ */
   --yj-quality-good: #167C59;
   --yj-quality-fair: #A86608;
   --yj-quality-poor: #C53B4C;
+  --yj-quality-offline: #94A3B8;
+  --yj-chart-series1: #2F80FF;
+  --yj-chart-series2: #009BD6;
+  --yj-chart-series3: #A86608;
+  --yj-chart-series4: #167C59;
+  --yj-chart-gridline: #E8ECF2;
 
-  /* ============ 中性色 color.neutral.light（默认/light 套） ============ */
-  --yj-bg: #F5F7FA;
+  /* ---- 表面 / 文字 / 边界（浅色，规范 §1.2） ---- */
+  --yj-canvas: #F5F7FA;
   --yj-surface: #FCFDFE;
-  --yj-surface-hover: #EEF2F7;
-  --yj-border: #DDE3EC;
-  --yj-divider: #E8ECF2;
+  --yj-surface-raised: #F9FBFD;
+  --yj-surface-sunken: #EEF2F7;
+  --yj-surface-selected: #E8F2FF;
   --yj-text-primary: #172033;
   --yj-text-secondary: #4F5E73;
   --yj-text-tertiary: #718096;
+  --yj-text-disabled: #A7B0BE;
   --yj-text-inverse: #FFFFFF;
+  --yj-border: #DDE3EC;
+  --yj-border-strong: #C6CFDB;
+  --yj-divider: #E8ECF2;
 
-  /* ============ 字体 font（web 工程性字体链，保留） ============ */
-  --yj-font-family-base: -apple-system, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --yj-font-family-mono: 'SF Mono', Consolas, 'JetBrains Mono', monospace;
-  --yj-font-family-id-display: 'SF Pro Display', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  /* ---- 阴影（浅色，规范 §1.4） ---- */
+  --yj-shadow-elev1: 0 1px 2px rgba(18,37,63,.06), 0 4px 12px rgba(18,37,63,.04);
+  --yj-shadow-elev2: 0 8px 24px rgba(18,37,63,.10), 0 1px 3px rgba(18,37,63,.06);
+  --yj-shadow-elev3: 0 20px 56px rgba(18,37,63,.16), 0 4px 12px rgba(18,37,63,.08);
 
-  /* font.size（数值 → px；档位与 v2.1 §1.3 对应：xs=caption / sm=label / base=bodyS / md=bodyM / lg=bodyL / xl=titleM / xxl=titleL / display=h2 / id-card=h1） */
-  --yj-font-size-xs: 11px;
-  --yj-font-size-sm: 12px;
-  --yj-font-size-base: 13px;
-  --yj-font-size-md: 14px;
-  --yj-font-size-lg: 16px;
-  --yj-font-size-xl: 18px;
-  --yj-font-size-xxl: 20px;
-  --yj-font-size-display: 28px;
-  --yj-font-size-id-card: 34px;
-
-  /* font.weight */
+  /* ---- 字体（规范 §1.3、§6；JetBrains Mono 本地托管 woff2，禁外链 CDN） ---- */
+  --yj-font-interface: PingFang SC, Noto Sans CJK SC, Microsoft YaHei UI, system-ui, sans-serif;
+  --yj-font-mono: "JetBrains Mono", SFMono-Regular, Roboto Mono, ui-monospace, monospace;
+  --yj-font-id-display: "JetBrains Mono", PingFang SC, Microsoft YaHei UI, system-ui, sans-serif;
+  --yj-font-size-caption: 11px;
+  --yj-font-size-label: 12px;
+  --yj-font-size-body-s: 13px;
+  --yj-font-size-body-m: 14px;
+  --yj-font-size-body-l: 16px;
+  --yj-font-size-title-m: 18px;
+  --yj-font-size-title-l: 20px;
+  --yj-font-size-h3: 24px;
+  --yj-font-size-h2: 28px;
+  --yj-font-size-h1: 34px;
+  --yj-font-size-display: 44px;
   --yj-font-weight-regular: 400;
   --yj-font-weight-medium: 500;
   --yj-font-weight-semibold: 600;
   --yj-font-weight-bold: 700;
+  --yj-letter-spacing-numeric-face: -0.02em;
+  --yj-letter-spacing-section-label: 0.12em;
 
-  /* font.lineHeight（web 工程性 token，tokens.json 未覆盖，保留） */
-  --yj-line-height-tight: 1.25;
-  --yj-line-height-base: 1.5;
-  --yj-line-height-relaxed: 1.75;
+  /* ---- 动效（规范 §1.5；降级见文件尾 prefers-reduced-motion 段） ---- */
+  --yj-motion-hover: .15s;
+  --yj-motion-press: .12s;
+  --yj-motion-normal: .2s;
+  --yj-motion-dialog-in: .2s;
+  --yj-motion-dialog-out: .16s;
+  --yj-motion-collapse: .42s;
+  --yj-motion-success-pulse: .4s;
+  --yj-motion-ambient: 1.5s;
+  --yj-easing-standard: cubic-bezier(.2,0,0,1);
+  --yj-easing-enter: cubic-bezier(0,0,.2,1);
+  --yj-easing-exit: cubic-bezier(.4,0,1,1);
+  --yj-easing-ease: ease;
+  --yj-easing-ease-in-out: ease-in-out;
 
-  /* ============ 间距 spacing（数值 → px） ============ */
+  /* ---- 间距 / 圆角 / 层级 / 核心尺寸（规范 §1.4、§9.1、§9.2） ---- */
   --yj-spacing-xxs: 2px;
   --yj-spacing-xs: 4px;
   --yj-spacing-sm: 8px;
@@ -77,90 +139,250 @@
   --yj-spacing-xxl: 24px;
   --yj-spacing-xxxl: 32px;
   --yj-spacing-page: 40px;
-
-  /* ============ 圆角 radius（数值 → px） ============ */
-  --yj-radius-sm: 6px;
-  --yj-radius-md: 8px;
-  --yj-radius-lg: 12px;
-  --yj-radius-xl: 16px;
+  --yj-spacing-section: 48px;
+  --yj-spacing-portal: 64px;
+  --yj-spacing-portal-lg: 80px;
+  --yj-radius-compact: 6px;
+  --yj-radius-base: 8px;
+  --yj-radius-card: 12px;
+  --yj-radius-dialog: 16px;
   --yj-radius-full: 9999px;
-
-  /* ============ 阴影 shadow.light（默认/light 套，v2.1 §1.4 elev1/2/3） ============ */
-  --yj-shadow-sm: 0 1px 2px rgba(18, 37, 63, 0.06), 0 4px 12px rgba(18, 37, 63, 0.04);
-  --yj-shadow-md: 0 8px 24px rgba(18, 37, 63, 0.10), 0 1px 3px rgba(18, 37, 63, 0.06);
-  --yj-shadow-lg: 0 20px 56px rgba(18, 37, 63, 0.16), 0 4px 12px rgba(18, 37, 63, 0.08);
-
-  /* ============ 动效 motion ============ */
-  --yj-duration-fast: 120ms;
-  --yj-duration-normal: 200ms;
-  --yj-duration-slow: 320ms;
-  --yj-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-  --yj-easing-emphasis: cubic-bezier(0.2, 0, 0, 1);
-
-  /* ============ 层级 zIndex（v2.1 §9.2；overlay/modal 为 web 工程性补充，保留原值） ============ */
-  --yj-z-dropdown: 300;
+  --yj-z-base: 0;
   --yj-z-sticky: 100;
-  --yj-z-overlay: 1200;
-  --yj-z-modal: 1300;
+  --yj-z-dropdown: 300;
+  --yj-z-session-toolbar: 400;
+  --yj-z-scrim: 600;
+  --yj-z-dialog: 700;
   --yj-z-toast: 800;
+  --yj-size-sidebar-desktop: 220px;
+  --yj-size-sidebar-admin: 232px;
+  --yj-size-topbar: 56px;
+  --yj-size-input-default: 40px;
+  --yj-size-button-default: 40px;
+  --yj-size-touch-target: 44px;
+  --yj-size-table-row-compact: 44px;
+  --yj-size-table-row-default: 48px;
+  --yj-size-mobile-remote-toolbar: 64px;
+  --yj-size-content-max: 1440px;
 
-  /* ============ 布局 layout（W5 页面级，web 工程性 token，保留） ============ */
-  --yj-header-height: 56px;
+  /* ---- 组件 token ---- */
+  --yj-focus-ring: 0 0 0 3px rgba(47,128,255,.35);
+  --yj-session-toolbar-height: 44px;
+  --yj-session-toolbar-radius: 12px;
+  --yj-session-toolbar-bg: rgba(20,27,42,.94);
+  --yj-session-toolbar-border: #37445C;
+  --yj-id-card-font-size: 28px;
+
+  /* ---- 管理后台兼容别名（值仍由 v2.1 token 驱动，禁止新增字面量色板） ---- */
+  --yj-primary: var(--yj-blue-600);
+  --yj-primary-hover: var(--yj-blue-700);
+  --yj-primary-active: var(--yj-blue-800);
+  --yj-primary-subtle: var(--yj-brand-subtle);
+  --yj-bg: var(--yj-canvas);
+  --yj-surface-hover: var(--yj-surface-sunken);
+  --yj-font-family-base: var(--yj-font-interface);
+  --yj-font-family-mono: var(--yj-font-mono);
+  --yj-font-family-id-display: var(--yj-font-id-display);
+  --yj-font-size-xs: var(--yj-font-size-caption);
+  --yj-font-size-sm: var(--yj-font-size-label);
+  --yj-font-size-base: var(--yj-font-size-body-s);
+  --yj-font-size-md: var(--yj-font-size-body-m);
+  --yj-font-size-lg: var(--yj-font-size-body-l);
+  --yj-font-size-xl: var(--yj-font-size-title-m);
+  --yj-font-size-xxl: var(--yj-font-size-title-l);
+  --yj-line-height-tight: 1.25;
+  --yj-line-height-base: 1.5;
+  --yj-line-height-relaxed: 1.75;
+  --yj-duration-fast: var(--yj-motion-press);
+  --yj-duration-normal: var(--yj-motion-normal);
+  --yj-duration-slow: var(--yj-motion-collapse);
+  --yj-gradient: var(--yj-gradient-blue-cyan);
+  --yj-radius-sm: var(--yj-radius-compact);
+  --yj-radius-md: var(--yj-radius-base);
+  --yj-radius-lg: var(--yj-radius-card);
+  --yj-radius-xl: var(--yj-radius-dialog);
+  --yj-shadow-sm: var(--yj-shadow-elev1);
+  --yj-shadow-md: var(--yj-shadow-elev2);
+  --yj-shadow-lg: var(--yj-shadow-elev3);
+  --yj-header-height: var(--yj-size-topbar);
   --yj-sidebar-collapsed-width: 64px;
-  --yj-content-max-width: 1560px;
+  --yj-content-max-width: var(--yj-size-content-max);
   --yj-tags-height: 44px;
-
-  /* ============ 侧边栏 sidebar（深空蓝，深浅主题同构） ============ */
-  --yj-sidebar-bg: #0B1437;
-  --yj-sidebar-text: rgba(255, 255, 255, 0.68);
+  --yj-sidebar-bg: var(--yj-deep-navy);
+  --yj-sidebar-text: rgba(255,255,255,.68);
   --yj-sidebar-text-active: #FFFFFF;
-  --yj-sidebar-hover-bg: rgba(255, 255, 255, 0.07);
-  --yj-sidebar-active-bg: #2F80FF;
+  --yj-sidebar-hover-bg: rgba(255,255,255,.07);
+  --yj-sidebar-active-bg: var(--yj-primary);
+  --yj-online: var(--yj-success);
+  --yj-offline: var(--yj-quality-offline);
+  --yj-success-subtle: color-mix(in srgb, var(--yj-success) 14%, transparent);
+  --yj-offline-subtle: rgba(148,163,184,.16);
+  --yj-status-online: var(--yj-success);
+  --yj-status-warning: var(--yj-warning);
+  --yj-status-danger: var(--yj-danger);
+  --yj-table-zebra: var(--yj-surface);
 
-  /* ============ 状态点 status（v2.1 语义色派生） ============ */
-  --yj-online: #167C59;
-  --yj-offline: #94A3B8;
-  --yj-success-subtle: rgba(22, 124, 89, 0.14);
-  --yj-offline-subtle: rgba(148, 163, 184, 0.16);
-
-  /* ============ 表格 table（web 工程性 token，保留） ============ */
-  --yj-table-zebra: #FAFBFC;
+  /* ---- Element Plus 映射 · 浅色（规范 §9.3，逐 token 显式双写，禁止反向推导） ---- */
+  --el-color-primary: #2F80FF;
+  --el-bg-color-page: #F5F7FA;
+  --el-bg-color: #FCFDFE;
+  --el-bg-color-overlay: #F9FBFD;
+  --el-fill-color: #EEF2F7;
+  --el-color-primary-light-9: #E8F2FF;
+  --el-text-color-primary: #172033;
+  --el-text-color-regular: #4F5E73;
+  --el-text-color-secondary: #718096;
+  --el-text-color-placeholder: #A7B0BE;
+  --el-text-color-disabled: #A7B0BE;
+  --el-border-color: #DDE3EC;
+  --el-border-color-hover: #C6CFDB;
+  --el-border-color-light: #E8ECF2;
+  --el-border-color-lighter: #E8ECF2;
+  --el-transition-duration-fast: .15s;
+  --el-transition-duration: .2s;
+  --el-border-radius-base: 8px;
 }
 
-/* ============ 暗色覆盖（Element Plus 暗色约定） ============ */
+/* ================================================================
+ * html.dark · 深色主题（深空蓝黑，不使用纯黑）
+ * ============================================================== */
 html.dark {
-  /* color.neutral.dark（深色 Surface 统一 #141B2A，废弃旧值 #1A2130） */
-  --yj-bg: #0F1420;
-  --yj-surface: #141B2A;
-  --yj-surface-hover: #192234;
-  --yj-border: #273247;
-  --yj-divider: #202B3D;
-  --yj-text-primary: #F2F6FC;
-  --yj-text-secondary: #AAB7CA;
-  --yj-text-tertiary: #7F8EA4;
-  --yj-text-inverse: #172033;
-
-  /* semantic.dark + 深色主交互（v2.1 §1.1：主交互 Blue 400，hover Blue 300） */
-  --yj-primary: #5A9EFF;
-  --yj-primary-hover: #88BCFF;
+  /* ---- 语义色（深色） ---- */
   --yj-success: #39C894;
   --yj-warning: #F5B94C;
   --yj-danger: #FF6B7C;
   --yj-info: #5A9EFF;
+  --yj-warningText: #D9A441;
+  --yj-dangerText: #E56B78;
   --yj-quality-good: #39C894;
   --yj-quality-fair: #F5B94C;
   --yj-quality-poor: #FF6B7C;
-  --yj-online: #39C894;
-  --yj-success-subtle: rgba(57, 200, 148, 0.14);
+  --yj-quality-offline: #94A3B8;
+  --yj-chart-series1: #5A9EFF;
+  --yj-chart-series2: #25D1FF;
+  --yj-chart-series3: #F5B94C;
+  --yj-chart-series4: #39C894;
+  --yj-chart-gridline: #202B3D;
 
-  /* shadow.dark（v2.1 §1.4 深色 elev1/2/3） */
-  --yj-shadow-sm: 0 1px 2px rgba(2, 6, 14, 0.28), 0 4px 14px rgba(2, 6, 14, 0.18);
-  --yj-shadow-md: 0 10px 28px rgba(2, 6, 14, 0.38), 0 1px 3px rgba(2, 6, 14, 0.28);
-  --yj-shadow-lg: 0 24px 64px rgba(2, 6, 14, 0.54), 0 4px 14px rgba(2, 6, 14, 0.34);
+  /* ---- 表面 / 文字 / 边界（深色；深色 Surface 统一 #141B2A） ---- */
+  --yj-canvas: #0F1420;
+  --yj-surface: #141B2A;
+  --yj-surface-raised: #192234;
+  --yj-surface-sunken: #0B101A;
+  --yj-surface-selected: #17335C;
+  --yj-text-primary: #F2F6FC;
+  --yj-text-secondary: #AAB7CA;
+  --yj-text-tertiary: #7F8EA4;
+  --yj-text-disabled: #526075;
+  --yj-text-inverse: #172033;
+  --yj-border: #273247;
+  --yj-border-strong: #37445C;
+  --yj-divider: #202B3D;
 
-  /* sidebar.dark：比 deep navy 更深，贴近暗色底 */
+  /* ---- 阴影与深色受光（规范 §1.2 三要素：明度差 6–8% / Raised 1px 内高光 / Border 对比 ≥2:1） ---- */
+  --yj-shadow-elev1: 0 1px 2px rgba(2,6,14,.28), 0 4px 14px rgba(2,6,14,.18);
+  --yj-shadow-elev2: 0 10px 28px rgba(2,6,14,.38), 0 1px 3px rgba(2,6,14,.28);
+  --yj-shadow-elev3: 0 24px 64px rgba(2,6,14,.54), 0 4px 14px rgba(2,6,14,.34);
+  --yj-shadow-raised-inset: inset 0 1px 0 rgba(255,255,255,.05);
+
+  /* ---- 管理后台兼容别名 · 深色 ---- */
+  --yj-primary: var(--yj-blue-400);
+  --yj-primary-hover: var(--yj-blue-300);
+  --yj-primary-active: var(--yj-blue-500);
+  --yj-primary-subtle: rgba(90,158,255,.14);
+  --yj-bg: var(--yj-canvas);
+  --yj-surface-hover: var(--yj-surface-sunken);
+  --yj-font-family-base: var(--yj-font-interface);
+  --yj-font-family-mono: var(--yj-font-mono);
+  --yj-font-family-id-display: var(--yj-font-id-display);
+  --yj-font-size-xs: var(--yj-font-size-caption);
+  --yj-font-size-sm: var(--yj-font-size-label);
+  --yj-font-size-base: var(--yj-font-size-body-s);
+  --yj-font-size-md: var(--yj-font-size-body-m);
+  --yj-font-size-lg: var(--yj-font-size-body-l);
+  --yj-font-size-xl: var(--yj-font-size-title-m);
+  --yj-font-size-xxl: var(--yj-font-size-title-l);
+  --yj-line-height-tight: 1.25;
+  --yj-line-height-base: 1.5;
+  --yj-line-height-relaxed: 1.75;
+  --yj-duration-fast: var(--yj-motion-press);
+  --yj-duration-normal: var(--yj-motion-normal);
+  --yj-duration-slow: var(--yj-motion-collapse);
+  --yj-gradient: var(--yj-gradient-blue-cyan);
+  --yj-radius-sm: var(--yj-radius-compact);
+  --yj-radius-md: var(--yj-radius-base);
+  --yj-radius-lg: var(--yj-radius-card);
+  --yj-radius-xl: var(--yj-radius-dialog);
+  --yj-shadow-sm: var(--yj-shadow-elev1);
+  --yj-shadow-md: var(--yj-shadow-elev2);
+  --yj-shadow-lg: var(--yj-shadow-elev3);
+  --yj-header-height: var(--yj-size-topbar);
+  --yj-sidebar-collapsed-width: 64px;
+  --yj-content-max-width: var(--yj-size-content-max);
+  --yj-tags-height: 44px;
   --yj-sidebar-bg: #0A1024;
+  --yj-sidebar-text: rgba(255,255,255,.68);
+  --yj-sidebar-text-active: #FFFFFF;
+  --yj-sidebar-hover-bg: rgba(255,255,255,.07);
+  --yj-sidebar-active-bg: var(--yj-primary);
+  --yj-online: var(--yj-success);
+  --yj-offline: var(--yj-quality-offline);
+  --yj-success-subtle: color-mix(in srgb, var(--yj-success) 14%, transparent);
+  --yj-offline-subtle: rgba(148,163,184,.16);
+  --yj-status-online: var(--yj-success);
+  --yj-status-warning: var(--yj-warning);
+  --yj-status-danger: var(--yj-danger);
+  --yj-table-zebra: var(--yj-surface);
 
-  /* table.dark */
-  --yj-table-zebra: #161D2C;
+  /* ---- Element Plus 映射 · 深色（规范 §9.3，逐 token 显式双写） ---- */
+  --el-color-primary: #5A9EFF;
+  --el-bg-color-page: #0F1420;
+  --el-bg-color: #141B2A;
+  --el-bg-color-overlay: #192234;
+  --el-fill-color: #0B101A;
+  --el-color-primary-light-9: #17335C;
+  --el-text-color-primary: #F2F6FC;
+  --el-text-color-regular: #AAB7CA;
+  --el-text-color-secondary: #7F8EA4;
+  --el-text-color-placeholder: #526075;
+  --el-text-color-disabled: #526075;
+  --el-border-color: #273247;
+  --el-border-color-hover: #37445C;
+  --el-border-color-light: #202B3D;
+  --el-border-color-lighter: #202B3D;
+  --el-transition-duration-fast: .15s;
+  --el-transition-duration: .2s;
+  --el-border-radius-base: 8px;
+
+  /* ---- 深色字体渲染（规范 §6.1；浅色保持 auto） ---- */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 降级对照（规范 §1.5 token 表）:
+ *   hover    .15s -> 无过渡，直接切换状态
+ *   press    .12s -> 无过渡，直接切换状态
+ *   normal   .2s -> 时长压至 0.01s
+ *   dialog   200ms/160ms -> 仅透明度突变
+ *   collapse .42s -> 直接展开/收起
+ *   ambient  1.5s -> 静止态 */
+/* ---- 动效降级（规范 §1.5 / §10-5）：hover/press 直接切换；normal 压至 0.01s；
+ * dialog 仅透明度突变；collapse 直接展开收起；ambient 雷达呼吸静止 ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  :root {
+    --yj-motion-hover: 0s;
+    --yj-motion-press: 0s;
+    --yj-motion-normal: 0.01s;
+    --yj-motion-dialog-in: 0.01s;
+    --yj-motion-dialog-out: 0.01s;
+    --yj-motion-collapse: 0.01s;
+    --yj-motion-ambient: 0s;
+    --el-transition-duration-fast: 0.01s;
+    --el-transition-duration: 0.01s;
+  }
 }

@@ -67,7 +67,7 @@
   import { T } from '@/utils/i18n'
   import { list } from '@/api/peer'
   import { downBlob, jsonToCsv } from '@/utils/file'
-  import { Delete } from '@element-plus/icons'
+  import { Delete } from '@element-plus/icons-vue'
 
   const { allUsers, getAllUsers } = loadAllUsers()
   getAllUsers()

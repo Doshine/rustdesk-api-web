@@ -113,7 +113,7 @@
   import { T } from '@/utils/i18n'
   import { useRepositories } from '@/views/address_book/rule'
   import { onActivated, onMounted, watch } from 'vue'
-  import { Delete, Edit } from '@element-plus/icons'
+  import { Delete, Edit } from '@element-plus/icons-vue'
 
   const props = defineProps({
     collection: {
