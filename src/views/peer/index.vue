@@ -365,6 +365,7 @@
 
 <script setup>
   import { computed, onActivated, onMounted, reactive, ref, watch } from 'vue'
+  import { useRoute } from 'vue-router'
   import { approve, batchRemove, batchUpdateTags, create, list, remove, update } from '@/api/peer'
   import { list as tagList } from '@/api/tag'
   import { list as groupList } from '@/api/device_group'
@@ -390,6 +391,7 @@
   import { formatTime } from '@/utils/time'
 
   const appStore = useAppStore()
+  const route = useRoute()
 
   //group
   const groupListRes = reactive({
@@ -424,7 +426,7 @@
     ip: '',
     os: '',
     group_id: null,
-    status: '', // '' 全部 / 0 待审批 / 1 已通过
+    status: route.query.status === '0' ? 0 : '', // '' 全部 / 0 待审批 / 1 已通过
   })
 
   // 状态结构化筛选：在线/离线映射 time_ago（<60s 视为在线），待审批映射 status=0
@@ -557,6 +559,14 @@
   watch(() => listQuery.page, getList)
 
   watch(() => listQuery.page_size, handlerQuery)
+
+  // 从部署码页进入审批队列时同步 URL 状态；兼容 keep-alive 下重复进入。
+  watch(() => route.query.status, (status) => {
+    if (route.name !== 'Peer') return
+    listQuery.status = status === '0' ? 0 : ''
+    if (listQuery.page === 1) getList()
+    else listQuery.page = 1
+  })
 
   const formVisible = ref(false)
   const formData = reactive({

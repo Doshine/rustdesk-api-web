@@ -112,6 +112,12 @@ export const asyncRoutes = [
     component: () => import('@/layout/index.vue'),
     children: [
       {
+        path: 'deploymentCodes',
+        name: 'DeploymentCodes',
+        meta: { title: 'DeploymentCodes', icon: 'Key' },
+        component: () => import('@/views/deployment/index.vue'),
+      },
+      {
         path: 'peer',
         name: 'Peer',
         meta: { title: 'PeerManage', icon: 'Monitor' /*keepAlive: true*/ },
